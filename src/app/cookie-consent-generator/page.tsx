@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import { motion } from "framer-motion";
@@ -15,7 +16,28 @@ import {
 } from "react-icons/fi";
 import Header from "../../components/Header";
 
-const cookieConsentTemplates = [
+interface TemplateStyle {
+  backgroundColor: string;
+  textColor: string;
+  buttonColor: string;
+  buttonTextColor: string;
+  fontFamily: string;
+  fontSize: string;
+  borderRadius: string;
+  boxShadow: string;
+  secondaryButtonColor?: string;
+  secondaryButtonTextColor?: string;
+}
+
+interface ConsentTemplate {
+  name: string;
+  text: string;
+  buttonText: string;
+  secondaryButtonText?: string;
+  style: TemplateStyle;
+}
+
+const cookieConsentTemplates: ConsentTemplate[] = [
   {
     name: "Minimāls",
     text: "Mēs izmantojam sīkdatnes, lai uzlabotu jūsu pieredzi.",
@@ -96,16 +118,24 @@ const cookieConsentTemplates = [
   },
 ];
 
-const CookieConsentGenerator = () => {
-  const [selectedTemplate, setSelectedTemplate] = useState(
+const CookieConsentGenerator: React.FC = () => {
+  const [selectedTemplate, setSelectedTemplate] = useState<ConsentTemplate>(
     cookieConsentTemplates[0]
   );
-  const [customTemplate, setCustomTemplate] = useState(null);
-  const [previewDevice, setPreviewDevice] = useState("desktop");
-  const [favorites, setFavorites] = useState([]);
-  const [currentTemplateIndex, setCurrentTemplateIndex] = useState(0);
-  const [bannerPosition, setBannerPosition] = useState("bottom");
-  const [animationStyle, setAnimationStyle] = useState("fade");
+  const [customTemplate, setCustomTemplate] = useState<ConsentTemplate | null>(
+    null
+  );
+  const [previewDevice, setPreviewDevice] = useState<
+    "desktop" | "tablet" | "mobile"
+  >("desktop");
+  const [favorites, setFavorites] = useState<ConsentTemplate[]>([]);
+  const [currentTemplateIndex, setCurrentTemplateIndex] = useState<number>(0);
+  const [bannerPosition, setBannerPosition] = useState<"top" | "bottom">(
+    "bottom"
+  );
+  const [animationStyle, setAnimationStyle] = useState<
+    "fade" | "slideUp" | "slideDown"
+  >("fade");
 
   useEffect(() => {
     const storedFavorites = localStorage.getItem("cookieConsentFavorites");
@@ -385,7 +415,7 @@ const CookieConsentGenerator = () => {
                       })
                     }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                    rows="3"
+                    rows={3}
                   ></textarea>
                 </div>
                 <div>
@@ -578,7 +608,9 @@ const CookieConsentGenerator = () => {
                   </label>
                   <select
                     value={bannerPosition}
-                    onChange={(e) => setBannerPosition(e.target.value)}
+                    onChange={(e) =>
+                      setBannerPosition(e.target.value as "top" | "bottom")
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                   >
                     <option value="top">Augšā</option>
@@ -591,7 +623,11 @@ const CookieConsentGenerator = () => {
                   </label>
                   <select
                     value={animationStyle}
-                    onChange={(e) => setAnimationStyle(e.target.value)}
+                    onChange={(e) =>
+                      setAnimationStyle(
+                        e.target.value as "fade" | "slideUp" | "slideDown"
+                      )
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                   >
                     <option value="fade">Izzūdošs</option>
