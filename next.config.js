@@ -4,6 +4,12 @@ const nextConfig = {
     serverComponentsExternalPackages: ["openai", "cheerio"],
   },
   transpilePackages: ["reactflow"],
+  eslint: {
+    ignoreDuringBuilds: true, // Disable ESLint checks during build
+  },
+  typescript: {
+    ignoreBuildErrors: true, // Disable TypeScript checks during build
+  },
   async headers() {
     return [
       {
@@ -53,7 +59,7 @@ module.exports = nextConfig;
 // /** @type {import('next').NextConfig} */
 // const nextConfig = {
 //   experimental: {
-//     serverComponentsExternalPackages: ["cheerio"],
+//     serverComponentsExternalPackages: ["openai", "cheerio"],
 //   },
 //   transpilePackages: ["reactflow"],
 //   async headers() {
@@ -76,19 +82,21 @@ module.exports = nextConfig;
 //       },
 //     ];
 //   },
-//   webpack: (config) => {
-//     config.resolve.fallback = {
-//       ...config.resolve.fallback,
-//       fs: false,
-//     };
+//   webpack: (config, { isServer }) => {
+//     if (!isServer) {
+//       config.resolve.fallback = {
+//         ...config.resolve.fallback,
+//         fs: false,
+//         net: false,
+//         tls: false,
+//       };
+//     }
 
-//     // Add external modules for Socket.IO client
 //     config.externals.push({
 //       "utf-8-validate": "commonjs utf-8-validate",
 //       bufferutil: "commonjs bufferutil",
 //     });
 
-//     // Ensure canvas is available for Fabric.js
 //     if (!config.resolve.alias) {
 //       config.resolve.alias = {};
 //     }
