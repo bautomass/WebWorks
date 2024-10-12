@@ -1,5 +1,8 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+
+"use client";
+
+import React, { useState, useEffect, useCallback } from "react";
 import Head from "next/head";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "../../components/Header";
@@ -38,7 +41,7 @@ import {
   FaMapMarkerAlt,
 } from "react-icons/fa";
 
-const COLORS = [
+const COLORS: string[] = [
   "#0088FE",
   "#00C49F",
   "#FFBB28",
@@ -47,8 +50,31 @@ const COLORS = [
   "#82CA9D",
 ];
 
+interface KeywordData {
+  keyword: string;
+  searchVolume: number;
+  difficulty: number;
+  cpc: string;
+  trend: number[];
+  intent: string;
+  seasonality: string;
+  competition: number;
+  serp: {
+    organic: number;
+    paid: number;
+    features: string[];
+  };
+  relatedKeywords: string[];
+  sentiment: number;
+  growthPotential: number;
+  aiSuggestions: string[];
+  difficultyTrend: number[];
+  localRelevance: boolean;
+  aiInsights?: string;
+}
+
 // Simulated API for real-time data fetching
-const fetchKeywordData = async (keyword) => {
+const fetchKeywordData = async (keyword: string): Promise<KeywordData> => {
   await new Promise((resolve) => setTimeout(resolve, 1000));
   return {
     keyword,
@@ -56,7 +82,7 @@ const fetchKeywordData = async (keyword) => {
     difficulty: Math.floor(Math.random() * 100),
     cpc: (Math.random() * 5).toFixed(2),
     trend: Array(12)
-      .fill()
+      .fill(0)
       .map(() => Math.floor(Math.random() * 1000) + 500),
     intent: ["Informational", "Navigational", "Commercial", "Transactional"][
       Math.floor(Math.random() * 4)
@@ -76,11 +102,11 @@ const fetchKeywordData = async (keyword) => {
       ].filter(() => Math.random() > 0.5),
     },
     relatedKeywords: Array(5)
-      .fill()
+      .fill("")
       .map(
         () => `Related ${keyword} ${Math.random().toString(36).substring(7)}`
       ),
-    sentiment: (Math.random() * 2 - 1).toFixed(2),
+    sentiment: parseFloat((Math.random() * 2 - 1).toFixed(2)),
     growthPotential: Math.floor(Math.random() * 100),
     aiSuggestions: [
       "Optimize for voice search",
@@ -89,13 +115,23 @@ const fetchKeywordData = async (keyword) => {
       "Improve page loading speed",
     ].filter(() => Math.random() > 0.5),
     difficultyTrend: Array(6)
-      .fill()
+      .fill(0)
       .map(() => Math.floor(Math.random() * 100)),
     localRelevance: Math.random() > 0.5,
   };
 };
 
-const CustomAlert = ({ title, description, variant = "default" }) => {
+interface CustomAlertProps {
+  title: string;
+  description: string;
+  variant?: "default" | "destructive";
+}
+
+const CustomAlert: React.FC<CustomAlertProps> = ({
+  title,
+  description,
+  variant = "default",
+}) => {
   const bgColor = variant === "destructive" ? "bg-red-100" : "bg-yellow-100";
   const textColor =
     variant === "destructive" ? "text-red-800" : "text-yellow-800";
@@ -108,7 +144,12 @@ const CustomAlert = ({ title, description, variant = "default" }) => {
   );
 };
 
-const KeywordCard = ({ keyword, onSelect }) => (
+interface KeywordCardProps {
+  keyword: KeywordData;
+  onSelect: (keyword: KeywordData) => void;
+}
+
+const KeywordCard: React.FC<KeywordCardProps> = ({ keyword, onSelect }) => (
   <motion.div
     whileHover={{ scale: 1.03 }}
     whileTap={{ scale: 0.98 }}
@@ -159,13 +200,17 @@ const KeywordCard = ({ keyword, onSelect }) => (
     <div className="text-xs text-gray-500">
       <p>
         CPC: {keyword.cpc}€ | Sentiments:{" "}
-        {keyword.sentiment > 0 ? "Pozitīvs" : "Negatīvs"}
+        {parseFloat(keyword.sentiment.toString()) > 0 ? "Pozitīvs" : "Negatīvs"}
       </p>
     </div>
   </motion.div>
 );
 
-const TrendChart = ({ data }) => (
+interface TrendChartProps {
+  data: number[];
+}
+
+const TrendChart: React.FC<TrendChartProps> = ({ data }) => (
   <ResponsiveContainer width="100%" height={200}>
     <LineChart data={data.map((value, index) => ({ name: index, value }))}>
       <XAxis dataKey="name" />
@@ -182,21 +227,36 @@ const TrendChart = ({ data }) => (
   </ResponsiveContainer>
 );
 
-const CompetitionChart = ({ competition }) => (
+interface CompetitionChartProps {
+  competition: number;
+}
+
+const CompetitionChart: React.FC<CompetitionChartProps> = ({ competition }) => (
   <ResponsiveContainer width="100%" height={100}>
     <BarChart data={[{ competition }]}>
       <Bar dataKey="competition" fill="#82ca9d" />
       <XAxis tick={false} />
       <YAxis domain={[0, 1]} ticks={[0, 0.25, 0.5, 0.75, 1]} />
       <Tooltip
-        formatter={(value) => [`${(value * 100).toFixed(0)}%`, "Konkurence"]}
+        formatter={(value: number) => [
+          `${(value * 100).toFixed(0)}%`,
+          "Konkurence",
+        ]}
         labelFormatter={() => ""}
       />
     </BarChart>
   </ResponsiveContainer>
 );
 
-const SentimentRadar = ({ sentiment, growthPotential }) => {
+interface SentimentRadarProps {
+  sentiment: number;
+  growthPotential: number;
+}
+
+const SentimentRadar: React.FC<SentimentRadarProps> = ({
+  sentiment,
+  growthPotential,
+}) => {
   const data = [
     { subject: "Sentiments", A: (sentiment + 1) * 50, fullMark: 100 },
     { subject: "Izaugsmes potenciāls", A: growthPotential, fullMark: 100 },
@@ -220,8 +280,14 @@ const SentimentRadar = ({ sentiment, growthPotential }) => {
   );
 };
 
-const KeywordClusterView = ({ relatedKeywords }) => {
-  const data = relatedKeywords.map((kw, index) => ({
+interface KeywordClusterViewProps {
+  relatedKeywords: string[];
+}
+
+const KeywordClusterView: React.FC<KeywordClusterViewProps> = ({
+  relatedKeywords,
+}) => {
+  const data = relatedKeywords.map((kw) => ({
     x: Math.random() * 100,
     y: Math.random() * 100,
     z: Math.random() * 1000 + 100,
@@ -244,7 +310,13 @@ const KeywordClusterView = ({ relatedKeywords }) => {
   );
 };
 
-const GlobalTrendsAnalysis = ({ keyword }) => {
+interface GlobalTrendsAnalysisProps {
+  keyword: string;
+}
+
+const GlobalTrendsAnalysis: React.FC<GlobalTrendsAnalysisProps> = ({
+  keyword,
+}) => {
   const trendsData = [
     { region: "Eiropa", volume: Math.floor(Math.random() * 1000000) },
     { region: "Ziemeļamerika", volume: Math.floor(Math.random() * 1000000) },
@@ -276,7 +348,15 @@ const GlobalTrendsAnalysis = ({ keyword }) => {
   );
 };
 
-const AIInsightsComponent = ({ keyword, aiInsights }) => {
+interface AIInsightsComponentProps {
+  keyword: string;
+  aiInsights?: string;
+}
+
+const AIInsightsComponent: React.FC<AIInsightsComponentProps> = ({
+  keyword,
+  aiInsights,
+}) => {
   return (
     <div className="mt-8 bg-gradient-to-r from-blue-100 to-purple-100 p-6 rounded-xl shadow-md">
       <h3 className="text-2xl font-bold mb-4 text-indigo-800">
@@ -306,7 +386,13 @@ const AIInsightsComponent = ({ keyword, aiInsights }) => {
   );
 };
 
-const KeywordForecastChart = ({ keyword }) => {
+interface KeywordForecastChartProps {
+  keyword: string;
+}
+
+const KeywordForecastChart: React.FC<KeywordForecastChartProps> = ({
+  keyword,
+}) => {
   const forecastData = Array.from({ length: 12 }, (_, i) => ({
     month: i + 1,
     volume: Math.floor(Math.random() * 1000 + 500),
@@ -339,8 +425,14 @@ const KeywordForecastChart = ({ keyword }) => {
   );
 };
 
-const SEODifficultyMeter = ({ difficulty }) => {
-  const getColor = (value) => {
+interface SEODifficultyMeterProps {
+  difficulty: number;
+}
+
+const SEODifficultyMeter: React.FC<SEODifficultyMeterProps> = ({
+  difficulty,
+}) => {
+  const getColor = (value: number): string => {
     if (value <= 30) return "bg-green-500";
     if (value <= 70) return "bg-yellow-500";
     return "bg-red-500";
@@ -367,7 +459,11 @@ const SEODifficultyMeter = ({ difficulty }) => {
   );
 };
 
-const CompetitorInsights = ({ keyword }) => {
+interface CompetitorInsightsProps {
+  keyword: string;
+}
+
+const CompetitorInsights: React.FC<CompetitorInsightsProps> = ({ keyword }) => {
   const competitors = [
     {
       name: "competitor1.lv",
@@ -411,7 +507,15 @@ const CompetitorInsights = ({ keyword }) => {
   );
 };
 
-const ActionableTips = ({ keyword, difficulty }) => {
+interface ActionableTipsProps {
+  keyword: string;
+  difficulty: number;
+}
+
+const ActionableTips: React.FC<ActionableTipsProps> = ({
+  keyword,
+  difficulty,
+}) => {
   const tips = [
     {
       title: "Optimizējiet Meta Aprakstu",
@@ -459,8 +563,14 @@ const ActionableTips = ({ keyword, difficulty }) => {
   );
 };
 
-const ContentIdeaGenerator = ({ keyword }) => {
-  const [ideas, setIdeas] = useState([]);
+interface ContentIdeaGeneratorProps {
+  keyword: string;
+}
+
+const ContentIdeaGenerator: React.FC<ContentIdeaGeneratorProps> = ({
+  keyword,
+}) => {
+  const [ideas, setIdeas] = useState<string[]>([]);
 
   const generateIdeas = () => {
     const newIdeas = [
@@ -497,7 +607,7 @@ const ContentIdeaGenerator = ({ keyword }) => {
   );
 };
 
-const LearningResources = () => {
+const LearningResources: React.FC = () => {
   const resources = [
     { title: "SEO Pamati", link: "#", icon: <FaGraduationCap /> },
     {
@@ -531,7 +641,11 @@ const LearningResources = () => {
   );
 };
 
-const SERPPreview = ({ keyword }) => {
+interface SERPPreviewProps {
+  keyword: string;
+}
+
+const SERPPreview: React.FC<SERPPreviewProps> = ({ keyword }) => {
   return (
     <div className="mt-8 bg-white p-6 rounded-xl shadow-lg">
       <h3 className="text-2xl font-bold mb-4 text-indigo-700">
@@ -554,7 +668,13 @@ const SERPPreview = ({ keyword }) => {
   );
 };
 
-const KeywordDifficultyTrend = ({ difficultyTrend }) => {
+interface KeywordDifficultyTrendProps {
+  difficultyTrend: number[];
+}
+
+const KeywordDifficultyTrend: React.FC<KeywordDifficultyTrendProps> = ({
+  difficultyTrend,
+}) => {
   const data = difficultyTrend.map((value, index) => ({
     month: index + 1,
     value,
@@ -588,9 +708,19 @@ const KeywordDifficultyTrend = ({ difficultyTrend }) => {
   );
 };
 
-const ROICalculator = ({ keyword, searchVolume, cpc }) => {
-  const [conversionRate, setConversionRate] = useState(2);
-  const [averageOrderValue, setAverageOrderValue] = useState(50);
+interface ROICalculatorProps {
+  keyword: string;
+  searchVolume: number;
+  cpc: string;
+}
+
+const ROICalculator: React.FC<ROICalculatorProps> = ({
+  keyword,
+  searchVolume,
+  cpc,
+}) => {
+  const [conversionRate, setConversionRate] = useState<number>(2);
+  const [averageOrderValue, setAverageOrderValue] = useState<number>(50);
 
   const potentialRevenue = (
     searchVolume *
@@ -598,7 +728,8 @@ const ROICalculator = ({ keyword, searchVolume, cpc }) => {
     averageOrderValue
   ).toFixed(2);
   const potentialROI = (
-    ((potentialRevenue - searchVolume * cpc) / (searchVolume * cpc)) *
+    ((parseFloat(potentialRevenue) - searchVolume * parseFloat(cpc)) /
+      (searchVolume * parseFloat(cpc))) *
     100
   ).toFixed(2);
 
@@ -613,7 +744,7 @@ const ROICalculator = ({ keyword, searchVolume, cpc }) => {
           <input
             type="number"
             value={conversionRate}
-            onChange={(e) => setConversionRate(e.target.value)}
+            onChange={(e) => setConversionRate(Number(e.target.value))}
             className="w-full p-2 border rounded"
           />
         </div>
@@ -622,7 +753,7 @@ const ROICalculator = ({ keyword, searchVolume, cpc }) => {
           <input
             type="number"
             value={averageOrderValue}
-            onChange={(e) => setAverageOrderValue(e.target.value)}
+            onChange={(e) => setAverageOrderValue(Number(e.target.value))}
             className="w-full p-2 border rounded"
           />
         </div>
@@ -637,7 +768,11 @@ const ROICalculator = ({ keyword, searchVolume, cpc }) => {
   );
 };
 
-const VoiceSearchTips = ({ keyword }) => {
+interface VoiceSearchTipsProps {
+  keyword: string;
+}
+
+const VoiceSearchTips: React.FC<VoiceSearchTipsProps> = ({ keyword }) => {
   const tips = [
     "Izmantojiet dabiskas valodas frāzes",
     "Atbildiet uz biežāk uzdotajiem jautājumiem",
@@ -667,7 +802,15 @@ const VoiceSearchTips = ({ keyword }) => {
   );
 };
 
-const LocalSEOInsights = ({ keyword, localRelevance }) => {
+interface LocalSEOInsightsProps {
+  keyword: string;
+  localRelevance: boolean;
+}
+
+const LocalSEOInsights: React.FC<LocalSEOInsightsProps> = ({
+  keyword,
+  localRelevance,
+}) => {
   if (!localRelevance) return null;
 
   return (
@@ -691,15 +834,17 @@ const LocalSEOInsights = ({ keyword, localRelevance }) => {
   );
 };
 
-export default function AtslegvarduPetijums() {
-  const [seedKeyword, setSeedKeyword] = useState("");
-  const [results, setResults] = useState([]);
-  const [selectedKeyword, setSelectedKeyword] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [aiMode, setAiMode] = useState(false);
+const AtslegvarduPetijums: React.FC = () => {
+  const [seedKeyword, setSeedKeyword] = useState<string>("");
+  const [results, setResults] = useState<KeywordData[]>([]);
+  const [selectedKeyword, setSelectedKeyword] = useState<KeywordData | null>(
+    null
+  );
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [aiMode, setAiMode] = useState<boolean>(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -715,7 +860,7 @@ export default function AtslegvarduPetijums() {
   };
 
   const handleAIMode = useCallback(() => {
-    setAiMode(!aiMode);
+    setAiMode((prevMode) => !prevMode);
     if (!aiMode) {
       // Simulated AI analysis
       setTimeout(() => {
@@ -998,4 +1143,6 @@ export default function AtslegvarduPetijums() {
       </footer>
     </div>
   );
-}
+};
+
+export default AtslegvarduPetijums;
