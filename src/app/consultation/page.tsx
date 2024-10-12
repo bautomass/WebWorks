@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import Head from "next/head";
 import { motion } from "framer-motion";
 import {
@@ -20,8 +20,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
 import Header from "../../components/Header";
 
 interface ConsultationType {
@@ -102,7 +100,7 @@ const LiveChat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState<string>("");
 
-  const sendMessage = useCallback(() => {
+  const sendMessage = () => {
     if (input.trim()) {
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -120,7 +118,7 @@ const LiveChat: React.FC = () => {
         ]);
       }, 1000);
     }
-  }, [input]);
+  };
 
   return (
     <div className="fixed bottom-4 right-4 z-50">
@@ -176,76 +174,12 @@ const LiveChat: React.FC = () => {
   );
 };
 
-interface BookingCalendarProps {
-  selectedType: ConsultationType | null;
-  onSelectDateTime: (date: Date, time: string) => void;
-}
-
-const BookingCalendar: React.FC<BookingCalendarProps> = ({
-  selectedType,
-  onSelectDateTime,
-}) => {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [selectedTime, setSelectedTime] = useState<string | null>(null);
-
-  const availableTimes = [
-    "09:00",
-    "10:00",
-    "11:00",
-    "13:00",
-    "14:00",
-    "15:00",
-    "16:00",
-  ];
-
-  const handleDateChange = (date: Date) => {
-    setSelectedDate(date);
-    setSelectedTime(null);
-  };
-
-  const handleTimeSelect = (time: string) => {
-    setSelectedTime(time);
-    onSelectDateTime(selectedDate, time);
-  };
-
-  return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
-      <Calendar
-        onChange={handleDateChange}
-        value={selectedDate}
-        minDate={new Date()}
-        className="w-full"
-      />
-      <div className="mt-4">
-        <h4 className="font-bold mb-2">Pieejamie laiki:</h4>
-        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-          {availableTimes.map((time) => (
-            <button
-              key={time}
-              onClick={() => handleTimeSelect(time)}
-              className={`p-2 rounded ${
-                selectedTime === time
-                  ? "bg-[#EEC71B] text-[#3D3B4A]"
-                  : "bg-gray-200 hover:bg-gray-300"
-              }`}
-            >
-              {time}
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const KonsultacijaPage: React.FC = () => {
   const [selectedType, setSelectedType] = useState<ConsultationType | null>(
     null
   );
-  const [selectedDateTime, setSelectedDateTime] = useState<{
-    date: Date;
-    time: string;
-  } | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [bookingStep, setBookingStep] = useState<number>(0);
 
   const handleTypeSelect = (type: ConsultationType) => {
@@ -253,9 +187,15 @@ const KonsultacijaPage: React.FC = () => {
     setBookingStep(1);
   };
 
-  const handleDateTimeSelect = (date: Date, time: string) => {
-    setSelectedDateTime({ date, time });
+  const handleDateSelect = (date: string) => {
+    setSelectedDate(date);
+    setSelectedTime(null);
     setBookingStep(2);
+  };
+
+  const handleTimeSelect = (time: string) => {
+    setSelectedTime(time);
+    setBookingStep(3);
   };
 
   const handleBookingSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -266,8 +206,27 @@ const KonsultacijaPage: React.FC = () => {
     );
     setBookingStep(0);
     setSelectedType(null);
-    setSelectedDateTime(null);
+    setSelectedDate(null);
+    setSelectedTime(null);
   };
+
+  // Simulated available dates (next 7 days)
+  const availableDates = Array.from({ length: 7 }, (_, i) => {
+    const date = new Date();
+    date.setDate(date.getDate() + i + 1);
+    return date.toISOString().split("T")[0];
+  });
+
+  // Simulated available time slots
+  const availableTimeSlots = [
+    "09:00",
+    "10:00",
+    "11:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+  ];
 
   return (
     <TooltipProvider>
@@ -383,80 +342,137 @@ const KonsultacijaPage: React.FC = () => {
                 transition={{ duration: 0.5 }}
               >
                 <h3 className="text-xl sm:text-2xl font-bold text-[#3D3B4A] mb-4 text-center">
-                  Izvēlieties Konsultācijas Laiku
+                  Izvēlieties Konsultācijas Datumu
                 </h3>
-                <BookingCalendar
-                  selectedType={selectedType}
-                  onSelectDateTime={handleDateTimeSelect}
-                />
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                  {availableDates.map((date) => (
+                    <motion.button
+                      key={date}
+                      className={`p-4 rounded-lg ${
+                        selectedDate === date
+                          ? "bg-[#EEC71B] text-[#3D3B4A]"
+                          : "bg-white text-[#3D3B4A] hover:bg-gray-100"
+                      } shadow-md transition-colors duration-300`}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => handleDateSelect(date)}
+                    >
+                      {new Date(date).toLocaleDateString("lv-LV", {
+                        weekday: "short",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </motion.button>
+                  ))}
+                </div>
               </motion.div>
             )}
 
-            {bookingStep === 2 && selectedType && selectedDateTime && (
+            {bookingStep === 2 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
               >
                 <h3 className="text-xl sm:text-2xl font-bold text-[#3D3B4A] mb-4 text-center">
-                  Apstipriniet Rezervāciju
+                  Izvēlieties Konsultācijas Laiku
                 </h3>
-                <form
-                  onSubmit={handleBookingSubmit}
-                  className="bg-white rounded-lg shadow-lg p-6"
-                >
-                  <div className="mb-4">
-                    <p>
-                      <strong>Konsultācijas veids:</strong> {selectedType.title}
-                    </p>
-                    <p>
-                      <strong>Datums:</strong>{" "}
-                      {selectedDateTime.date.toLocaleDateString()}
-                    </p>
-                    <p>
-                      <strong>Laiks:</strong> {selectedDateTime.time}
-                    </p>
-                  </div>
-                  <div className="mb-4">
-                    <label className="block mb-2">Jūsu vārds:</label>
-                    <input
-                      type="text"
-                      required
-                      className="w-full p-2 border rounded"
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <label className="block mb-2">Jūsu e-pasts:</label>
-                    <input
-                      type="email"
-                      required
-                      className="w-full p-2 border rounded"
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <label className="block mb-2">Jūsu tālrunis:</label>
-                    <input
-                      type="tel"
-                      required
-                      className="w-full p-2 border rounded"
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <label className="block mb-2">Papildus informācija:</label>
-                    <textarea
-                      className="w-full p-2 border rounded"
-                      rows={4}
-                    ></textarea>
-                  </div>
-                  <button
-                    type="submit"
-                    className="bg-[#EEC71B] text-[#3D3B4A] px-6 py-2 rounded-full font-bold text-sm sm:text-base"
-                  >
-                    Apstiprināt Rezervāciju
-                  </button>
-                </form>
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
+                  {availableTimeSlots.map((time) => (
+                    <motion.button
+                      key={time}
+                      className={`p-4 rounded-lg ${
+                        selectedTime === time
+                          ? "bg-[#EEC71B] text-[#3D3B4A]"
+                          : "bg-white text-[#3D3B4A] hover:bg-gray-100"
+                      } shadow-md transition-colors duration-300`}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => handleTimeSelect(time)}
+                    >
+                      {time}
+                    </motion.button>
+                  ))}
+                </div>
               </motion.div>
             )}
+
+            {bookingStep === 3 &&
+              selectedType &&
+              selectedDate &&
+              selectedTime && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <h3 className="text-xl sm:text-2xl font-bold text-[#3D3B4A] mb-4 text-center">
+                    Apstipriniet Rezervāciju
+                  </h3>
+                  <form
+                    onSubmit={handleBookingSubmit}
+                    className="bg-white rounded-lg shadow-lg p-6"
+                  >
+                    <div className="mb-4">
+                      <p>
+                        <strong>Konsultācijas veids:</strong>{" "}
+                        {selectedType.title}
+                      </p>
+                      <p>
+                        <strong>Datums:</strong>{" "}
+                        {new Date(selectedDate).toLocaleDateString("lv-LV", {
+                          weekday: "long",
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </p>
+                      <p>
+                        <strong>Laiks:</strong> {selectedTime}
+                      </p>
+                    </div>
+                    <div className="mb-4">
+                      <label className="block mb-2">Jūsu vārds:</label>
+                      <input
+                        type="text"
+                        required
+                        className="w-full p-2 border rounded"
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label className="block mb-2">Jūsu e-pasts:</label>
+                      <input
+                        type="email"
+                        required
+                        className="w-full p-2 border rounded"
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label className="block mb-2">Jūsu tālrunis:</label>
+                      <input
+                        type="tel"
+                        required
+                        className="w-full p-2 border rounded"
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label className="block mb-2">
+                        Papildus informācija:
+                      </label>
+                      <textarea
+                        className="w-full p-2 border rounded"
+                        rows={4}
+                      ></textarea>
+                    </div>
+                    <button
+                      type="submit"
+                      className="bg-[#EEC71B] text-[#3D3B4A] px-6 py-2 rounded-full font-bold text-sm sm:text-base"
+                    >
+                      Apstiprināt Rezervāciju
+                    </button>
+                  </form>
+                </motion.div>
+              )}
           </motion.section>
 
           <motion.section
