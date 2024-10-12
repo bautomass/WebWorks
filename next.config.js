@@ -2,13 +2,14 @@
 const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ["openai", "cheerio"],
+    appDir: true,
   },
   transpilePackages: ["reactflow"],
   eslint: {
-    ignoreDuringBuilds: true, // Disable ESLint checks during build
+    ignoreDuringBuilds: true,
   },
   typescript: {
-    ignoreBuildErrors: true, // Disable TypeScript checks during build
+    ignoreBuildErrors: true,
   },
   async headers() {
     return [
@@ -55,55 +56,3 @@ const nextConfig = {
 };
 
 module.exports = nextConfig;
-
-// /** @type {import('next').NextConfig} */
-// const nextConfig = {
-//   experimental: {
-//     serverComponentsExternalPackages: ["openai", "cheerio"],
-//   },
-//   transpilePackages: ["reactflow"],
-//   async headers() {
-//     return [
-//       {
-//         source: "/api/:path*",
-//         headers: [
-//           { key: "Access-Control-Allow-Credentials", value: "true" },
-//           { key: "Access-Control-Allow-Origin", value: "*" },
-//           {
-//             key: "Access-Control-Allow-Methods",
-//             value: "GET,OPTIONS,PATCH,DELETE,POST,PUT",
-//           },
-//           {
-//             key: "Access-Control-Allow-Headers",
-//             value:
-//               "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
-//           },
-//         ],
-//       },
-//     ];
-//   },
-//   webpack: (config, { isServer }) => {
-//     if (!isServer) {
-//       config.resolve.fallback = {
-//         ...config.resolve.fallback,
-//         fs: false,
-//         net: false,
-//         tls: false,
-//       };
-//     }
-
-//     config.externals.push({
-//       "utf-8-validate": "commonjs utf-8-validate",
-//       bufferutil: "commonjs bufferutil",
-//     });
-
-//     if (!config.resolve.alias) {
-//       config.resolve.alias = {};
-//     }
-//     config.resolve.alias.canvas = "canvas";
-
-//     return config;
-//   },
-// };
-
-// module.exports = nextConfig;
