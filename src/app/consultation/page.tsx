@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Head from "next/head";
 import { motion } from "framer-motion";
 import {
@@ -24,14 +24,26 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import Header from "../../components/Header";
 
-const consultationTypes = [
+interface ConsultationType {
+  icon: React.ReactNode;
+  title: string;
+  duration: string;
+}
+
+const consultationTypes: ConsultationType[] = [
   { icon: <FiVideo />, title: "Video Konsultācija", duration: "45 min" },
   { icon: <FiMessageSquare />, title: "Čata Konsultācija", duration: "30 min" },
   { icon: <FiCalendar />, title: "Klātienes Tikšanās", duration: "60 min" },
   { icon: <FiPhone />, title: "Telefona Konsultācija", duration: "30 min" },
 ];
 
-const testimonials = [
+interface Testimonial {
+  name: string;
+  company: string;
+  quote: string;
+}
+
+const testimonials: Testimonial[] = [
   {
     name: "Jānis K.",
     company: "StartUp Latvia",
@@ -52,7 +64,12 @@ const testimonials = [
   },
 ];
 
-const faqs = [
+interface FAQ {
+  question: string;
+  answer: string;
+}
+
+const faqs: FAQ[] = [
   {
     question: "Kā es varu sagatvoties konsultācijai?",
     answer:
@@ -75,19 +92,27 @@ const faqs = [
   },
 ];
 
-const LiveChat = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
+interface Message {
+  text: string;
+  sender: "user" | "bot";
+}
 
-  const sendMessage = () => {
+const LiveChat: React.FC = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState<string>("");
+
+  const sendMessage = useCallback(() => {
     if (input.trim()) {
-      setMessages([...messages, { text: input, sender: "user" }]);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { text: input, sender: "user" },
+      ]);
       setInput("");
       // Simulate response
       setTimeout(() => {
-        setMessages((msgs) => [
-          ...msgs,
+        setMessages((prevMessages) => [
+          ...prevMessages,
           {
             text: "Paldies par jūsu ziņojumu! Mūsu konsultants ar jums sazināsies tuvākajā laikā.",
             sender: "bot",
@@ -95,7 +120,7 @@ const LiveChat = () => {
         ]);
       }, 1000);
     }
-  };
+  }, [input]);
 
   return (
     <div className="fixed bottom-4 right-4 z-50">
@@ -108,7 +133,7 @@ const LiveChat = () => {
         </button>
       )}
       {isOpen && (
-        <div className="bg-white rounded-lg shadow-lg w-80">
+        <div className="bg-white rounded-lg shadow-lg w-80 sm:w-96">
           <div className="bg-[#3D3B4A] text-white p-4 rounded-t-lg flex justify-between items-center">
             <h3 className="font-bold">Live Konsultācija</h3>
             <button onClick={() => setIsOpen(false)}>
@@ -151,9 +176,17 @@ const LiveChat = () => {
   );
 };
 
-const BookingCalendar = ({ selectedType, onSelectDateTime }) => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTime, setSelectedTime] = useState(null);
+interface BookingCalendarProps {
+  selectedType: ConsultationType | null;
+  onSelectDateTime: (date: Date, time: string) => void;
+}
+
+const BookingCalendar: React.FC<BookingCalendarProps> = ({
+  selectedType,
+  onSelectDateTime,
+}) => {
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
   const availableTimes = [
     "09:00",
@@ -165,12 +198,12 @@ const BookingCalendar = ({ selectedType, onSelectDateTime }) => {
     "16:00",
   ];
 
-  const handleDateChange = (date) => {
+  const handleDateChange = (date: Date) => {
     setSelectedDate(date);
     setSelectedTime(null);
   };
 
-  const handleTimeSelect = (time) => {
+  const handleTimeSelect = (time: string) => {
     setSelectedTime(time);
     onSelectDateTime(selectedDate, time);
   };
@@ -181,10 +214,11 @@ const BookingCalendar = ({ selectedType, onSelectDateTime }) => {
         onChange={handleDateChange}
         value={selectedDate}
         minDate={new Date()}
+        className="w-full"
       />
       <div className="mt-4">
         <h4 className="font-bold mb-2">Pieejamie laiki:</h4>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
           {availableTimes.map((time) => (
             <button
               key={time}
@@ -204,22 +238,27 @@ const BookingCalendar = ({ selectedType, onSelectDateTime }) => {
   );
 };
 
-const KonsultacijaPage = () => {
-  const [selectedType, setSelectedType] = useState(null);
-  const [selectedDateTime, setSelectedDateTime] = useState(null);
-  const [bookingStep, setBookingStep] = useState(0);
+const KonsultacijaPage: React.FC = () => {
+  const [selectedType, setSelectedType] = useState<ConsultationType | null>(
+    null
+  );
+  const [selectedDateTime, setSelectedDateTime] = useState<{
+    date: Date;
+    time: string;
+  } | null>(null);
+  const [bookingStep, setBookingStep] = useState<number>(0);
 
-  const handleTypeSelect = (type) => {
+  const handleTypeSelect = (type: ConsultationType) => {
     setSelectedType(type);
     setBookingStep(1);
   };
 
-  const handleDateTimeSelect = (date, time) => {
+  const handleDateTimeSelect = (date: Date, time: string) => {
     setSelectedDateTime({ date, time });
     setBookingStep(2);
   };
 
-  const handleBookingSubmit = (e) => {
+  const handleBookingSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Here you would typically send the booking information to your backend
     alert(
@@ -255,7 +294,7 @@ const KonsultacijaPage = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-4xl md:text-5xl font-bold text-center text-[#3D3B4A] mb-8"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-[#3D3B4A] mb-8"
           >
             Bezmaksas Konsultācija ar Mūsu Ekspertiem
           </motion.h1>
@@ -264,7 +303,7 @@ const KonsultacijaPage = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-xl text-center text-gray-700 mb-12 max-w-3xl mx-auto"
+            className="text-lg sm:text-xl text-center text-gray-700 mb-12 max-w-3xl mx-auto"
           >
             Uzziniet, kā WebWorks var palīdzēt jūsu biznesam augt digitālajā
             vidē. Pieprasiet bezmaksas konsultāciju ar mūsu ekspertiem jau
@@ -277,39 +316,39 @@ const KonsultacijaPage = () => {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="mb-16"
           >
-            <h2 className="text-3xl font-bold text-[#3D3B4A] mb-8 text-center">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#3D3B4A] mb-8 text-center">
               Rezervējiet Konsultāciju 3 Vienkāršos Soļos
             </h2>
 
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
               <div className="flex-1 text-center mb-4 md:mb-0">
                 <div className="inline-block bg-[#EEC71B] rounded-full p-4 mb-2">
-                  <FiVideo className="text-3xl text-[#3D3B4A]" />
+                  <FiVideo className="text-2xl sm:text-3xl text-[#3D3B4A]" />
                 </div>
-                <h3 className="text-xl font-bold">
+                <h3 className="text-lg sm:text-xl font-bold">
                   1. Izvēlieties Konsultācijas Veidu
                 </h3>
               </div>
               <div className="flex-1 text-center mb-4 md:mb-0">
                 <div className="inline-block bg-[#EEC71B] rounded-full p-4 mb-2">
-                  <FiCalendar className="text-3xl text-[#3D3B4A]" />
+                  <FiCalendar className="text-2xl sm:text-3xl text-[#3D3B4A]" />
                 </div>
-                <h3 className="text-xl font-bold">
+                <h3 className="text-lg sm:text-xl font-bold">
                   2. Izvēlieties Datumu un Laiku
                 </h3>
               </div>
               <div className="flex-1 text-center">
                 <div className="inline-block bg-[#EEC71B] rounded-full p-4 mb-2">
-                  <FiSend className="text-3xl text-[#3D3B4A]" />
+                  <FiSend className="text-2xl sm:text-3xl text-[#3D3B4A]" />
                 </div>
-                <h3 className="text-xl font-bold">
+                <h3 className="text-lg sm:text-xl font-bold">
                   3. Apstipriniet Rezervāciju
                 </h3>
               </div>
             </div>
 
             {bookingStep === 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 {consultationTypes.map((type, index) => (
                   <motion.div
                     key={index}
@@ -317,15 +356,17 @@ const KonsultacijaPage = () => {
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <div className="text-4xl text-[#EEC71B] mb-4 flex justify-center">
+                    <div className="text-3xl sm:text-4xl text-[#EEC71B] mb-4 flex justify-center">
                       {type.icon}
                     </div>
-                    <h3 className="text-xl font-bold mb-2">{type.title}</h3>
+                    <h3 className="text-lg sm:text-xl font-bold mb-2">
+                      {type.title}
+                    </h3>
                     <p className="text-gray-700">{type.duration}</p>
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="mt-4 bg-[#EEC71B] text-[#3D3B4A] px-6 py-2 rounded-full font-bold"
+                      className="mt-4 bg-[#EEC71B] text-[#3D3B4A] px-6 py-2 rounded-full font-bold text-sm sm:text-base"
                       onClick={() => handleTypeSelect(type)}
                     >
                       Izvēlēties
@@ -341,7 +382,7 @@ const KonsultacijaPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <h3 className="text-2xl font-bold text-[#3D3B4A] mb-4 text-center">
+                <h3 className="text-xl sm:text-2xl font-bold text-[#3D3B4A] mb-4 text-center">
                   Izvēlieties Konsultācijas Laiku
                 </h3>
                 <BookingCalendar
@@ -351,13 +392,13 @@ const KonsultacijaPage = () => {
               </motion.div>
             )}
 
-            {bookingStep === 2 && (
+            {bookingStep === 2 && selectedType && selectedDateTime && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <h3 className="text-2xl font-bold text-[#3D3B4A] mb-4 text-center">
+                <h3 className="text-xl sm:text-2xl font-bold text-[#3D3B4A] mb-4 text-center">
                   Apstipriniet Rezervāciju
                 </h3>
                 <form
@@ -404,12 +445,12 @@ const KonsultacijaPage = () => {
                     <label className="block mb-2">Papildus informācija:</label>
                     <textarea
                       className="w-full p-2 border rounded"
-                      rows="4"
+                      rows={4}
                     ></textarea>
                   </div>
                   <button
                     type="submit"
-                    className="bg-[#EEC71B] text-[#3D3B4A] px-6 py-2 rounded-full font-bold"
+                    className="bg-[#EEC71B] text-[#3D3B4A] px-6 py-2 rounded-full font-bold text-sm sm:text-base"
                   >
                     Apstiprināt Rezervāciju
                   </button>
@@ -422,12 +463,12 @@ const KonsultacijaPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.6 }}
-            className="mb-16 bg-white rounded-lg shadow-lg p-8"
+            className="mb-16 bg-white rounded-lg shadow-lg p-6 sm:p-8"
           >
-            <h2 className="text-3xl font-bold text-[#3D3B4A] mb-6 text-center">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#3D3B4A] mb-6 text-center">
               Kāpēc Izvēlēties Mūsu Konsultācijas?
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {[
                 {
                   icon: <FiCheckCircle />,
@@ -447,10 +488,12 @@ const KonsultacijaPage = () => {
                 },
               ].map((item, index) => (
                 <div key={index} className="flex items-center">
-                  <div className="text-2xl text-[#EEC71B] mr-4">
+                  <div className="text-xl sm:text-2xl text-[#EEC71B] mr-4">
                     {item.icon}
                   </div>
-                  <p className="text-gray-700">{item.text}</p>
+                  <p className="text-gray-700 text-sm sm:text-base">
+                    {item.text}
+                  </p>
                 </div>
               ))}
             </div>
@@ -462,10 +505,10 @@ const KonsultacijaPage = () => {
             transition={{ duration: 0.5, delay: 0.8 }}
             className="mb-16"
           >
-            <h2 className="text-3xl font-bold text-[#3D3B4A] mb-8 text-center">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#3D3B4A] mb-8 text-center">
               Ko Saka Mūsu Klienti
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {testimonials.map((testimonial, index) => (
                 <motion.div
                   key={index}
@@ -473,9 +516,15 @@ const KonsultacijaPage = () => {
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <p className="text-gray-700 mb-4">"{testimonial.quote}"</p>
-                  <p className="font-bold">{testimonial.name}</p>
-                  <p className="text-sm text-gray-600">{testimonial.company}</p>
+                  <p className="text-gray-700 mb-4 text-sm sm:text-base">
+                    "{testimonial.quote}"
+                  </p>
+                  <p className="font-bold text-sm sm:text-base">
+                    {testimonial.name}
+                  </p>
+                  <p className="text-xs sm:text-sm text-gray-600">
+                    {testimonial.company}
+                  </p>
                 </motion.div>
               ))}
             </div>
@@ -487,7 +536,7 @@ const KonsultacijaPage = () => {
             transition={{ duration: 0.5, delay: 1.0 }}
             className="mb-16"
           >
-            <h2 className="text-3xl font-bold text-[#3D3B4A] mb-8 text-center">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#3D3B4A] mb-8 text-center">
               Bieži Uzdotie Jautājumi
             </h2>
             <div className="space-y-6">
@@ -499,8 +548,12 @@ const KonsultacijaPage = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  <h3 className="text-xl font-bold mb-2">{faq.question}</h3>
-                  <p className="text-gray-700">{faq.answer}</p>
+                  <h3 className="text-lg sm:text-xl font-bold mb-2">
+                    {faq.question}
+                  </h3>
+                  <p className="text-gray-700 text-sm sm:text-base">
+                    {faq.answer}
+                  </p>
                 </motion.div>
               ))}
             </div>
@@ -510,19 +563,19 @@ const KonsultacijaPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 1.2 }}
-            className="mb-16 bg-[#3D3B4A] text-white p-8 rounded-lg text-center"
+            className="mb-16 bg-[#3D3B4A] text-white p-6 sm:p-8 rounded-lg text-center"
           >
-            <h2 className="text-3xl font-bold mb-6">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-6">
               Vai Jums Nepieciešama Tūlītēja Palīdzība?
             </h2>
-            <p className="text-xl mb-8">
+            <p className="text-lg sm:text-xl mb-8">
               Ja jums ir steidzams jautājums vai vēlaties tūlītēju konsultāciju,
               mūsu eksperti ir gatavi palīdzēt.
             </p>
-            <div className="flex justify-center space-x-4">
+            <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
               <motion.a
                 href="tel:+37112345678"
-                className="bg-[#EEC71B] text-[#3D3B4A] px-8 py-3 rounded-full font-bold text-lg hover:bg-white transition-colors duration-300 inline-flex items-center"
+                className="bg-[#EEC71B] text-[#3D3B4A] px-6 sm:px-8 py-3 rounded-full font-bold text-base sm:text-lg hover:bg-white transition-colors duration-300 inline-flex items-center justify-center"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -530,12 +583,15 @@ const KonsultacijaPage = () => {
                 Zvanīt Tagad
               </motion.a>
               <motion.button
-                onClick={() =>
-                  document
-                    .querySelector(".fixed.bottom-4.right-4 button")
-                    .click()
-                }
-                className="bg-white text-[#3D3B4A] px-8 py-3 rounded-full font-bold text-lg hover:bg-[#EEC71B] transition-colors duration-300 inline-flex items-center"
+                onClick={() => {
+                  const chatButton = document.querySelector<HTMLButtonElement>(
+                    ".fixed.bottom-4.right-4 button"
+                  );
+                  if (chatButton) {
+                    chatButton.click();
+                  }
+                }}
+                className="bg-white text-[#3D3B4A] px-6 sm:px-8 py-3 rounded-full font-bold text-base sm:text-lg hover:bg-[#EEC71B] transition-colors duration-300 inline-flex items-center justify-center"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
