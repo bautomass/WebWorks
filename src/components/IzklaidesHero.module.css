@@ -1,0 +1,411 @@
+.heroContainer {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0f0f1f;
+}
+
+.heroBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  animation: float linear infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-100vh) rotate(720deg);
+  }
+}
+
+.heroContent {
+  max-width: 1200px;
+  width: 90%;
+  color: white;
+  text-align: center;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  margin-bottom: 2rem;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(0, 245, 212, 0.7);
+}
+
+.navLinks {
+  display: flex;
+  gap: 1rem;
+}
+
+.navLink {
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.navLink:hover {
+  color: #00f5d4;
+  transform: scale(1.1);
+}
+
+.loginButton {
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  border: 2px solid #00f5d4;
+  color: #00f5d4;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.loginButton:hover {
+  background-color: #00f5d4;
+  color: #1a1a2e;
+  box-shadow: 0 0 15px rgba(0, 245, 212, 0.7);
+}
+
+.heroText {
+  margin-bottom: 2rem;
+}
+
+.heroTitle {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.heroSubtitle {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.categoryHighlight {
+  color: #00f5d4;
+  font-weight: bold;
+}
+
+.heroDescription {
+  font-size: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.searchContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.searchInput {
+  width: 60%;
+  max-width: 400px;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 25px 0 0 25px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.searchInput:focus {
+  background-color: rgba(255, 255, 255, 0.2);
+  outline: none;
+}
+
+.searchButton {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  background-color: #00f5d4;
+  color: #1a1a2e;
+  border: none;
+  border-radius: 0 25px 25px 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.searchButton:hover {
+  background-color: #00d4b6;
+  transform: scale(1.05);
+}
+
+.featuredContent {
+  margin-top: 2rem;
+}
+
+.featuredTitle {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.featuredItems {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.featuredItem {
+  width: 200px;
+  height: 120px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.featuredItem:hover {
+  transform: scale(1.05);
+  border: 1px solid #00f5d451;
+  box-shadow: 0 0 20px #00f5d480;
+}
+
+.itemOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.7);
+  text-align: left;
+  transition: transform 0.3s ease;
+}
+
+.featuredItem:hover .itemOverlay {
+  transform: translateY(-5px);
+}
+
+.itemTitle {
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.itemCategory {
+  font-size: 0.8rem;
+  color: #00f5d4;
+}
+
+.itemRating {
+  font-size: 0.8rem;
+  color: #ffd700;
+}
+
+.recommendationContainer {
+  margin-top: 2rem;
+}
+
+.recommendationButton {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  background-color: #00f5d4;
+  color: #1a1a2e;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.recommendationButton:hover {
+  background-color: #00d4b6;
+  transform: scale(1.05);
+}
+
+.recommendationText {
+  font-size: 1rem;
+  color: #ffffff;
+  background-color: rgba(0, 245, 212, 0.1);
+  padding: 1rem;
+  border-radius: 10px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.callToAction {
+  margin-top: 2rem;
+}
+
+.ctaButton {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  background-color: #00f5d4;
+  color: #1a1a2e;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.ctaButton:hover {
+  background-color: #00d4b6;
+  transform: scale(1.05);
+}
+
+.ctaText {
+  font-size: 0.9rem;
+  color: #ffffff;
+}
+
+.loginModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.loginModalContent {
+  background-color: #1a1a2e;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 300px;
+  position: relative;
+  box-shadow: 0 0 30px rgba(0, 245, 212, 0.3);
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.loginInput {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: none;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.loginSubmitButton {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #00f5d4;
+  color: #1a1a2e;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.loginSubmitButton:hover {
+  background-color: #00d4b6;
+}
+
+.forgotPassword {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: #00f5d4;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: 2rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1.2rem;
+  }
+
+  .heroDescription {
+    font-size: 0.9rem;
+  }
+
+  .searchInput {
+    width: 70%;
+  }
+
+  .featuredItem {
+    width: calc(50% - 0.5rem);
+  }
+
+  .navbar {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .navLinks {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroTitle {
+    font-size: 1.5rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1rem;
+  }
+
+  .heroDescription {
+    font-size: 0.8rem;
+  }
+
+  .searchInput {
+    width: 80%;
+  }
+
+  .featuredItem {
+    width: 100%;
+  }
+
+  .navbar {
+    padding: 0.5rem 0;
+  }
+
+  .logo {
+    font-size: 1.2rem;
+  }
+
+  .navLinks {
+    font-size: 0.9rem;
+  }
+
+  .loginButton {
+    font-size: 0.9rem;
+  }
+}

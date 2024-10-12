@@ -1,0 +1,125 @@
+.servicesContainer {
+  max-width: calc(100% - 2rem);
+  margin: auto;
+  padding: 34px;
+  margin-bottom: 40px;
+  position: relative;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-bottom: -2px;
+}
+
+.tab {
+  padding: 10px 15px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+  flex: 1;
+  min-width: 100px;
+  max-width: 150px;
+  text-align: center;
+  background-color: #fff;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+}
+
+.tab:hover {
+  transform: translateY(0px);
+}
+
+.tab.active {
+  color: #007bff;
+  background-color: #f8f8f8;
+  border: 2px solid #007bff;
+  border-bottom: none;
+  transform: translateY(2px);
+}
+
+.tab.active::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: #fff;
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+}
+
+.tab .icon {
+  margin-bottom: 5px;
+  font-size: 36px;
+  transition: transform 0.3s ease;
+}
+
+.tab.active .icon {
+  transform: scale(1.1);
+}
+
+.tabTitle {
+  font-size: 12px;
+}
+
+.tabContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 2px solid #007bff;
+  padding: 4px;
+  margin-top: 2px;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.tabContent .textContent {
+  flex: 1;
+  padding-right: 20px;
+}
+
+.tabContent .textContent h3 {
+  font-size: 32px;
+  color: #007bff;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.tabContent .textContent p {
+  max-width: 400px;
+  font-size: 20px;
+  color: #666;
+}
+
+.tabContent .imageContent img {
+  max-width: 400px;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .tabs {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .tabContent {
+    flex-direction: row;
+  }
+
+  .tabContent .textContent {
+    padding-right: 0;
+  }
+
+  .tabContent .imageContent img {
+    max-width: 100%;
+    margin-top: 20px;
+  }
+}

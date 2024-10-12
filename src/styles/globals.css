@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "react-resizable/css/styles.css";
+
+:root {
+  --primary-color: #8cb8b4;
+  --secondary-color: #eec71b;
+  --accent-color: #cf4b43;
+  --background-color: #f3f5f4;
+  --text-color: #3d3b4a;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}

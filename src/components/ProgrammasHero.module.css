@@ -1,0 +1,481 @@
+.container {
+  display: flex;
+  font-family: "Roboto", Arial, sans-serif;
+  color: #333;
+  background-color: #f4f4f4;
+  padding: 20px;
+  max-height: 100vh;
+  box-sizing: border-box;
+}
+
+.sidebar {
+  width: 300px;
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  padding: 20px;
+  border-radius: 10px;
+  margin-right: 20px;
+  overflow-y: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.sidebarTitle {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #3498db;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.taskList {
+  margin-bottom: 30px;
+  background-color: #34495e;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.taskList h3 {
+  margin-bottom: 15px;
+  color: #3498db;
+  font-size: 18px;
+  text-transform: uppercase;
+}
+
+.task {
+  display: flex;
+  align-items: center;
+  background-color: #2c3e50;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: move;
+  transition: all 0.2s ease;
+}
+
+.task:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.taskCheckbox {
+  margin-right: 10px;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #3498db;
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+}
+
+.taskCheckbox:checked::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #3498db;
+  font-size: 14px;
+}
+
+.taskContent {
+  flex-grow: 1;
+  font-size: 14px;
+}
+
+.taskActions {
+  display: flex;
+  gap: 5px;
+}
+
+.addTask,
+.addBook {
+  background: none;
+  border: 2px solid #3498db;
+  color: #3498db;
+  cursor: pointer;
+  padding: 8px 12px;
+  width: 100%;
+  text-align: center;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.addTask:hover,
+.addBook:hover {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.booksToRead {
+  margin-top: 30px;
+}
+
+.pricing {
+  margin-top: 30px;
+  background-color: #34495e;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.pricing h3 {
+  margin-bottom: 15px;
+  color: #3498db;
+}
+
+.price {
+  font-size: 28px;
+  font-weight: bold;
+  color: #2ecc71;
+}
+
+.price span {
+  font-size: 16px;
+  font-weight: normal;
+  color: #bdc3c7;
+}
+
+.pricing ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 15px;
+}
+
+.pricing li {
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #ecf0f1;
+}
+
+.calendar {
+  flex-grow: 1;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  overflow-y: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.calendarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.calendarControls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.controlButton,
+.todayButton,
+.shareButton {
+  background: none;
+  border: 1px solid #3498db;
+  color: #3498db;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.controlButton:hover,
+.todayButton:hover {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.shareButton {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.shareButton:hover {
+  background-color: #2980b9;
+}
+
+.weekdays {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.weekday {
+  flex: 1;
+  text-align: center;
+  font-weight: bold;
+  color: #7f8c8d;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+.days {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+
+.day {
+  min-height: 120px;
+  border: 1px solid #ecf0f1;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+}
+
+.dayNumber {
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: block;
+  color: #34495e;
+}
+
+.eventList {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.event {
+  padding: 5px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.event.work {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.event.personal {
+  background-color: #f1c40f;
+  color: #34495e;
+}
+
+.event.break {
+  background-color: #2ecc71;
+  color: #fff;
+}
+
+.eventTime {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.eventContent {
+  word-break: break-word;
+}
+
+.currentDateTime {
+  font-size: 14px;
+  margin-bottom: 20px;
+  color: #bdc3c7;
+}
+
+.userManagement,
+.taskManagement {
+  margin-bottom: 30px;
+}
+
+.userList,
+.taskManagement ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.userItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  background-color: #34495e;
+  padding: 8px 12px;
+  border-radius: 5px;
+}
+
+.userName {
+  font-size: 14px;
+}
+
+.removeButton,
+.moveButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #e74c3c;
+  transition: all 0.2s ease;
+}
+
+.removeButton:hover,
+.moveButton:hover {
+  color: #c0392b;
+}
+
+.addButton {
+  background-color: #2ecc71;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.addButton:hover {
+  background-color: #27ae60;
+}
+
+.assignedTo {
+  font-size: 12px;
+  color: #bdc3c7;
+  margin-left: 10px;
+}
+
+.inputText,
+.selectDropdown {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 3px;
+  border: 1px solid #34495e;
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  font-size: 14px;
+}
+
+.inputText::placeholder {
+  color: #7f8c8d;
+}
+
+.selectDropdown {
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23ecf0f1" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+
+.addUserForm {
+  display: flex;
+  gap: 10px;
+}
+
+.addUserForm .inputText {
+  flex-grow: 1;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    margin-bottom: 20px;
+    margin-right: 0;
+  }
+
+  .calendar {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .days {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .calendarHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .calendarControls {
+    margin-top: 10px;
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 480px) {
+  .days {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .weekdays {
+    display: none;
+  }
+
+  .day {
+    min-height: 100px;
+  }
+
+  .addUserForm {
+    flex-direction: column;
+  }
+
+  .addUserForm .inputText,
+  .addUserForm .addButton {
+    width: 100%;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.task,
+.event,
+.userItem {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.taskCheckbox:focus,
+.addTask:focus,
+.addBook:focus,
+.controlButton:focus,
+.todayButton:focus,
+.shareButton:focus,
+.removeButton:focus,
+.moveButton:focus,
+.addButton:focus,
+.inputText:focus,
+.selectDropdown:focus {
+  outline: 2px solid #3498db;
+  outline-offset: 2px;
+}
+
+/* Scrollbar styling */
+.sidebar::-webkit-scrollbar,
+.calendar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-thumb,
+.calendar::-webkit-scrollbar-thumb {
+  background-color: #95a7b9;
+  border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track,
+.calendar::-webkit-scrollbar-track {
+  background-color: #dde1e4;
+}
