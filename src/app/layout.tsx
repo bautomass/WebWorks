@@ -14,7 +14,8 @@ export const metadata: Metadata = {
     type: "website",
     locale: "lv_LV",
     url: "https://www.yourwebsite.lv/",
-    siteName: "Jūsu Uzņēmuma Nosaukums",
+    siteName:
+      "WebWorks - Unikālu Mājaslapu un E-komercijas Risinājumu Izstrāde",
   },
 };
 
