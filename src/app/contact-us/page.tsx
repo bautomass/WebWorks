@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiSend,
@@ -13,7 +13,6 @@ import {
   FiShoppingCart,
 } from "react-icons/fi";
 import Head from "next/head";
-import Image from "next/image";
 import {
   Tooltip,
   TooltipContent,
@@ -22,7 +21,25 @@ import {
 } from "@/components/ui/tooltip";
 import Header from "../../components/Header";
 
-const sendEmail = async (data) => {
+interface FormData {
+  name: string;
+  email: string;
+  message: string;
+  projectType: "website" | "app" | "ecommerce" | "other";
+}
+
+interface FormErrors {
+  name?: string;
+  email?: string;
+  message?: string;
+  submit?: string;
+}
+
+interface EmailResponse {
+  success: boolean;
+}
+
+const sendEmail = async (data: FormData): Promise<EmailResponse> => {
   // Simulated API call
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -33,15 +50,15 @@ const sendEmail = async (data) => {
 };
 
 const ContactUs: React.FC = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     message: "",
     projectType: "website",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [errors, setErrors] = useState<FormErrors>({});
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -49,20 +66,20 @@ const ContactUs: React.FC = () => {
     >
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value as string }));
   };
 
-  const validateForm = () => {
-    let errors = {};
-    if (!formData.name.trim()) errors["name"] = "Vārds ir obligāts";
-    if (!formData.email.trim()) errors["email"] = "E-pasts ir obligāts";
+  const validateForm = (): FormErrors => {
+    let errors: FormErrors = {};
+    if (!formData.name.trim()) errors.name = "Vārds ir obligāts";
+    if (!formData.email.trim()) errors.email = "E-pasts ir obligāts";
     else if (!/\S+@\S+\.\S+/.test(formData.email))
-      errors["email"] = "Nederīgs e-pasta formāts";
-    if (!formData.message.trim()) errors["message"] = "Ziņojums ir obligāts";
+      errors.email = "Nederīgs e-pasta formāts";
+    if (!formData.message.trim()) errors.message = "Ziņojums ir obligāts";
     return errors;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formErrors = validateForm();
     if (Object.keys(formErrors).length > 0) {
@@ -177,39 +194,41 @@ const ContactUs: React.FC = () => {
                       Projekta Tips
                     </label>
                     <div className="grid grid-cols-2 gap-4">
-                      {["website", "app", "ecommerce", "other"].map((type) => (
-                        <motion.button
-                          key={type}
-                          type="button"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          onClick={() =>
-                            setFormData((prev) => ({
-                              ...prev,
-                              projectType: type,
-                            }))
-                          }
-                          className={`p-4 rounded-lg border ${
-                            formData.projectType === type
-                              ? "border-[#8CB8B4] bg-[#8CB8B4] text-white"
-                              : "border-gray-300 hover:border-[#8CB8B4]"
-                          } transition-colors duration-300`}
-                        >
-                          {type === "website" && (
-                            <FiLayout className="inline-block mr-2" />
-                          )}
-                          {type === "app" && (
-                            <FiSmartphone className="inline-block mr-2" />
-                          )}
-                          {type === "ecommerce" && (
-                            <FiShoppingCart className="inline-block mr-2" />
-                          )}
-                          {type === "other" && (
-                            <FiCode className="inline-block mr-2" />
-                          )}
-                          {type.charAt(0).toUpperCase() + type.slice(1)}
-                        </motion.button>
-                      ))}
+                      {(["website", "app", "ecommerce", "other"] as const).map(
+                        (type) => (
+                          <motion.button
+                            key={type}
+                            type="button"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                projectType: type,
+                              }))
+                            }
+                            className={`p-4 rounded-lg border ${
+                              formData.projectType === type
+                                ? "border-[#8CB8B4] bg-[#8CB8B4] text-white"
+                                : "border-gray-300 hover:border-[#8CB8B4]"
+                            } transition-colors duration-300`}
+                          >
+                            {type === "website" && (
+                              <FiLayout className="inline-block mr-2" />
+                            )}
+                            {type === "app" && (
+                              <FiSmartphone className="inline-block mr-2" />
+                            )}
+                            {type === "ecommerce" && (
+                              <FiShoppingCart className="inline-block mr-2" />
+                            )}
+                            {type === "other" && (
+                              <FiCode className="inline-block mr-2" />
+                            )}
+                            {type.charAt(0).toUpperCase() + type.slice(1)}
+                          </motion.button>
+                        )
+                      )}
                     </div>
                   </div>
 
