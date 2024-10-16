@@ -240,7 +240,7 @@ const Footer: React.FC = () => {
               className="mt-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
+              transition={{ delay: 0.4 }}
             >
               <h4 className="text-lg font-semibold mb-2">Mūsu Apbalvojumi</h4>
               <ul className="space-y-2">
