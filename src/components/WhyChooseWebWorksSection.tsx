@@ -76,12 +76,12 @@ const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
           transition={{ duration: 0.5 }}
           className="absolute inset-0 flex items-center justify-center"
         >
-          <div className="text-center p-8 relative">
+          <div className="text-center p-4 sm:p-8 relative">
             <motion.div
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="text-8xl text-white mb-6 transform hover:scale-110 transition-transform duration-300"
+              className="text-5xl sm:text-8xl text-white mb-4 sm:mb-6 transform hover:scale-110 transition-transform duration-300"
             >
               {items[currentIndex].icon}
             </motion.div>
@@ -89,7 +89,7 @@ const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.5 }}
-              className="text-3xl font-bold text-white mb-4"
+              className="text-xl sm:text-3xl font-bold text-white mb-2 sm:mb-4"
             >
               {items[currentIndex].title}
             </motion.h3>
@@ -97,7 +97,7 @@ const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.4, duration: 0.5 }}
-              className="text-xl text-white mb-6"
+              className="text-sm sm:text-xl text-white mb-3 sm:mb-6"
             >
               {items[currentIndex].description}
             </motion.p>
@@ -105,10 +105,13 @@ const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.5 }}
-              className="space-y-2"
+              className="space-y-1 sm:space-y-2"
             >
               {items[currentIndex].bullets.map((bullet, index) => (
-                <li key={index} className="flex items-center text-white">
+                <li
+                  key={index}
+                  className="flex items-center text-white text-sm sm:text-base"
+                >
                   <FiCheck
                     className="mr-2 flex-shrink-0 text-[#EEC71B]"
                     aria-hidden="true"
@@ -128,11 +131,11 @@ const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
           </div>
         </motion.div>
       </AnimatePresence>
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+      <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
         {items.map((_, index) => (
           <button
             key={index}
-            className={`w-6 h-6 p-1 rounded-full transition-all duration-300 ${
+            className={`w-3 h-3 sm:w-6 sm:h-6 p-0.5 sm:p-1 rounded-full transition-all duration-300 ${
               index === currentIndex ? "bg-white scale-125" : "bg-white/50"
             }`}
             onClick={() => setCurrentIndex(index)}
@@ -604,25 +607,25 @@ const WhyChooseWebWorksSection: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative pt-5 mt-20 pb-20 px-4 sm:px-6 lg:px-8">
+    <section className="relative pt-5 mt-10 sm:mt-20 pb-10 sm:pb-20 px-4 sm:px-6 lg:px-8">
       <div className="absolute inset-0 bg-web-pattern rounded-t-xl"></div>
       <div className="relative z-10 max-w-7xl mx-auto">
-        <h2 className="title-highlight text-4xl sm:text-5xl font-bold text-[#3D3B4A] mb-16 text-center relative inline-block left-1/2 transform -translate-x-1/2">
+        <h2 className="title-highlight text-3xl sm:text-4xl md:text-5xl font-bold text-[#3D3B4A] mb-8 sm:mb-16 text-center relative inline-block left-1/2 transform -translate-x-1/2">
           Kāpēc Izvēlēties WebWorks
         </h2>
 
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-6 sm:gap-8">
           <div className="lg:w-2/5">
             <Carousel items={carouselItems} />
           </div>
 
-          <div className="lg:w-3/5">
-            <div className="bg-white rounded-lg shadow-lg p-6 h-full overflow-hidden flex flex-col">
-              <div className="flex flex-wrap justify-center gap-2 mb-6">
+          <div className="lg:w-3/5 mt-6 lg:mt-0">
+            <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 h-full overflow-hidden flex flex-col">
+              <div className="flex flex-wrap justify-center gap-2 mb-4 sm:mb-6">
                 {Object.entries(tabsContent).map(([key, { icon, title }]) => (
                   <Tooltip key={key} content={title}>
                     <button
-                      className={`p-4 rounded-full transition-all duration-300 ${
+                      className={`p-3 sm:p-4 rounded-full transition-all duration-300 ${
                         activeTab === key
                           ? "bg-[#3D3B4A] text-white shadow-md"
                           : "bg-gray-100 text-[#3D3B4A] hover:bg-gray-200"
@@ -677,7 +680,7 @@ const WhyChooseWebWorksSection: React.FC = () => {
           );
         }
         .title-highlight {
-          padding: 0.5em 2em;
+          padding: 0.5em 1em;
           display: inline-block;
         }
         .title-highlight::before {
@@ -698,6 +701,10 @@ const WhyChooseWebWorksSection: React.FC = () => {
         }
         .custom-scrollbar::-webkit-scrollbar {
           width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 4px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
           background: #f1f1f1;
