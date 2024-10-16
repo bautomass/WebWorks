@@ -18,7 +18,6 @@ import {
   FiShoppingCart,
   FiSearch,
   FiUsers,
-  IconType,
 } from "react-icons/fi";
 
 interface Advantage {
@@ -147,6 +146,8 @@ const FloatingPromo: React.FC = () => {
           onMouseEnter={toggleExpand}
           onMouseLeave={() => !isOpen && setIsExpanded(false)}
           onClick={toggleOpen}
+          aria-label="Atklāt web izstrādes noslēpumus"
+          role="button"
         >
           <motion.div
             className="absolute inset-0 bg-gradient-to-r from-transparent via-[#EEC71B] to-transparent"
@@ -165,7 +166,10 @@ const FloatingPromo: React.FC = () => {
               transition={{ duration: 0.5 }}
               className="mr-2 sm:mr-4"
             >
-              <FiStar className="text-3xl sm:text-4xl text-[#EEC71B]" />
+              <FiStar
+                className="text-3xl sm:text-4xl text-[#EEC71B]"
+                aria-hidden="true"
+              />
             </motion.div>
             <motion.div
               initial={{ opacity: 0 }}
@@ -197,7 +201,10 @@ const FloatingPromo: React.FC = () => {
                     ease: "easeInOut",
                   }}
                 >
-                  <FiChevronRight className="text-3xl sm:text-4xl text-[#EEC71B]" />
+                  <FiChevronRight
+                    className="text-3xl sm:text-4xl text-[#EEC71B]"
+                    aria-hidden="true"
+                  />
                 </motion.div>
               </motion.div>
             )}
@@ -214,7 +221,7 @@ const FloatingPromo: React.FC = () => {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-gradient-to-br from-[#8CB8B4] to-[#3D3B4A] rounded-3xl p-4 sm:p-8 w-full max-w-6xl relative overflow-hidden shadow-2xl text-white"
+              className="bg-gradient-to-br from-[#8CB8B4] to-[#3D3B4A] rounded-2xl sm:rounded-3xl p-4 sm:p-8 w-full max-w-[90vw] sm:max-w-6xl relative overflow-hidden shadow-2xl text-white"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
@@ -223,14 +230,15 @@ const FloatingPromo: React.FC = () => {
               <button
                 onClick={toggleOpen}
                 className="absolute top-2 right-2 sm:top-4 sm:right-4 text-white hover:text-[#EEC71B] transition-colors duration-200"
+                aria-label="Aizvērt"
               >
-                <FiX className="text-2xl sm:text-3xl" />
+                <FiX className="text-2xl sm:text-3xl" aria-hidden="true" />
               </button>
-              <h2 className="text-3xl sm:text-5xl font-bold mb-4 sm:mb-8 text-center text-[#EEC71B]">
+              <h2 className="text-2xl sm:text-5xl font-bold mb-4 sm:mb-8 text-center text-[#EEC71B]">
                 Mūsu Web Izstrādes Maģija
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 mb-4 sm:mb-8">
-                <div className="relative h-64 sm:h-96 bg-white bg-opacity-10 rounded-2xl p-4 sm:p-6 overflow-hidden shadow-xl">
+                <div className="relative h-64 sm:h-96 bg-white bg-opacity-10 rounded-xl sm:rounded-2xl p-4 sm:p-6 overflow-hidden shadow-xl">
                   {memoizedAdvantages.map((advantage, index) => (
                     <motion.div
                       key={index}
@@ -242,13 +250,16 @@ const FloatingPromo: React.FC = () => {
                       }}
                       transition={{ duration: 0.5 }}
                     >
-                      <div className="text-4xl sm:text-6xl mb-2 sm:mb-4 text-[#EEC71B]">
+                      <div
+                        className="text-3xl sm:text-6xl mb-2 sm:mb-4 text-[#EEC71B]"
+                        aria-hidden="true"
+                      >
                         {advantage.icon}
                       </div>
-                      <h3 className="text-xl sm:text-2xl font-semibold mb-2 sm:mb-4 text-[#EEC71B]">
+                      <h3 className="text-lg sm:text-2xl font-semibold mb-2 sm:mb-4 text-[#EEC71B]">
                         {advantage.title}
                       </h3>
-                      <p className="text-white text-sm sm:text-lg">
+                      <p className="text-sm sm:text-lg text-white">
                         {advantage.description}
                       </p>
                     </motion.div>
@@ -261,12 +272,13 @@ const FloatingPromo: React.FC = () => {
                           index === activeIndex ? "bg-[#EEC71B]" : "bg-gray-400"
                         }`}
                         onClick={() => setActiveIndex(index)}
+                        aria-label={`Rādīt ${advantages[index].title}`}
                       />
                     ))}
                   </div>
                 </div>
-                <div className="bg-white bg-opacity-10 rounded-2xl p-4 sm:p-6 shadow-xl">
-                  <h3 className="text-xl sm:text-2xl font-semibold mb-2 sm:mb-4 text-[#EEC71B]">
+                <div className="bg-white bg-opacity-10 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-xl">
+                  <h3 className="text-lg sm:text-2xl font-semibold mb-2 sm:mb-4 text-[#EEC71B]">
                     Mūsu Atšķirības
                   </h3>
                   <ul className="space-y-2 sm:space-y-3 max-h-48 sm:max-h-80 overflow-y-auto pr-2 sm:pr-4 styled-scrollbar">
@@ -278,7 +290,10 @@ const FloatingPromo: React.FC = () => {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1 }}
                       >
-                        <FiCheck className="text-[#EEC71B] mr-2 mt-1 flex-shrink-0" />
+                        <FiCheck
+                          className="text-[#EEC71B] mr-2 mt-1 flex-shrink-0 text-sm sm:text-base"
+                          aria-hidden="true"
+                        />
                         <span className="text-white text-sm sm:text-base">
                           {point}
                         </span>
@@ -291,12 +306,14 @@ const FloatingPromo: React.FC = () => {
                 <Link
                   href="/apreksinat-aptuvenu-lapas-izmaksas-cenu"
                   className="bg-[#EEC71B] text-[#3D3B4A] font-bold py-2 px-4 sm:py-3 sm:px-6 rounded-full text-sm sm:text-base transition duration-300 transform hover:scale-105 hover:shadow-lg flex items-center"
+                  aria-label="Aprēķināt aptuvenu lapas izmaksu cenu"
                 >
                   Aprēķināt Cenu
                 </Link>
                 <Link
                   href="/sakt-projekta-skici"
                   className="bg-[#8CB8B4] text-white font-bold py-2 px-4 sm:py-3 sm:px-6 rounded-full text-sm sm:text-base transition duration-300 transform hover:scale-105 hover:shadow-lg flex items-center"
+                  aria-label="Sākt projekta skici"
                 >
                   Sākt Projekta Skici
                 </Link>
@@ -305,6 +322,7 @@ const FloatingPromo: React.FC = () => {
                     showToast("Paldies! Mēs ar jums sazināsimies drīzumā.")
                   }
                   className="bg-white text-[#3D3B4A] font-bold py-2 px-4 sm:py-3 sm:px-6 rounded-full text-sm sm:text-base transition duration-300 transform hover:scale-105 hover:shadow-lg flex items-center"
+                  aria-label="Sazināties ar mums"
                 >
                   Sazinies ar Mums
                 </button>
@@ -316,7 +334,7 @@ const FloatingPromo: React.FC = () => {
 
       <style jsx global>{`
         .styled-scrollbar::-webkit-scrollbar {
-          width: 6px;
+          width: 4px;
         }
         .styled-scrollbar::-webkit-scrollbar-track {
           background: rgba(255, 255, 255, 0.1);
@@ -324,7 +342,7 @@ const FloatingPromo: React.FC = () => {
         .styled-scrollbar::-webkit-scrollbar-thumb {
           background-color: #eec71b;
           border-radius: 20px;
-          border: 2px solid rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.1);
         }
       `}</style>
 
