@@ -34,6 +34,27 @@ interface CarouselProps {
   items: CarouselItem[];
 }
 
+interface TabContentItem {
+  subtitle: string;
+  description: string;
+  stats?: Array<{ value: string; label: string }>;
+  list?: string[];
+}
+
+interface TabContentProps {
+  content: TabContentItem[];
+}
+
+interface TabContent {
+  icon: React.ReactElement<IconType>;
+  title: string;
+  content: TabContentItem[];
+}
+
+interface TabsContent {
+  [key: string]: TabContent;
+}
+
 const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
@@ -88,13 +109,22 @@ const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
             >
               {items[currentIndex].bullets.map((bullet, index) => (
                 <li key={index} className="flex items-center text-white">
-                  <FiCheck className="mr-2 flex-shrink-0 text-[#EEC71B]" />
+                  <FiCheck
+                    className="mr-2 flex-shrink-0 text-[#EEC71B]"
+                    aria-hidden="true"
+                  />
                   <span>{bullet}</span>
                 </li>
               ))}
             </motion.ul>
-            <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-white opacity-10 rounded-full transform rotate-45" />
-            <div className="absolute -top-4 -left-4 w-16 h-16 bg-white opacity-10 rounded-full" />
+            <div
+              className="absolute -bottom-4 -right-4 w-24 h-24 bg-white opacity-10 rounded-full transform rotate-45"
+              aria-hidden="true"
+            />
+            <div
+              className="absolute -top-4 -left-4 w-16 h-16 bg-white opacity-10 rounded-full"
+              aria-hidden="true"
+            />
           </div>
         </motion.div>
       </AnimatePresence>
@@ -102,11 +132,14 @@ const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
         {items.map((_, index) => (
           <button
             key={index}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+            className={`w-6 h-6 p-1 rounded-full transition-all duration-300 ${
               index === currentIndex ? "bg-white scale-125" : "bg-white/50"
             }`}
             onClick={() => setCurrentIndex(index)}
-          />
+            aria-label={`Go to slide ${index + 1}`}
+          >
+            <span className="block w-full h-full rounded-full bg-current"></span>
+          </button>
         ))}
       </div>
     </div>
@@ -114,17 +147,6 @@ const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
 });
 
 Carousel.displayName = "Carousel";
-
-interface TabContentItem {
-  subtitle: string;
-  description: string;
-  stats?: Array<{ value: string; label: string }>;
-  list?: string[];
-}
-
-interface TabContentProps {
-  content: TabContentItem[];
-}
 
 const TabContent: React.FC<TabContentProps> = React.memo(({ content }) => (
   <div className="space-y-6">
@@ -134,23 +156,23 @@ const TabContent: React.FC<TabContentProps> = React.memo(({ content }) => (
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: index * 0.1 }}
-        className="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-200"
+        className="bg-gray-100 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-200"
       >
         <h4 className="font-bold text-xl text-[#3D3B4A] mb-3">
           {item.subtitle}
         </h4>
-        <p className="text-gray-600 mb-4">{item.description}</p>
+        <p className="text-gray-700 mb-4">{item.description}</p>
         {item.stats && (
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4">
             {item.stats.map((stat, statIndex) => (
               <div
                 key={statIndex}
-                className="text-center bg-gray-50 p-3 rounded"
+                className="text-center bg-white p-3 rounded shadow"
               >
-                <p className="text-2xl font-bold text-[#EEC71B]">
+                <p className="text-2xl font-bold text-[#3D3B4A]">
                   {stat.value}
                 </p>
-                <p className="text-sm text-gray-500">{stat.label}</p>
+                <p className="text-sm text-gray-700">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -158,8 +180,8 @@ const TabContent: React.FC<TabContentProps> = React.memo(({ content }) => (
         {item.list && (
           <ul className="mt-4 space-y-2">
             {item.list.map((listItem, listIndex) => (
-              <li key={listIndex} className="flex items-center text-gray-600">
-                <FiCheck className="mr-2 text-[#EEC71B]" />
+              <li key={listIndex} className="flex items-center text-gray-700">
+                <FiCheck className="mr-2 text-[#3D3B4A]" aria-hidden="true" />
                 <span>{listItem}</span>
               </li>
             ))}
@@ -171,16 +193,6 @@ const TabContent: React.FC<TabContentProps> = React.memo(({ content }) => (
 ));
 
 TabContent.displayName = "TabContent";
-
-interface TabContent {
-  icon: React.ReactElement<IconType>;
-  title: string;
-  content: TabContentItem[];
-}
-
-interface TabsContent {
-  [key: string]: TabContent;
-}
 
 const WhyChooseWebWorksSection: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("efficiency");
@@ -610,14 +622,16 @@ const WhyChooseWebWorksSection: React.FC = () => {
                 {Object.entries(tabsContent).map(([key, { icon, title }]) => (
                   <Tooltip key={key} content={title}>
                     <button
-                      className={`p-3 rounded-full transition-all duration-300 ${
+                      className={`p-4 rounded-full transition-all duration-300 ${
                         activeTab === key
-                          ? "bg-[#EEC71B] text-white shadow-md"
+                          ? "bg-[#3D3B4A] text-white shadow-md"
                           : "bg-gray-100 text-[#3D3B4A] hover:bg-gray-200"
                       }`}
                       onClick={() => handleTabChange(key)}
+                      aria-label={title}
+                      aria-pressed={activeTab === key}
                     >
-                      {icon}
+                      {React.cloneElement(icon, { "aria-hidden": "true" })}
                     </button>
                   </Tooltip>
                 ))}
@@ -690,15 +704,15 @@ const WhyChooseWebWorksSection: React.FC = () => {
           border-radius: 4px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #eec71b;
+          background: #3d3b4a;
           border-radius: 4px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #d4b017;
+          background: #2a2937;
         }
       `}</style>
     </section>
   );
 };
 
-export default WhyChooseWebWorksSection;
+export default React.memo(WhyChooseWebWorksSection);
