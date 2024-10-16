@@ -230,6 +230,7 @@ const Footer: React.FC = () => {
                   className="bg-[#EEC71B] text-[#3D3B4A] px-4 py-2 rounded-r-md hover:bg-opacity-90 transition-colors duration-300"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  aria-label="Iesniegt e-pastu"
                 >
                   <FiMail />
                 </motion.button>
