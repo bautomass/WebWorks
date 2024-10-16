@@ -37,7 +37,7 @@ const JsonLd: React.FC = () => {
       contactPoint: [
         {
           "@type": "ContactPoint",
-          telephone: "+371-12345678",
+          telephone: "+371-26282630",
           contactType: "customer service",
         },
       ],
@@ -132,7 +132,7 @@ const Footer: React.FC = () => {
 
   return (
     <footer className="bg-gradient-to-br from-[#3D3B4A] to-[#2C2A35] text-white py-12 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('/footer-bg.svg')] opacity-10"></div>
+      <div className="absolute inset-0 opacity-10"></div>
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8"
