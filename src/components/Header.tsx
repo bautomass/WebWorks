@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -26,10 +26,24 @@ import {
   FiDroplet,
   FiGrid,
   FiLayout,
+  IconType,
 } from "react-icons/fi";
 import { BiCookie } from "react-icons/bi";
 
-const menuItems = [
+interface DropdownItem {
+  name: string;
+  href: string;
+  description: string;
+  icon: IconType;
+}
+
+interface MenuItem {
+  name: string;
+  href: string;
+  dropdown?: DropdownItem[];
+}
+
+const menuItems: MenuItem[] = [
   { name: "Sākums", href: "/" },
   { name: "Par mums", href: "/about-us" },
   { name: "Konsultācija", href: "/consultation" },
@@ -158,7 +172,7 @@ const menuItems = [
   { name: "Kontakti", href: "/contact-us" },
 ];
 
-export default function Header() {
+const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
@@ -204,28 +218,42 @@ export default function Header() {
         <div className="absolute inset-0 z-0 pointer-events-none">
           <GeoBackground />
         </div>
-        <Link href="/" className="flex-shrink-0 relative z-10">
+        <Link
+          href="/"
+          className="flex-shrink-0 relative z-10"
+          aria-label="Go to homepage"
+        >
           <Image
             src="/images/webworks.svg"
-            alt="Jūsu Uzņēmuma Logo"
+            alt="WebWorks Logo"
             width={240}
             height={80}
             className="transform hover:scale-105 transition-transform duration-300"
+            priority
           />
         </Link>
         {isMobile ? (
           <BurgerMenu isOpen={isOpen} setIsOpen={setIsOpen} />
         ) : (
-          <nav className="flex items-center space-x-8 relative z-10">
+          <nav
+            className="flex items-center space-x-8 relative z-10"
+            aria-label="Main navigation"
+          >
             <NavItems />
             <CtaButton />
           </nav>
         )}
         <div className="absolute bottom-0 left-0 right-0 z-0 h-2">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#8CB8B4] via-[#EEC71B] to-[#CF4B43] border-b-2 border-solid animate-border-gradient" />
+          <div
+            className="absolute inset-0 bg-gradient-to-r from-[#8CB8B4] via-[#EEC71B] to-[#CF4B43] border-b-2 border-solid animate-border-gradient"
+            aria-hidden="true"
+          />
         </div>
         {!isVisible && (
-          <div className="fixed top-0 left-1/2 transform -translate-x-1/2 bg-[#EEC71B] text-[#3D3B4A] px-4 py-2 rounded-b-md shadow-md text-sm font-medium">
+          <div
+            className="fixed top-0 left-1/2 transform -translate-x-1/2 bg-[#EEC71B] text-[#3D3B4A] px-4 py-2 rounded-b-md shadow-md text-sm font-medium"
+            role="alert"
+          >
             Scroll up or move cursor to top to see menu
           </div>
         )}
@@ -233,32 +261,32 @@ export default function Header() {
       {isMobile && <MobileMenu isOpen={isOpen} setIsOpen={setIsOpen} />}
     </>
   );
-}
+};
 
-function GeoBackground() {
-  return (
-    <div className="w-full h-full grid grid-cols-3 grid-rows-1">
-      {[...Array(12)].map((_, i) => (
-        <div key={i} className="relative overflow-hidden h-full">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#8CB8B4] to-[#EEC71B] opacity-10 transform rotate-45" />
-          <svg
-            className="absolute w-full h-full"
-            viewBox="0 0 100 100"
-            preserveAspectRatio="none"
-          >
-            <polygon
-              points="0,100 100,0 100,100"
-              fill="#CF4B43"
-              fillOpacity="0.05"
-            />
-          </svg>
-        </div>
-      ))}
-    </div>
-  );
-}
+const GeoBackground: React.FC = React.memo(() => (
+  <div className="w-full h-full grid grid-cols-3 grid-rows-1">
+    {[...Array(12)].map((_, i) => (
+      <div key={i} className="relative overflow-hidden h-full">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#8CB8B4] to-[#EEC71B] opacity-10 transform rotate-45" />
+        <svg
+          className="absolute w-full h-full"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+        >
+          <polygon
+            points="0,100 100,0 100,100"
+            fill="#CF4B43"
+            fillOpacity="0.05"
+          />
+        </svg>
+      </div>
+    ))}
+  </div>
+));
 
-function NavItems() {
+GeoBackground.displayName = "GeoBackground";
+
+const NavItems: React.FC = () => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   return (
@@ -271,6 +299,8 @@ function NavItems() {
                 onMouseEnter={() => setOpenDropdown(item.name)}
                 onMouseLeave={() => setOpenDropdown(null)}
                 className="text-[#3D3B4A] font-medium group transition-colors duration-300 hover:text-[#8CB8B4] flex items-center"
+                aria-expanded={openDropdown === item.name}
+                aria-haspopup="true"
               >
                 {item.name}
                 <svg
@@ -281,6 +311,7 @@ function NavItems() {
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
                 >
                   <path
                     strokeLinecap="round"
@@ -300,6 +331,9 @@ function NavItems() {
                     onMouseEnter={() => setOpenDropdown(item.name)}
                     onMouseLeave={() => setOpenDropdown(null)}
                     className="fixed left-0 right-0 mt-6 bg-white shadow-lg py-6 z-50 border-t-4 border-[#8CB8B4]"
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby={`${item.name}-menu`}
                   >
                     <div className="container mx-auto px-4">
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -308,12 +342,14 @@ function NavItems() {
                             key={dropdownItem.name}
                             href={dropdownItem.href}
                             className="block p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-150 border border-gray-200 hover:border-[#8CB8B4] group"
+                            role="menuitem"
                           >
                             <div className="flex items-center mb-2">
-                              <span className="text-[#8CB8B4] mr-2">
-                                {dropdownItem.icon && (
-                                  <dropdownItem.icon className="w-6 h-6" />
-                                )}
+                              <span
+                                className="text-[#8CB8B4] mr-2"
+                                aria-hidden="true"
+                              >
+                                <dropdownItem.icon className="w-6 h-6" />
                               </span>
                               <h3 className="text-lg font-semibold text-[#3D3B4A] group-hover:text-[#8CB8B4] transition-colors duration-150">
                                 {dropdownItem.name}
@@ -338,64 +374,75 @@ function NavItems() {
               {item.name}
             </Link>
           )}
-          <span className="absolute left-0 bottom-0 w-full h-0.5 bg-[#EEC71B] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out" />
+          <span
+            className="absolute left-0 bottom-0 w-full h-0.5 bg-[#EEC71B] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"
+            aria-hidden="true"
+          />
         </div>
       ))}
     </>
   );
-}
+};
 
-function CtaButton() {
-  return (
-    <Link
-      href="/apreksinat-aptuvenu-lapas-izmaksas-cenu"
-      className="bg-[#8CB8B4] text-white px-6 py-2 rounded-full hover:bg-[#EEC71B] transition-colors duration-300 relative overflow-hidden group shadow-md"
-    >
-      <span className="relative z-10">Saņemt piedāvājumu</span>
-      <span className="absolute inset-0 bg-[#CF4B43] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left" />
-    </Link>
-  );
-}
+const CtaButton: React.FC = React.memo(() => (
+  <Link
+    href="/apreksinat-aptuvenu-lapas-izmaksas-cenu"
+    className="bg-[#8CB8B4] text-[#3D3B4A] px-6 py-2 rounded-lg hover:bg-[#EEC71B] transition-colors duration-300 relative overflow-hidden group shadow-md font-bold"
+    aria-label="Saņemt piedāvājumu"
+  >
+    <span className="relative z-10">Saņemt piedāvājumu</span>
+    <span
+      className="absolute inset-0 bg-[#CF4B43] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left"
+      aria-hidden="true"
+    />
+  </Link>
+));
 
-function BurgerMenu({
-  isOpen,
-  setIsOpen,
-}: {
+CtaButton.displayName = "CtaButton";
+
+interface BurgerMenuProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-}) {
-  return (
+}
+
+const BurgerMenu: React.FC<BurgerMenuProps> = React.memo(
+  ({ isOpen, setIsOpen }) => (
     <button
       onClick={() => setIsOpen(!isOpen)}
       className="lg:hidden flex flex-col justify-center items-center w-10 h-10 relative z-50"
-      aria-label="Toggle menu"
+      aria-label={isOpen ? "Close menu" : "Open menu"}
+      aria-expanded={isOpen}
     >
       <span
         className={`bg-[#3D3B4A] h-0.5 w-6 rounded-sm transition-all duration-300 ${
           isOpen ? "rotate-45 translate-y-1.5" : ""
         }`}
+        aria-hidden="true"
       />
       <span
         className={`bg-[#3D3B4A] h-0.5 w-6 rounded-sm my-1 transition-all duration-300 ${
           isOpen ? "opacity-0" : ""
         }`}
+        aria-hidden="true"
       />
       <span
         className={`bg-[#3D3B4A] h-0.5 w-6 rounded-sm transition-all duration-300 ${
           isOpen ? "-rotate-45 -translate-y-1.5" : ""
         }`}
+        aria-hidden="true"
       />
     </button>
-  );
-}
+  )
+);
 
-function MobileMenu({
-  isOpen,
-  setIsOpen,
-}: {
+BurgerMenu.displayName = "BurgerMenu";
+
+interface MobileMenuProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-}) {
+}
+
+const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, setIsOpen }) => {
   const menuVariants = {
     closed: { opacity: 0, x: "100%" },
     open: { opacity: 1, x: 0 },
@@ -413,9 +460,14 @@ function MobileMenu({
           variants={menuVariants}
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className="fixed inset-0 bg-white/95 backdrop-blur-md shadow-lg p-6 flex flex-col z-50 overflow-y-auto lg:hidden"
+          aria-label="Mobile menu"
         >
           <div className="flex justify-between items-center mb-8">
-            <Link href="/" onClick={() => setIsOpen(false)}>
+            <Link
+              href="/"
+              onClick={() => setIsOpen(false)}
+              aria-label="Go to homepage"
+            >
               <Image
                 src="/images/webworks.svg"
                 alt="Your Company Logo"
@@ -427,12 +479,14 @@ function MobileMenu({
             <button
               onClick={() => setIsOpen(false)}
               className="text-[#3D3B4A] hover:text-[#8CB8B4] transition-colors duration-300"
+              aria-label="Close menu"
             >
               <svg
                 className="w-6 h-6"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
+                aria-hidden="true"
               >
                 <path
                   strokeLinecap="round"
@@ -455,6 +509,7 @@ function MobileMenu({
                         )
                       }
                       className="text-[#3D3B4A] font-bold text-2xl flex items-center w-full justify-between border-b border-gray-200 pb-4"
+                      aria-expanded={openDropdown === item.name}
                     >
                       <span className="flex items-center">
                         <span className="text-[#8CB8B4] mr-4 text-xl font-normal">
@@ -469,6 +524,7 @@ function MobileMenu({
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
+                        aria-hidden="true"
                       >
                         <path
                           strokeLinecap="round"
@@ -489,7 +545,10 @@ function MobileMenu({
                           >
                             <span className="flex items-center">
                               {dropdownItem.icon && (
-                                <dropdownItem.icon className="w-5 h-5 mr-2" />
+                                <dropdownItem.icon
+                                  className="w-5 h-5 mr-2"
+                                  aria-hidden="true"
+                                />
                               )}
                               {dropdownItem.name}
                             </span>
@@ -515,6 +574,7 @@ function MobileMenu({
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
+                      aria-hidden="true"
                     >
                       <path
                         strokeLinecap="round"
@@ -531,15 +591,21 @@ function MobileMenu({
           <div className="mt-auto flex justify-center">
             <Link
               href="/apreksinat-aptuvenu-lapas-izmaksas-cenu"
-              className="bg-[#8CB8B4] text-white px-8 py-3 rounded-full hover:bg-[#EEC71B] transition-colors duration-300 text-lg font-semibold shadow-md relative overflow-hidden group"
+              className="bg-[#8CB8B4] text-[#3D3B4A] px-8 py-3 rounded-full hover:bg-[#EEC71B] transition-colors duration-300 text-lg font-semibold shadow-md relative overflow-hidden group"
               onClick={() => setIsOpen(false)}
+              aria-label="Saņemt piedāvājumu"
             >
               <span className="relative z-10">Saņemt piedāvājumu</span>
-              <span className="absolute inset-0 bg-[#CF4B43] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left" />
+              <span
+                className="absolute inset-0 bg-[#CF4B43] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left"
+                aria-hidden="true"
+              />
             </Link>
           </div>
         </motion.nav>
       )}
     </AnimatePresence>
   );
-}
+};
+
+export default React.memo(Header);
