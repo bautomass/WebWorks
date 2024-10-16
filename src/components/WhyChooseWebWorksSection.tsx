@@ -66,7 +66,7 @@ const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
   }, [items.length]);
 
   return (
-    <div className="relative w-full h-full overflow-hidden rounded-lg shadow-2xl bg-gradient-to-br from-[#8CB8B4] to-[#EEC71B]">
+    <div className="relative w-full overflow-hidden rounded-lg shadow-2xl bg-gradient-to-br from-[#8CB8B4] to-[#EEC71B]">
       <AnimatePresence initial={false}>
         <motion.div
           key={currentIndex}
@@ -74,14 +74,15 @@ const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
           transition={{ duration: 0.5 }}
-          className="absolute inset-0 flex items-center justify-center"
+          className="flex items-center justify-center p-4 sm:p-8"
         >
-          <div className="text-center p-8 relative">
+          <div className="text-center relative">
             <motion.div
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="text-8xl text-white mb-6 transform hover:scale-110 transition-transform duration-300"
+              className="text-5xl sm:text-8xl text-white mb-4 sm:mb-6 transform hover:scale-110 transition-transform duration-300"
+              aria-hidden="true"
             >
               {items[currentIndex].icon}
             </motion.div>
@@ -89,7 +90,7 @@ const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.5 }}
-              className="text-3xl font-bold text-white mb-4"
+              className="text-xl sm:text-3xl font-bold text-white mb-2 sm:mb-4"
             >
               {items[currentIndex].title}
             </motion.h3>
@@ -97,7 +98,7 @@ const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.4, duration: 0.5 }}
-              className="text-xl text-white mb-6"
+              className="text-sm sm:text-xl text-white mb-4 sm:mb-6"
             >
               {items[currentIndex].description}
             </motion.p>
@@ -105,7 +106,7 @@ const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.5 }}
-              className="space-y-2"
+              className="space-y-2 text-sm sm:text-base"
             >
               {items[currentIndex].bullets.map((bullet, index) => (
                 <li key={index} className="flex items-center text-white">
@@ -117,28 +118,20 @@ const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
                 </li>
               ))}
             </motion.ul>
-            <div
-              className="absolute -bottom-4 -right-4 w-24 h-24 bg-white opacity-10 rounded-full transform rotate-45"
-              aria-hidden="true"
-            />
-            <div
-              className="absolute -top-4 -left-4 w-16 h-16 bg-white opacity-10 rounded-full"
-              aria-hidden="true"
-            />
           </div>
         </motion.div>
       </AnimatePresence>
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+      <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
         {items.map((_, index) => (
           <button
             key={index}
-            className={`w-6 h-6 p-1 rounded-full transition-all duration-300 ${
+            className={`w-3 h-3 sm:w-6 sm:h-6 p-0.5 sm:p-1 rounded-full transition-all duration-300 ${
               index === currentIndex ? "bg-white scale-125" : "bg-white/50"
             }`}
             onClick={() => setCurrentIndex(index)}
             aria-label={`Go to slide ${index + 1}`}
           >
-            <span className="block w-full h-full rounded-full bg-current"></span>
+            <span className="sr-only">Slide {index + 1}</span>
           </button>
         ))}
       </div>
@@ -149,38 +142,43 @@ const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
 Carousel.displayName = "Carousel";
 
 const TabContent: React.FC<TabContentProps> = React.memo(({ content }) => (
-  <div className="space-y-6">
+  <div className="space-y-4 sm:space-y-6">
     {content.map((item, index) => (
       <motion.div
         key={index}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: index * 0.1 }}
-        className="bg-gray-100 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-200"
+        className="bg-gray-100 p-4 sm:p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-200"
       >
-        <h4 className="font-bold text-xl text-[#3D3B4A] mb-3">
+        <h4 className="font-bold text-lg sm:text-xl text-[#3D3B4A] mb-2 sm:mb-3">
           {item.subtitle}
         </h4>
-        <p className="text-gray-700 mb-4">{item.description}</p>
+        <p className="text-sm sm:text-base text-gray-700 mb-3 sm:mb-4">
+          {item.description}
+        </p>
         {item.stats && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4 mt-3 sm:mt-4">
             {item.stats.map((stat, statIndex) => (
               <div
                 key={statIndex}
-                className="text-center bg-white p-3 rounded shadow"
+                className="text-center bg-white p-2 sm:p-3 rounded shadow"
               >
-                <p className="text-2xl font-bold text-[#3D3B4A]">
+                <p className="text-lg sm:text-2xl font-bold text-[#3D3B4A]">
                   {stat.value}
                 </p>
-                <p className="text-sm text-gray-700">{stat.label}</p>
+                <p className="text-xs sm:text-sm text-gray-700">{stat.label}</p>
               </div>
             ))}
           </div>
         )}
         {item.list && (
-          <ul className="mt-4 space-y-2">
+          <ul className="mt-3 sm:mt-4 space-y-1 sm:space-y-2">
             {item.list.map((listItem, listIndex) => (
-              <li key={listIndex} className="flex items-center text-gray-700">
+              <li
+                key={listIndex}
+                className="flex items-center text-sm sm:text-base text-gray-700"
+              >
                 <FiCheck className="mr-2 text-[#3D3B4A]" aria-hidden="true" />
                 <span>{listItem}</span>
               </li>
@@ -604,25 +602,25 @@ const WhyChooseWebWorksSection: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative pt-5 mt-20 pb-20 px-4 sm:px-6 lg:px-8">
+    <section className="relative pt-5 mt-10 sm:mt-20 pb-10 sm:pb-20 px-4 sm:px-6 lg:px-8">
       <div className="absolute inset-0 bg-web-pattern rounded-t-xl"></div>
       <div className="relative z-10 max-w-7xl mx-auto">
-        <h2 className="title-highlight text-4xl sm:text-5xl font-bold text-[#3D3B4A] mb-16 text-center relative inline-block left-1/2 transform -translate-x-1/2">
+        <h2 className="title-highlight text-3xl sm:text-4xl md:text-5xl font-bold text-[#3D3B4A] mb-8 sm:mb-16 text-center relative inline-block left-1/2 transform -translate-x-1/2">
           Kāpēc Izvēlēties WebWorks
         </h2>
 
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-6 sm:gap-8">
           <div className="lg:w-2/5">
             <Carousel items={carouselItems} />
           </div>
 
-          <div className="lg:w-3/5">
-            <div className="bg-white rounded-lg shadow-lg p-6 h-full overflow-hidden flex flex-col">
-              <div className="flex flex-wrap justify-center gap-2 mb-6">
+          <div className="lg:w-3/5 mt-6 lg:mt-0">
+            <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 h-full overflow-hidden flex flex-col">
+              <div className="flex flex-wrap justify-center gap-2 mb-4 sm:mb-6">
                 {Object.entries(tabsContent).map(([key, { icon, title }]) => (
                   <Tooltip key={key} content={title}>
                     <button
-                      className={`p-4 rounded-full transition-all duration-300 ${
+                      className={`p-3 sm:p-4 rounded-full transition-all duration-300 ${
                         activeTab === key
                           ? "bg-[#3D3B4A] text-white shadow-md"
                           : "bg-gray-100 text-[#3D3B4A] hover:bg-gray-200"
@@ -631,7 +629,10 @@ const WhyChooseWebWorksSection: React.FC = () => {
                       aria-label={title}
                       aria-pressed={activeTab === key}
                     >
-                      {React.cloneElement(icon, { "aria-hidden": "true" })}
+                      {React.cloneElement(icon, {
+                        "aria-hidden": "true",
+                        className: "w-5 h-5 sm:w-6 sm:h-6",
+                      })}
                     </button>
                   </Tooltip>
                 ))}
@@ -677,7 +678,7 @@ const WhyChooseWebWorksSection: React.FC = () => {
           );
         }
         .title-highlight {
-          padding: 0.5em 2em;
+          padding: 0.5em 1em;
           display: inline-block;
         }
         .title-highlight::before {
@@ -695,6 +696,10 @@ const WhyChooseWebWorksSection: React.FC = () => {
             rgba(248, 249, 250, 0) 80%
           );
           z-index: -1;
+        }
+        .custom-scrollbar {
+          scrollbar-width: thin;
+          scrollbar-color: #3d3b4a #f1f1f1;
         }
         .custom-scrollbar::-webkit-scrollbar {
           width: 8px;
