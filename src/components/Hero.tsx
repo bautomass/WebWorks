@@ -41,8 +41,13 @@ const ValueProposition: React.FC<ValueProposition> = React.memo(
       transition={{ duration: 0.5 }}
       whileHover={{ scale: 1.05 }}
     >
-      <Icon className="text-2xl text-[#EEC71B]" aria-hidden="true" />
-      <span className="text-sm font-medium text-gray-700">{title}</span>
+      <Icon
+        className="text-2xl text-[#EEC71B] flex-shrink-0"
+        aria-hidden="true"
+      />
+      <span className="text-sm font-medium text-gray-700 leading-tight">
+        {title}
+      </span>
     </motion.div>
   )
 );
@@ -55,6 +60,7 @@ const ColoredText: React.FC<ColoredTextProps> = React.memo(
       <span className="relative z-10">{children}</span>
       <span
         className="absolute bottom-0 left-0 w-full h-3 bg-[#EEC71B] opacity-30 transform -skew-x-12"
+        style={{ bottom: "-0.1em" }}
         aria-hidden="true"
       ></span>
     </span>
