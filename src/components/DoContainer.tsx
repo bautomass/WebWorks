@@ -11,36 +11,36 @@ interface Step {
 
 const steps: Step[] = [
   {
-    title: "1. Posms: Klienta vajadzību apspriešana",
+    title: "1. Posms: Iepazīšanās un ideju apkopošana",
     content:
-      "Mēs sākam ar detalizētu sarunu, lai izprastu jūsu vajadzības un mērķus. Šajā posmā mēs noskaidrojam, ko jūs vēlaties sasniegt ar savu mājaslapu un kādi ir jūsu galvenie mērķi.",
+      "Sākam ar patīkamu sarunu, lai saprastu jūsu sapņus par jauno mājaslapu. Kopā iezīmēsim galvenos mērķus, runāsim par jūsu mērķauditoriju un vēlamajām funkcijām. Beigās jums būs skaidrs plāns, kā jūsu ideja pārtaps realitātē.",
     className:
       "bg-[#20b2aa] bg-opacity-90 text-white sm:col-start-1 sm:col-end-2 sm:row-start-1 sm:row-end-2",
     arrowClass:
       "absolute top-1/2 right-[-13px] transform -translate-y-1/2 border-t-8 border-b-8 border-l-[13px] border-transparent border-l-[#20b2aae6] sm:block hidden",
   },
   {
-    title: "2. Posms: Dizaina izstrāde",
+    title: "2. Posms: Radošā dizaina izstrāde",
     content:
-      "Mūsu dizaineri veido sākotnējo konceptu jūsu mājaslapai. Mēs izstrādājam vairākus dizaina variantus un pielāgojam tos, pamatojoties uz jūsu atsauksmēm.",
+      "Laiks pārvērst idejas vizuālā baudā! Balstoties uz jūsu vēlmēm, radīsim 3 unikālus dizaina konceptus. Jūs varēsiet izvēlēties savu favorītu, un kopā to pilnveidosim līdz perfekcijai. Krāsas, formas, un stils - viss būs tieši pēc jūsu gaumes.",
     className:
       "bg-white bg-opacity-90 text-gray-800 sm:col-start-2 sm:col-end-3 sm:row-start-1 sm:row-end-2",
     arrowClass:
       "absolute left-1/2 bottom-[-13px] transform -translate-x-1/2 border-l-8 border-r-8 border-t-[13px] border-transparent border-t-white sm:block hidden",
   },
   {
-    title: "3. Posms: Koncepta izstrāde un precizēšana",
+    title: "3. Posms: Detalizēta dizaina izstrāde",
     content:
-      "Pēc sākotnējā dizaina izstrādes mēs veicam finetuning, lai nodrošinātu, ka dizains pilnībā atbilst jūsu prasībām un vēlmēm.",
+      "Šajā posmā jūsu izvēlētais dizains iegūs dzīvību. Izstrādāsim pilnu mājaslapas dizainu, ieskaitot visas galvenās lapas un mobilās versijas. Kopā pārskatīsim katru elementu, lai pārliecinātos, ka viss ir tieši tā, kā jūs vēlaties.",
     className:
       "bg-[#20b2aa] bg-opacity-90 text-white sm:col-start-2 sm:col-end-3 sm:row-start-2 sm:row-end-3",
     arrowClass:
       "absolute top-1/2 left-[-13px] transform -translate-y-1/2 border-t-8 border-b-8 border-r-[13px] border-transparent border-r-[#20b2aae6] sm:block hidden",
   },
   {
-    title: "4. Posms: Vienošanās un līguma noslēgšana",
+    title: "4. Posms: Pēdējie pieslīpējumi un starta šāviens",
     content:
-      "Pēc dizaina apstiprināšanas mēs pārrunājam gala nosacījumus un noslēdzam līgumu. Šajā posmā mēs pārliecināmies, ka viss ir gatavs mājaslapas izstrādei un ieviešanai.",
+      "Pēc galvenā dizaina apstiprināšanas vēl nav par vēlu veikt izmaiņas! Piedāvājam 2 bezmaksas pārskatīšanas reizes, lai jūs būtu pilnībā apmierināti. Kad viss ir perfekti, noslēgsim līgumu un sāksim darbu pie jūsu jaunās, brīnišķīgās mājaslapas.",
     className:
       "bg-white bg-opacity-90 text-gray-800 sm:col-start-1 sm:col-end-2 sm:row-start-2 sm:row-end-3",
     arrowClass:
