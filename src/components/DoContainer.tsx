@@ -128,17 +128,17 @@ const DoContainer: React.FC = () => {
 
   return (
     <div className="text-center p-5">
-      <h2 className="text-3xl mb-10 relative inline-block px-5 py-2.5 font-bold text-gray-800 uppercase tracking-wider before:content-[''] before:absolute before:w-[70px] before:h-1 before:bg-[#20b2aa] before:top-1/2 before:left-[-80px] before:transform before:-translate-y-1/2 after:content-[''] after:absolute after:w-[70px] after:h-1 after:bg-[#20b2aa] after:top-1/2 after:right-[-80px] after:transform after:-translate-y-1/2 sm:before:hidden sm:after:hidden">
+      <h2 className="text-2xl sm:text-3xl mb-6 sm:mb-10 relative inline-block px-3 sm:px-5 py-2 sm:py-2.5 font-bold text-gray-800 uppercase tracking-wider before:content-[''] before:absolute before:w-[50px] sm:before:w-[70px] before:h-1 before:bg-[#20b2aa] before:top-1/2 before:left-[-60px] sm:before:left-[-80px] before:transform before:-translate-y-1/2 after:content-[''] after:absolute after:w-[50px] sm:after:w-[70px] after:h-1 after:bg-[#20b2aa] after:top-1/2 after:right-[-60px] sm:after:right-[-80px] after:transform after:-translate-y-1/2 xs:before:hidden xs:after:hidden">
         Mājaslapas Izstrādes Process: Kā Mēs To Darām
       </h2>
       <div
         ref={containerRef}
-        className="min-w-[calc(100%-2rem)] grid grid-cols-1 gap-4 max-w-[1000px] mx-auto p-5 relative sm:grid-cols-2 sm:grid-rows-2"
+        className="min-w-[calc(100%-2rem)] grid grid-cols-1 gap-4 sm:gap-6 max-w-[1000px] mx-auto p-3 sm:p-5 relative sm:grid-cols-2 sm:grid-rows-2"
       >
         {steps.map((step, index) => (
           <div
             key={index}
-            className={`step max-h-[250px] relative p-7 flex flex-col justify-center transition-all duration-300 ease-in-out rounded-2xl shadow-lg z-10 ${
+            className={`step relative p-4 sm:p-7 flex flex-col justify-start transition-all duration-300 ease-in-out rounded-2xl shadow-lg z-10 ${
               step.className
             } opacity-0 ${
               index % 2 === 0
@@ -148,11 +148,13 @@ const DoContainer: React.FC = () => {
                 : "translate-y-[50px]"
             } hover:-translate-y-1 hover:shadow-xl`}
           >
-            <div className="max-w-[90%] mx-auto">
-              <h3 className="text-[22px] font-extrabold mb-4 relative after:content-[''] after:absolute after:bottom-[-5px] after:left-0 after:w-full after:h-1 after:bg-gradient-to-r after:from-[#20b2aa] after:via-white after:to-[#20b2aa] after:bg-[length:20px_4px]">
+            <div className="w-full mx-auto">
+              <h3 className="text-lg sm:text-[22px] font-extrabold mb-3 sm:mb-4 relative after:content-[''] after:absolute after:bottom-[-5px] after:left-0 after:w-full after:h-1 after:bg-gradient-to-r after:from-[#20b2aa] after:via-white after:to-[#20b2aa] after:bg-[length:20px_4px]">
                 {step.title}
               </h3>
-              <p className="text-base leading-relaxed">{step.content}</p>
+              <p className="text-sm sm:text-base leading-relaxed">
+                {step.content}
+              </p>
             </div>
             <div className={step.arrowClass}></div>
           </div>
