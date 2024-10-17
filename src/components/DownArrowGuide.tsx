@@ -11,7 +11,7 @@ const DownArrowGuide: React.FC = () => {
             style={{
               animationDelay: `${i * 0.5}s`,
               borderTopColor: "#8CB8B4",
-              filter: "drop-shadow(0 0 2px #EEC71B)",
+              filter: "drop-shadow(0 0 1px black)",
             }}
           ></div>
         ))}
