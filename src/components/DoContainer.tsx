@@ -45,7 +45,6 @@ const DoContainer = () => {
       path.style.animation = "flowAnimation 10s linear infinite";
       svg.appendChild(path);
 
-      // Redraw on window resize
       const redrawPath = () => {
         let newD = "";
         sequence.forEach((currentIndex, index) => {
