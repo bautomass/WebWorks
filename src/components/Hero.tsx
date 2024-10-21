@@ -144,7 +144,7 @@ const Hero: React.FC = () => {
                 <ColoredText color="text-[#EEC71B]">Arhitekti</ColoredText>
               </span>
             </h1>
-            <p className="text-base sm:text-lg text-gray-700 mb-6 sm:mb-8 text-center lg:text-left">
+            <p className="text-base sm:text-lg text-gray-700 mb-6 sm:mb-8 text-center lg:text-left max-w-xl mx-auto lg:mx-0">
               Mēs veidojam{" "}
               <ColoredText color="text-[#8CB8B4]">
                 mūsdienīgas un efektīvas tīmekļa vietnes
