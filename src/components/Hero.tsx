@@ -34,7 +34,7 @@ type HeroButtonProps = Readonly<{
 const ValueProposition: React.FC<ValueProposition> = React.memo(
   ({ icon: Icon, title }) => (
     <motion.div
-      className="flex items-center space-x-3 bg-white bg-opacity-50 backdrop-blur-sm p-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+      className="flex items-center space-x-3 bg-white bg-opacity-50 backdrop-blur-sm p-2.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -42,7 +42,7 @@ const ValueProposition: React.FC<ValueProposition> = React.memo(
       whileHover={{ scale: 1.05 }}
     >
       <Icon
-        className="text-2xl text-[#EEC71B] flex-shrink-0"
+        className="text-xl text-[#EEC71B] flex-shrink-0"
         aria-hidden="true"
       />
       <span className="text-sm font-medium text-gray-700 leading-tight">
@@ -56,10 +56,12 @@ ValueProposition.displayName = "ValueProposition";
 
 const ColoredText: React.FC<ColoredTextProps> = React.memo(
   ({ children, color }) => (
-    <span className={`font-bold ${color} relative inline-block`}>
+    <span
+      className={`font-bold ${color} relative inline-block whitespace-nowrap`}
+    >
       <span className="relative z-10">{children}</span>
       <span
-        className="absolute bottom-0 left-0 w-full h-3 bg-[#EEC71B] opacity-30 transform -skew-x-12"
+        className="absolute bottom-0 left-0 w-full h-2.5 bg-[#EEC71B] opacity-30 transform -skew-x-12"
         style={{ bottom: "-0.1em" }}
         aria-hidden="true"
       ></span>
@@ -73,7 +75,7 @@ const HeroButton: React.FC<HeroButtonProps> = React.memo(
   ({ href, bg, text, hover, children, ariaLabel }) => (
     <Link
       href={href}
-      className={`inline-block ${bg} ${text} px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-base sm:text-lg font-semibold ${hover} transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 w-full sm:w-auto text-center`}
+      className={`inline-block ${bg} ${text} px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg text-base font-semibold ${hover} transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 w-full sm:w-auto text-center`}
       aria-label={ariaLabel}
     >
       {children}
@@ -111,7 +113,7 @@ const Hero: React.FC = () => {
 
   const renderValuePropositions = useCallback(
     () => (
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 w-full">
         {valuePropositions.map((prop, index) => (
           <ValueProposition key={`value-prop-${index}`} {...prop} />
         ))}
@@ -123,38 +125,40 @@ const Hero: React.FC = () => {
   return (
     <section
       ref={containerRef}
-      className="relative bg-gradient-to-b from-[#F3F5F4] to-white py-12 sm:py-16 lg:py-20 px-4 sm:px-6 overflow-hidden"
+      className="relative bg-gradient-to-b from-[#F3F5F4] to-white py-8 sm:py-12 lg:py-16 px-3 sm:px-4 overflow-hidden"
     >
       <div
         className="absolute top-0 left-0 w-full h-full opacity-5"
         aria-hidden="true"
       ></div>
       <div className="container mx-auto max-w-7xl relative z-10">
-        <div className="flex flex-col lg:flex-row items-center">
+        <div className="flex flex-col lg:flex-row items-center lg:items-start">
           <motion.div
-            className="w-full lg:w-1/2 mb-8 lg:mb-0 lg:pr-12 order-2 lg:order-1"
+            className="w-full lg:w-1/2 mb-6 lg:mb-0 lg:pr-8 order-2 lg:order-1"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-[#3D3B4A] mb-4 sm:mb-6 leading-tight text-center lg:text-left">
-              <span className="block">Digitālās Izcilības</span>
-              <span className="block">
+            <div className="w-full text-left">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-[#3D3B4A] mb-3 sm:mb-4 leading-tight whitespace-normal">
+                <span className="whitespace-nowrap">Digitālās Izcilības</span>{" "}
                 <ColoredText color="text-[#EEC71B]">Arhitekti</ColoredText>
-              </span>
-            </h1>
-            <p className="text-base sm:text-lg text-gray-700 mb-6 sm:mb-8 text-center lg:text-left max-w-xl mx-auto lg:mx-0">
-              Mēs veidojam{" "}
-              <ColoredText color="text-[#8CB8B4]">
-                mūsdienīgas un efektīvas tīmekļa vietnes
-              </ColoredText>
-              , kas ne tikai izskatās lieliski, bet arī sniedz reālus rezultātus
-              jūsu biznesam. No vienkāršām mājaslapām līdz sarežģītām
-              e-komercijas platformām - mēs esam gatavi īstenot jūsu digitālos
-              mērķus.
-            </p>
-            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-8 sm:mb-10">
+              </h1>
+              <p className="text-base text-gray-700 mb-5 sm:mb-6 max-w-full leading-relaxed">
+                <span className="whitespace-nowrap">
+                  Mēs veidojam{" "}
+                  <ColoredText color="text-[#8CB8B4]">
+                    mūsdienīgas un efektīvas tīmekļa vietnes
+                  </ColoredText>
+                </span>
+                , kas ne tikai izskatās lieliski, bet arī sniedz reālus
+                rezultātus jūsu biznesam. No vienkāršām mājaslapām līdz
+                sarežģītām e-komercijas platformām - mēs esam gatavi īstenot
+                jūsu digitālos mērķus.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row justify-center lg:justify-start items-center space-y-3 sm:space-y-0 sm:space-x-4 mb-6 sm:mb-8 w-full">
               <HeroButton
                 href="/sakt-projekta-skici"
                 bg="bg-[#EEC71B]"
@@ -177,7 +181,7 @@ const Hero: React.FC = () => {
             {renderValuePropositions()}
           </motion.div>
           <motion.div
-            className="w-full lg:w-1/2 relative order-1 lg:order-2 mb-8 lg:mb-0"
+            className="w-full lg:w-1/2 relative order-1 lg:order-2 mb-6 lg:mb-0"
             style={{ y: imageY }}
           >
             <div className="relative w-full max-w-[500px] lg:max-w-[600px] mx-auto aspect-[2/2]">
