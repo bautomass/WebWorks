@@ -147,7 +147,7 @@ const Hero: React.FC = () => {
                 Mēs veidojam{" "}
                 <ColoredText color="text-[#8CB8B4]">
                   mūsdienīgas un efektīvas
-                </ColoredText>
+                </ColoredText>{" "}
                 tīmekļa vietnes, kas ne tikai izskatās lieliski, bet arī sniedz
                 reālus rezultātus jūsu biznesam. No vienkāršām mājaslapām līdz
                 sarežģītām e-komercijas platformām - mēs esam gatavi īstenot
