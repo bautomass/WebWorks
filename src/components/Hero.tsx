@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useMemo, useCallback } from "react";
+import React, { useRef, useMemo, useCallback, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
@@ -9,6 +9,7 @@ import {
   FaRocket,
   FaHandshake,
   FaLightbulb,
+  FaPhone,
   IconType,
 } from "react-icons/fa";
 
@@ -29,6 +30,13 @@ type HeroButtonProps = Readonly<{
   hover: string;
   children: React.ReactNode;
   ariaLabel: string;
+}>;
+
+type PhoneButtonProps = Readonly<{
+  phone: string;
+  bg: string;
+  text: string;
+  hover: string;
 }>;
 
 const ValueProposition: React.FC<ValueProposition> = React.memo(
@@ -83,6 +91,45 @@ const HeroButton: React.FC<HeroButtonProps> = React.memo(
 
 HeroButton.displayName = "HeroButton";
 
+const PhoneButton: React.FC<PhoneButtonProps> = React.memo(
+  ({ phone, bg, text, hover }) => {
+    const [isRevealed, setIsRevealed] = useState(false);
+    const [isClicked, setIsClicked] = useState(false);
+
+    const formattedPhone = useMemo(() => {
+      if (isClicked) return phone;
+      if (isRevealed) return phone.slice(0, -6) + "XXXXXX";
+      return "Piezvani Mums";
+    }, [phone, isRevealed, isClicked]);
+
+    const handleClick = useCallback(() => {
+      if (!isClicked) {
+        setIsClicked(true);
+        window.location.href = `tel:${phone}`;
+      }
+    }, [phone, isClicked]);
+
+    return (
+      <button
+        onClick={handleClick}
+        onMouseEnter={() => setIsRevealed(true)}
+        onMouseLeave={() => {
+          setIsRevealed(false);
+          setIsClicked(false);
+        }}
+        className={`inline-flex items-center justify-center space-x-2 ${bg} ${text} px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg text-base font-semibold ${hover} transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 w-full sm:w-auto`}
+      >
+        <FaPhone className="text-lg" />
+        <span className="transition-all duration-300 ease-in-out">
+          {formattedPhone}
+        </span>
+      </button>
+    );
+  }
+);
+
+PhoneButton.displayName = "PhoneButton";
+
 const Hero: React.FC = () => {
   const containerRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -123,16 +170,16 @@ const Hero: React.FC = () => {
   return (
     <section
       ref={containerRef}
-      className="relative bg-gradient-to-b from-[#F3F5F4] to-white py-8 sm:py-12 lg:py-16 m-2.5 lg:m-6 overflow-hidden w-[calc(100%-20px)] lg:w-[calc(100%-48px)]"
+      className="relative bg-gradient-to-b from-[#F3F5F4] to-white m-2.5 lg:m-0 lg:px-6 py-8 sm:py-12 lg:py-16 overflow-hidden w-[calc(100%-20px)] lg:w-full"
     >
       <div
         className="absolute top-0 left-0 w-full h-full opacity-5"
         aria-hidden="true"
       ></div>
-      <div className="container mx-auto max-w-full relative z-10 px-3 sm:px-4">
-        <div className="flex flex-col lg:flex-row items-center lg:items-start">
+      <div className="container mx-auto max-w-7xl relative z-10 px-3 sm:px-4">
+        <div className="flex flex-col lg:flex-row items-center justify-center lg:items-start">
           <motion.div
-            className="w-full lg:w-1/2 mb-6 lg:mb-0 lg:pr-8 order-2 lg:order-1"
+            className="w-full lg:w-1/2 mb-6 lg:mb-0 lg:pr-20 order-2 lg:order-1"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -164,20 +211,17 @@ const Hero: React.FC = () => {
               >
                 Izveidot Skici
               </HeroButton>
-              <HeroButton
-                href="#"
+              <PhoneButton
+                phone="+37126282630"
                 bg="bg-[#3D3B4A]"
                 text="text-white"
                 hover="hover:bg-[#8CB8B4]"
-                ariaLabel="Sazināties ar mums"
-              >
-                Uzraksti Mums
-              </HeroButton>
+              />
             </div>
             {renderValuePropositions()}
           </motion.div>
           <motion.div
-            className="w-full lg:w-1/2 relative order-1 lg:order-2 mb-8 sm:mb-6 lg:mb-0"
+            className="w-full lg:w-1/2 relative order-1 lg:order-2 mb-8 sm:mb-6 lg:mb-0 lg:pl-20"
             style={{ y: imageY }}
           >
             <div className="relative w-full max-w-[500px] lg:max-w-[600px] mx-auto aspect-[2/2]">
@@ -195,7 +239,7 @@ const Hero: React.FC = () => {
                   alt="Moderns un efektīvs tīmekļa dizains jūsu biznesam"
                   layout="fill"
                   objectFit="cover"
-                  className="relative z-10 transition-transform duration-500 hover:scale-105"
+                  className="relative z-10 transition-transform duration-300 hover:scale-105"
                   priority
                   loading="eager"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
