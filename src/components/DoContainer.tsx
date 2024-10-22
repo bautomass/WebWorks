@@ -128,8 +128,10 @@ const DoContainer: React.FC = () => {
 
   return (
     <div className="text-center p-5">
-      <h2 className="text-2xl sm:text-3xl mb-6 sm:mb-10 relative inline-block px-3 sm:px-5 py-2 sm:py-2.5 font-bold text-gray-800 uppercase tracking-wider before:content-[''] before:absolute before:w-[50px] sm:before:w-[70px] before:h-1 before:bg-[#20b2aa] before:top-1/2 before:left-[-60px] sm:before:left-[-80px] before:transform before:-translate-y-1/2 after:content-[''] after:absolute after:w-[50px] sm:after:w-[70px] after:h-1 after:bg-[#20b2aa] after:top-1/2 after:right-[-60px] sm:after:right-[-80px] after:transform after:-translate-y-1/2 xs:before:hidden xs:after:hidden">
-        Mājaslapas Izstrādes Process: Kā Mēs To Darām
+      <h2 className="text-2xl sm:text-3xl mb-6 sm:mb-10 relative inline-block px-3 sm:px-5 py-2 sm:py-2.5 font-bold text-gray-800 uppercase tracking-wider before:content-[''] before:absolute before:w-[20px] sm:before:w-[50px] before:h-1 before:bg-[#20b2aa] before:top-1/2 before:left-[-22px] sm:before:left-[-55px] before:transform before:-translate-y-1/2 after:content-[''] after:absolute after:w-[20px] sm:after:w-[50px] after:h-1 after:bg-[#20b2aa] after:top-1/2 after:right-[-22px] sm:after:right-[-55px] after:transform after:-translate-y-1/2">
+        Mājaslapas Izstrādes Process
+        <br />
+        Kā Mēs To Darām
       </h2>
       <div
         ref={containerRef}
