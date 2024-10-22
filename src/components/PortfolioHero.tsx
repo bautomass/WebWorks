@@ -270,7 +270,7 @@ const ModernArtisticPortfolio: FC = () => {
   );
 
   return (
-    <div className="relative mx-auto bg-black text-white h-[800px] max-w-[1920px] overflow-hidden">
+    <div className="relative mx-auto bg-black text-white h-[800px] max-w-7xl overflow-hidden">
       <Sidebar
         isOpen={isSidebarOpen}
         isMobile={isMobile}
