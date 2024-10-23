@@ -18,13 +18,6 @@ export default function SketchToolPage() {
       <div className="flex flex-col min-h-screen">
         <Header />
         <main className="flex-grow container mx-auto px-4 py-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 text-center text-blue-600">
-            Jūsu Sapņu Mājaslapas Skices Veidotājs
-          </h1>
-          <p className="text-xl text-center mb-12 text-gray-600 max-w-3xl mx-auto">
-            Ienirstiet radošajā procesā un izveidojiet savu ideālo mājaslapu ar
-            mūsu revolucionāro interaktīvo rīku!
-          </p>
           <SketchBuilder />
         </main>
       </div>
