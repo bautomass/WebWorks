@@ -1,5 +1,5 @@
 "use client";
-
+import { supabase } from "../utils/supabase";
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
   FaSave,
@@ -668,18 +668,70 @@ const SketchBuilder: React.FC = () => {
     }
   };
 
-  // New function to send project details
   const sendProjectDetails = async () => {
     try {
-      // Here you would normally send the data to your backend
-      // For now, we'll just show a success message
+      // Prepare the data
+      const projectData = {
+        name: project.name,
+        website_type: project.websiteType,
+        website_subtype: project.websiteSubtype,
+        color_scheme: project.colorScheme,
+        font_pair: project.fontPair,
+        layout: project.layout,
+        timeline: project.timeline,
+        budget: project.budget,
+        target_audience: project.targetAudience,
+        business_goals: project.businessGoals,
+        features: project.features,
+        setup_costs: project.setupCosts,
+        total_price: totalPrice,
+        monthly_price: monthlyPrice,
+        yearly_price: yearlyPrice,
+      };
+
+      // Save to Supabase
+      const { data, error } = await supabase
+        .from("projects")
+        .insert([projectData])
+        .select();
+
+      if (error) {
+        console.error("Error saving project:", error);
+        toast.error("Kļūda saglabājot projektu. Lūdzu mēģiniet vēlreiz.");
+        return;
+      }
+
+      // Show success message
       toast.success(
-        "Projekta detaļas nosūtītas! Mēs ar jums sazināsimies tuvāko 24h laikā."
+        "Projekta detaļas veiksmīgi nosūtītas! Mēs ar jums sazināsimies tuvāko 24h laikā."
       );
+
+      // Reset the form
+      setProject({
+        features: [],
+        name: "",
+        setupCosts: [],
+        businessGoals: [],
+      });
+      setStep(0);
     } catch (error) {
+      console.error("Error:", error);
       toast.error("Kļūda sūtot projekta detaļas. Lūdzu mēģiniet vēlreiz.");
     }
   };
+
+  // // New function to send project details
+  // const sendProjectDetails = async () => {
+  //   try {
+  //     // Here you would normally send the data to your backend
+  //     // For now, we'll just show a success message
+  //     toast.success(
+  //       "Projekta detaļas nosūtītas! Mēs ar jums sazināsimies tuvāko 24h laikā."
+  //     );
+  //   } catch (error) {
+  //     toast.error("Kļūda sūtot projekta detaļas. Lūdzu mēģiniet vēlreiz.");
+  //   }
+  // };
 
   // Main component render
   return (
