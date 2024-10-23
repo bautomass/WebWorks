@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "lv_LV",
-    url: "https://www.yourwebsite.lv/",
+    url: "https://www.webworks.lv/",
     siteName:
       "WebWorks - Unikālu Mājaslapu un E-komercijas Risinājumu Izstrāde",
   },
