@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -285,9 +285,54 @@ const GeoBackground: React.FC = React.memo(() => (
 ));
 
 GeoBackground.displayName = "GeoBackground";
-
 const NavItems: React.FC = () => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [isMovingToDropdown, setIsMovingToDropdown] = useState(false);
+
+  const handleMouseEnter = (itemName: string) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    setOpenDropdown(itemName);
+  };
+
+  const handleMouseLeave = (event: React.MouseEvent) => {
+    const relatedTarget = event.relatedTarget as HTMLElement;
+    const isMovingToDropdownContent = relatedTarget?.closest('[role="menu"]');
+
+    if (isMovingToDropdownContent) {
+      setIsMovingToDropdown(true);
+      return;
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      setOpenDropdown(null);
+      setIsMovingToDropdown(false);
+    }, 100);
+  };
+
+  const handleDropdownMouseLeave = (event: React.MouseEvent) => {
+    const relatedTarget = event.relatedTarget as HTMLElement;
+    const isMovingToTrigger = relatedTarget?.closest(
+      'button[aria-haspopup="true"]'
+    );
+
+    if (!isMovingToTrigger) {
+      timeoutRef.current = setTimeout(() => {
+        setOpenDropdown(null);
+        setIsMovingToDropdown(false);
+      }, 100);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -296,8 +341,8 @@ const NavItems: React.FC = () => {
           {item.dropdown ? (
             <>
               <button
-                onMouseEnter={() => setOpenDropdown(item.name)}
-                onMouseLeave={() => setOpenDropdown(null)}
+                onMouseEnter={() => handleMouseEnter(item.name)}
+                onMouseLeave={handleMouseLeave}
                 className="text-[#3D3B4A] font-medium group transition-colors duration-300 hover:text-[#8CB8B4] flex items-center"
                 aria-expanded={openDropdown === item.name}
                 aria-haspopup="true"
@@ -328,9 +373,9 @@ const NavItems: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
-                    onMouseEnter={() => setOpenDropdown(item.name)}
-                    onMouseLeave={() => setOpenDropdown(null)}
-                    className="fixed left-0 right-0 mt-6 bg-white shadow-lg py-6 z-50 border-t-4 border-[#8CB8B4]"
+                    onMouseEnter={() => handleMouseEnter(item.name)}
+                    onMouseLeave={handleDropdownMouseLeave}
+                    className="fixed left-0 right-0 mt-0 bg-white shadow-lg py-6 z-50 border-t-4 border-[#8CB8B4]"
                     role="menu"
                     aria-orientation="vertical"
                     aria-labelledby={`${item.name}-menu`}
