@@ -431,7 +431,7 @@ const NavItems: React.FC = () => {
 
 const CtaButton: React.FC = React.memo(() => (
   <Link
-    href="/apreksinat-aptuvenu-lapas-izmaksas-cenu"
+    href="/sakt-projekta-skici"
     className="bg-[#8CB8B4] text-[#3D3B4A] px-6 py-2 rounded-lg hover:bg-[#EEC71B] transition-colors duration-300 relative overflow-hidden group shadow-md font-bold"
     aria-label="Saņemt piedāvājumu"
   >
