@@ -46,7 +46,7 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
   { name: "Sākums", href: "/" },
   { name: "Par mums", href: "/about-us" },
-  { name: "Konsultācija", href: "/consultation" },
+  // { name: "Konsultācija", href: "/consultation" },
   {
     name: "Rīki",
     href: "#",
