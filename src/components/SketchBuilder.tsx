@@ -1,4 +1,5 @@
 "use client";
+
 import { supabase } from "../utils/supabase";
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
@@ -23,20 +24,25 @@ import "react-toastify/dist/ReactToastify.css";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
-// Enhanced Types
+// All Interfaces
 interface ProjectState {
   websiteType?: string;
-  websiteSubtype?: string; // New field for website subtypes
+  websiteSubtype?: string;
   colorScheme?: string;
   fontPair?: string;
   layout?: string;
   features: string[];
   name: string;
-  timeline?: string; // New field
-  budget?: string; // New field
-  targetAudience?: string; // New field
-  businessGoals?: string[]; // New field
-  setupCosts: string[]; // New field for tracking selected setup costs
+  timeline?: string;
+  budget?: string;
+  targetAudience?: string;
+  businessGoals?: string[];
+  setupCosts: string[];
+  clientName: string;
+  clientEmail: string;
+  clientPhone: string;
+  paymentOption: string;
+  paymentSplits: number;
 }
 
 interface WebsiteSubtype {
@@ -53,10 +59,83 @@ interface WebsiteType {
   icon: JSX.Element;
   basePrice: number;
   recommendedFeatures: string[];
-  subtypes: WebsiteSubtype[]; // New field for subtypes
+  subtypes: WebsiteSubtype[];
 }
 
-// Enhanced website types with subtypes
+interface SetupCost {
+  id: string;
+  name: string;
+  description: string;
+  monthlyPrice: number;
+  yearlyPrice: number;
+  required: boolean;
+  applicableTypes: string[];
+}
+
+interface ColorScheme {
+  id: string;
+  name: string;
+  description: string;
+  colors: {
+    primary: string;
+    secondary: string;
+    accent: string;
+    background: string;
+    text: string;
+  };
+  recommendedFor: string[];
+}
+
+interface FontPair {
+  id: string;
+  name: string;
+  heading: string;
+  body: string;
+  description: string;
+  preview: string;
+}
+
+interface Layout {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  priceModifier: number;
+  recommendedFor: string[];
+  features: string[];
+}
+
+interface Feature {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  icon: JSX.Element;
+  applicableTypes: string[];
+  complexity: "basic" | "intermediate" | "advanced";
+}
+
+// Component Props Types
+interface StepProps {
+  project: ProjectState;
+  updateProject: (updates: Partial<ProjectState>) => void;
+}
+
+interface CostSummaryStepProps extends StepProps {
+  totalPrice: number;
+  monthlyPrice: number;
+  yearlyPrice: number;
+  onSubmit: () => void;
+}
+
+interface PreviewPanelProps {
+  project: ProjectState;
+  totalPrice: number;
+  monthlyPrice: number;
+  yearlyPrice: number;
+}
+
+// Constants
 const websiteTypes: WebsiteType[] = [
   {
     id: "business",
@@ -211,17 +290,6 @@ const websiteTypes: WebsiteType[] = [
   },
 ];
 
-// Setup costs definition
-interface SetupCost {
-  id: string;
-  name: string;
-  description: string;
-  monthlyPrice: number;
-  yearlyPrice: number;
-  required: boolean;
-  applicableTypes: string[];
-}
-
 const setupCosts: SetupCost[] = [
   {
     id: "domain",
@@ -279,7 +347,6 @@ const setupCosts: SetupCost[] = [
   },
 ];
 
-// Color schemes with enhanced descriptions
 const colorSchemes: ColorScheme[] = [
   {
     id: "professional",
@@ -333,7 +400,6 @@ const colorSchemes: ColorScheme[] = [
     },
     recommendedFor: ["blog", "portfolio"],
   },
-  // New color scheme added
   {
     id: "creative",
     name: "Radošā",
@@ -382,7 +448,6 @@ const fontPairs: FontPair[] = [
     description: "Izteiksmīgs un unikāls",
     preview: "Aa Bb Cc 123",
   },
-  // New font pair added
   {
     id: "dynamic",
     name: "Dinamiskais",
@@ -393,7 +458,6 @@ const fontPairs: FontPair[] = [
   },
 ];
 
-// Child-friendly layout descriptions
 const layouts: Layout[] = [
   {
     id: "classic",
@@ -436,7 +500,7 @@ const layouts: Layout[] = [
     features: ["grid", "categories", "featured"],
   },
 ];
-// Enhanced features with more detailed descriptions
+
 const features: Feature[] = [
   {
     id: "responsiveDesign",
@@ -484,7 +548,6 @@ const features: Feature[] = [
     applicableTypes: ["all"],
     complexity: "advanced",
   },
-  // New feature added
   {
     id: "backups",
     name: "Automātiskās rezerves kopijas",
@@ -496,22 +559,29 @@ const features: Feature[] = [
   },
 ];
 
-// Main component
+// Main SketchBuilder Component
 const SketchBuilder: React.FC = () => {
+  // State declarations
   const [step, setStep] = useState(0);
   const [project, setProject] = useState<ProjectState>({
     features: [],
     name: "",
-    setupCosts: [], // Added for setup costs
-    businessGoals: [], // Added for business goals
+    setupCosts: [],
+    businessGoals: [],
+    clientName: "",
+    clientEmail: "",
+    clientPhone: "",
+    paymentOption: "full",
+    paymentSplits: 1,
   });
   const [totalPrice, setTotalPrice] = useState(0);
   const [history, setHistory] = useState<ProjectState[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
-  const [monthlyPrice, setMonthlyPrice] = useState(0); // Added for monthly costs
-  const [yearlyPrice, setYearlyPrice] = useState(0); // Added for yearly costs
+  const [monthlyPrice, setMonthlyPrice] = useState(0);
+  const [yearlyPrice, setYearlyPrice] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Enhanced steps array with more detailed descriptions
+  // Steps configuration
   const steps = [
     {
       title: "Projekta informācija",
@@ -547,11 +617,12 @@ const SketchBuilder: React.FC = () => {
     },
   ];
 
-  // Enhanced price calculation with setup costs
+  // Price calculation effect
   useEffect(() => {
     calculateTotalPrice();
   }, [project]);
 
+  // Price calculation function
   const calculateTotalPrice = useCallback(() => {
     let basePrice = 0;
     let monthlyTotal = 0;
@@ -600,12 +671,17 @@ const SketchBuilder: React.FC = () => {
       }
     }
 
+    // Apply split payment fee if applicable
+    if (project.paymentOption === "split" && project.paymentSplits > 1) {
+      const splitFee = basePrice * 0.02 * (project.paymentSplits - 1);
+      basePrice += splitFee;
+    }
+
     setTotalPrice(Math.round(basePrice));
     setMonthlyPrice(monthlyTotal);
     setYearlyPrice(yearlyTotal);
   }, [project]);
-
-  // History management functions
+  // History management
   useEffect(() => {
     if (project !== history[historyIndex]) {
       setHistory((prev) => [...prev.slice(0, historyIndex + 1), project]);
@@ -634,10 +710,11 @@ const SketchBuilder: React.FC = () => {
     }));
   }, []);
 
-  // Enhanced export function with more details
+  // PDF export function
   const exportToPDF = async () => {
     if (document.getElementById("preview-panel")) {
       try {
+        setIsLoading(true);
         const canvas = await html2canvas(
           document.getElementById("preview-panel")!
         );
@@ -646,31 +723,32 @@ const SketchBuilder: React.FC = () => {
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-        // Add title
         pdf.setFontSize(20);
         pdf.text("Mājaslapas projekta specifikācija", 20, 20);
 
-        // Add project details
         pdf.setFontSize(12);
         pdf.text(`Projekta nosaukums: ${project.name}`, 20, 40);
         pdf.text(`Datums: ${new Date().toLocaleDateString()}`, 20, 50);
+        pdf.text(`Klienta vārds: ${project.clientName}`, 20, 60);
+        pdf.text(`E-pasts: ${project.clientEmail}`, 20, 70);
 
-        // Add main image
-        pdf.addImage(imgData, "PNG", 0, 60, pdfWidth, pdfHeight);
+        pdf.addImage(imgData, "PNG", 0, 80, pdfWidth, pdfHeight);
 
         pdf.save(`${project.name || "website"}-specification.pdf`);
-
         toast.success("PDF veiksmīgi izveidots un saglabāts!");
       } catch (error) {
         toast.error("Kļūda PDF izveidē. Lūdzu mēģiniet vēlreiz.");
         console.error("PDF export error:", error);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
 
+  // Project submission function
   const sendProjectDetails = async () => {
     try {
-      // Prepare the data
+      setIsLoading(true);
       const projectData = {
         name: project.name,
         website_type: project.websiteType,
@@ -687,10 +765,14 @@ const SketchBuilder: React.FC = () => {
         total_price: totalPrice,
         monthly_price: monthlyPrice,
         yearly_price: yearlyPrice,
+        client_name: project.clientName,
+        client_email: project.clientEmail,
+        client_phone: project.clientPhone,
+        payment_option: project.paymentOption,
+        payment_splits: project.paymentSplits,
       };
 
-      // Save to Supabase
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("projects")
         .insert([projectData])
         .select();
@@ -701,7 +783,6 @@ const SketchBuilder: React.FC = () => {
         return;
       }
 
-      // Show success message
       toast.success(
         "Projekta detaļas veiksmīgi nosūtītas! Mēs ar jums sazināsimies tuvāko 24h laikā."
       );
@@ -712,38 +793,31 @@ const SketchBuilder: React.FC = () => {
         name: "",
         setupCosts: [],
         businessGoals: [],
+        clientName: "",
+        clientEmail: "",
+        clientPhone: "",
+        paymentOption: "full",
+        paymentSplits: 1,
       });
       setStep(0);
     } catch (error) {
       console.error("Error:", error);
       toast.error("Kļūda sūtot projekta detaļas. Lūdzu mēģiniet vēlreiz.");
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  // // New function to send project details
-  // const sendProjectDetails = async () => {
-  //   try {
-  //     // Here you would normally send the data to your backend
-  //     // For now, we'll just show a success message
-  //     toast.success(
-  //       "Projekta detaļas nosūtītas! Mēs ar jums sazināsimies tuvāko 24h laikā."
-  //     );
-  //   } catch (error) {
-  //     toast.error("Kļūda sūtot projekta detaļas. Lūdzu mēģiniet vēlreiz.");
-  //   }
-  // };
-
-  // Main component render
+  // Main render method
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="mb-8 flex justify-between items-center">
+        <div className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
               Mājaslapas Skices Veidotājs
             </h1>
-            <p className="mt-2 text-gray-600">
+            <p className="mt-2 text-sm sm:text-base text-gray-600">
               Izveidojiet savas mājaslapas vīziju {steps.length} vienkāršos
               soļos
             </p>
@@ -751,33 +825,37 @@ const SketchBuilder: React.FC = () => {
           <div className="flex space-x-2">
             <button
               onClick={undo}
-              disabled={historyIndex <= 0}
-              className="p-2 rounded-full bg-white shadow hover:bg-gray-50 disabled:opacity-50"
+              disabled={historyIndex <= 0 || isLoading}
+              className="p-2 rounded-full bg-white shadow hover:bg-gray-50 disabled:opacity-50 transition-all"
               title="Atsaukt"
+              aria-label="Atsaukt iepriekšējo darbību"
             >
-              <FaUndo />
+              <FaUndo className="w-5 h-5" />
             </button>
             <button
               onClick={redo}
-              disabled={historyIndex >= history.length - 1}
-              className="p-2 rounded-full bg-white shadow hover:bg-gray-50 disabled:opacity-50"
+              disabled={historyIndex >= history.length - 1 || isLoading}
+              className="p-2 rounded-full bg-white shadow hover:bg-gray-50 disabled:opacity-50 transition-all"
               title="Atcelt atsaukšanu"
+              aria-label="Atcelt atsaukšanu"
             >
-              <FaRedo />
+              <FaRedo className="w-5 h-5" />
             </button>
             <button
               onClick={exportToPDF}
-              className="p-2 rounded-full bg-white shadow hover:bg-gray-50"
+              disabled={isLoading}
+              className="p-2 rounded-full bg-white shadow hover:bg-gray-50 disabled:opacity-50 transition-all"
               title="Eksportēt PDF"
+              aria-label="Eksportēt projektu PDF formātā"
             >
-              <FaSave />
+              <FaSave className="w-5 h-5" />
             </button>
           </div>
         </div>
 
         {/* Progress Bar */}
         <div className="mb-8">
-          <div className="flex justify-between mb-2">
+          <div className="hidden sm:flex justify-between mb-2">
             {steps.map((s, index) => (
               <div
                 key={index}
@@ -804,11 +882,18 @@ const SketchBuilder: React.FC = () => {
               </div>
             ))}
           </div>
-          <div className="flex justify-between px-4">
+          <div className="sm:hidden">
+            <div className="text-center">
+              <span className="text-lg font-medium">
+                Solis {step + 1} no {steps.length}
+              </span>
+            </div>
+          </div>
+          <div className="flex justify-between px-4 text-sm text-gray-600 mt-2">
             {steps.map((s, index) => (
               <div
                 key={index}
-                className={`text-sm ${
+                className={`hidden sm:block ${
                   index <= step ? "text-blue-500" : "text-gray-500"
                 }`}
               >
@@ -817,8 +902,9 @@ const SketchBuilder: React.FC = () => {
             ))}
           </div>
         </div>
+
         {/* Main Content */}
-        <div className="flex gap-8">
+        <div className="flex flex-col lg:flex-row gap-8">
           {/* Step Content */}
           <div className="flex-1">
             <div className="bg-white rounded-lg shadow-lg p-6">
@@ -846,28 +932,41 @@ const SketchBuilder: React.FC = () => {
                 </motion.div>
               </AnimatePresence>
             </div>
-
-            {/* Navigation */}
-            <div className="mt-6 flex justify-between">
+            {/* Navigation Buttons */}
+            <div className="mt-6 flex flex-col sm:flex-row justify-between gap-4">
               <button
                 onClick={() => setStep((prev) => prev - 1)}
-                disabled={step === 0}
-                className="px-6 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 disabled:opacity-50"
+                disabled={step === 0 || isLoading}
+                className="w-full sm:w-auto px-6 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 
+                         disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                aria-label="Iepriekšējais solis"
               >
                 Atpakaļ
               </button>
               {step === steps.length - 1 ? (
                 <button
                   onClick={sendProjectDetails}
-                  className="px-6 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600"
+                  disabled={isLoading}
+                  className="w-full sm:w-auto px-6 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 
+                           disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center"
+                  aria-label="Apstiprināt un nosūtīt projektu"
                 >
-                  Apstiprināt un nosūtīt
+                  {isLoading ? (
+                    <span className="flex items-center gap-2">
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      Apstrādā...
+                    </span>
+                  ) : (
+                    "Apstiprināt un nosūtīt"
+                  )}
                 </button>
               ) : (
                 <button
                   onClick={() => setStep((prev) => prev + 1)}
-                  disabled={step === steps.length - 1}
-                  className="px-6 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50"
+                  disabled={step === steps.length - 1 || isLoading}
+                  className="w-full sm:w-auto px-6 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 
+                           disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                  aria-label="Nākamais solis"
                 >
                   Tālāk
                 </button>
@@ -875,17 +974,15 @@ const SketchBuilder: React.FC = () => {
             </div>
           </div>
 
-          {/* Preview Panel remains the same but updated with new fields */}
-          <div className="w-96">
+          {/* Preview Panel */}
+          <div className="w-full lg:w-96">
             <div
               id="preview-panel"
-              className="bg-white rounded-lg shadow-lg p-6 sticky top-8"
+              className="bg-white rounded-lg shadow-lg p-6 lg:sticky lg:top-8"
             >
               <h3 className="text-lg font-semibold mb-4">
                 Projekta kopsavilkums
               </h3>
-
-              {/* Project Preview */}
               <PreviewPanel
                 project={project}
                 totalPrice={totalPrice}
@@ -897,16 +994,23 @@ const SketchBuilder: React.FC = () => {
         </div>
       </div>
 
-      <ToastContainer position="bottom-right" />
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };
 
-// Enhanced Step Components
-const ProjectInfoStep: React.FC<{
-  project: ProjectState;
-  updateProject: (updates: Partial<ProjectState>) => void;
-}> = ({ project, updateProject }) => {
+// Sub-components Implementation
+const ProjectInfoStep: React.FC<StepProps> = ({ project, updateProject }) => {
   const timelineOptions = [
     { value: "1_month", label: "1 mēnesis" },
     { value: "2_months", label: "2 mēneši" },
@@ -929,30 +1033,39 @@ const ProjectInfoStep: React.FC<{
     "Izveidot online preču/pakalpojumu katalogu",
     "Nodrošināt klientu atbalstu",
   ];
-
   return (
     <div className="space-y-6">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          className="block text-sm font-medium text-gray-700 mb-2"
+          htmlFor="projectName"
+        >
           Projekta nosaukums
         </label>
         <input
+          id="projectName"
           type="text"
           value={project.name}
           onChange={(e) => updateProject({ name: e.target.value })}
           className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           placeholder="Piemēram: Mana Jaunā Mājaslapa"
+          aria-label="Projekta nosaukums"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          className="block text-sm font-medium text-gray-700 mb-2"
+          htmlFor="timeline"
+        >
           Vēlamais izstrādes termiņš
         </label>
         <select
+          id="timeline"
           value={project.timeline}
           onChange={(e) => updateProject({ timeline: e.target.value })}
           className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          aria-label="Izstrādes termiņš"
         >
           <option value="">Izvēlieties termiņu</option>
           {timelineOptions.map((option) => (
@@ -964,13 +1077,18 @@ const ProjectInfoStep: React.FC<{
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          className="block text-sm font-medium text-gray-700 mb-2"
+          htmlFor="budget"
+        >
           Plānotais budžets
         </label>
         <select
+          id="budget"
           value={project.budget}
           onChange={(e) => updateProject({ budget: e.target.value })}
           className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          aria-label="Plānotais budžets"
         >
           <option value="">Izvēlieties budžeta diapazonu</option>
           {budgetOptions.map((option) => (
@@ -982,54 +1100,59 @@ const ProjectInfoStep: React.FC<{
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          className="block text-sm font-medium text-gray-700 mb-2"
+          htmlFor="targetAudience"
+        >
           Mērķa auditorija
         </label>
         <input
+          id="targetAudience"
           type="text"
           value={project.targetAudience}
           onChange={(e) => updateProject({ targetAudience: e.target.value })}
           className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           placeholder="Piemēram: Jauni profesionāļi vecumā 25-40 gadi"
+          aria-label="Mērķa auditorija"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Biznesa mērķi (izvēlieties līdz 3)
-        </label>
-        <div className="grid grid-cols-2 gap-2">
-          {businessGoals.map((goal) => (
-            <label key={goal} className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                checked={project.businessGoals?.includes(goal)}
-                onChange={(e) => {
-                  const goals = project.businessGoals || [];
-                  if (e.target.checked) {
-                    if (goals.length < 3) {
-                      updateProject({ businessGoals: [...goals, goal] });
+        <fieldset>
+          <legend className="block text-sm font-medium text-gray-700 mb-2">
+            Biznesa mērķi (izvēlieties līdz 3)
+          </legend>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {businessGoals.map((goal) => (
+              <label key={goal} className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  checked={project.businessGoals?.includes(goal)}
+                  onChange={(e) => {
+                    const goals = project.businessGoals || [];
+                    if (e.target.checked) {
+                      if (goals.length < 3) {
+                        updateProject({ businessGoals: [...goals, goal] });
+                      }
+                    } else {
+                      updateProject({
+                        businessGoals: goals.filter((g) => g !== goal),
+                      });
                     }
-                  } else {
-                    updateProject({
-                      businessGoals: goals.filter((g) => g !== goal),
-                    });
-                  }
-                }}
-                className="rounded text-blue-500 focus:ring-blue-500"
-              />
-              <span className="text-sm">{goal}</span>
-            </label>
-          ))}
-        </div>
+                  }}
+                  className="rounded text-blue-500 focus:ring-blue-500"
+                  aria-label={`Biznesa mērķis: ${goal}`}
+                />
+                <span className="text-sm">{goal}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
       </div>
     </div>
   );
 };
-const WebsiteTypeStep: React.FC<{
-  project: ProjectState;
-  updateProject: (updates: Partial<ProjectState>) => void;
-}> = ({ project, updateProject }) => {
+const WebsiteTypeStep: React.FC<StepProps> = ({ project, updateProject }) => {
   const selectedType = websiteTypes.find(
     (type) => type.id === project.websiteType
   );
@@ -1055,8 +1178,13 @@ const WebsiteTypeStep: React.FC<{
                 ? "border-blue-500 bg-blue-50"
                 : "border-gray-200 hover:border-blue-200"
             }`}
+            role="button"
+            aria-pressed={project.websiteType === type.id}
+            tabIndex={0}
           >
-            <div className="mb-4 text-3xl text-blue-500">{type.icon}</div>
+            <div className="mb-4 text-3xl text-blue-500" aria-hidden="true">
+              {type.icon}
+            </div>
             <h3 className="text-lg font-semibold mb-2">{type.name}</h3>
             <p className="text-gray-600 text-sm mb-4">{type.description}</p>
             <p className="text-sm font-medium text-blue-500">
@@ -1072,7 +1200,7 @@ const WebsiteTypeStep: React.FC<{
           <h3 className="text-lg font-medium mb-4">
             Izvēlieties {selectedType.name.toLowerCase()} variantu
           </h3>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {selectedType.subtypes.map((subtype) => (
               <motion.div
                 key={subtype.id}
@@ -1084,6 +1212,9 @@ const WebsiteTypeStep: React.FC<{
                     ? "border-blue-500 bg-blue-50"
                     : "border-gray-200 hover:border-blue-200"
                 }`}
+                role="button"
+                aria-pressed={project.websiteSubtype === subtype.id}
+                tabIndex={0}
               >
                 <h4 className="font-medium mb-2">{subtype.name}</h4>
                 <p className="text-sm text-gray-600 mb-2">
@@ -1094,7 +1225,7 @@ const WebsiteTypeStep: React.FC<{
                     +{subtype.additionalPrice}€
                   </span>
                   {project.websiteSubtype === subtype.id && (
-                    <span className="text-green-500">
+                    <span className="text-green-500" aria-hidden="true">
                       <FaCheck className="w-5 h-5" />
                     </span>
                   )}
@@ -1129,17 +1260,13 @@ const WebsiteTypeStep: React.FC<{
     </div>
   );
 };
-
-const DesignStep: React.FC<{
-  project: ProjectState;
-  updateProject: (updates: Partial<ProjectState>) => void;
-}> = ({ project, updateProject }) => {
+const DesignStep: React.FC<StepProps> = ({ project, updateProject }) => {
   return (
     <div className="space-y-8">
       {/* Color Schemes */}
       <div>
         <h3 className="text-lg font-medium mb-4">Krāsu palete</h3>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {colorSchemes.map((scheme) => (
             <motion.div
               key={scheme.id}
@@ -1151,14 +1278,18 @@ const DesignStep: React.FC<{
                   ? "border-blue-500 bg-blue-50"
                   : "border-gray-200 hover:border-blue-200"
               }`}
+              role="button"
+              aria-pressed={project.colorScheme === scheme.id}
+              tabIndex={0}
             >
               <h4 className="font-medium mb-2">{scheme.name}</h4>
-              <div className="flex space-x-2 mb-3">
-                {Object.values(scheme.colors).map((color, index) => (
+              <div className="flex space-x-2 mb-3" aria-label="Krāsu paraugi">
+                {Object.entries(scheme.colors).map(([name, color]) => (
                   <div
-                    key={index}
+                    key={name}
                     className="w-8 h-8 rounded-full border border-gray-200"
                     style={{ backgroundColor: color }}
+                    aria-label={`${name} krāsa: ${color}`}
                   />
                 ))}
               </div>
@@ -1196,7 +1327,7 @@ const DesignStep: React.FC<{
       {/* Font Pairs */}
       <div>
         <h3 className="text-lg font-medium mb-4">Fontu kombinācijas</h3>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {fontPairs.map((pair) => (
             <motion.div
               key={pair.id}
@@ -1208,18 +1339,29 @@ const DesignStep: React.FC<{
                   ? "border-blue-500 bg-blue-50"
                   : "border-gray-200 hover:border-blue-200"
               }`}
+              role="button"
+              aria-pressed={project.fontPair === pair.id}
+              tabIndex={0}
             >
               <h4 className="font-medium mb-2">{pair.name}</h4>
               <div className="space-y-3">
                 <div>
                   <p className="text-xs text-gray-500 mb-1">Virsraksts:</p>
-                  <p style={{ fontFamily: pair.heading }} className="text-xl">
+                  <p
+                    style={{ fontFamily: pair.heading }}
+                    className="text-xl"
+                    aria-label={`Virsraksta fonts: ${pair.heading}`}
+                  >
                     {pair.preview}
                   </p>
                 </div>
                 <div>
                   <p className="text-xs text-gray-500 mb-1">Pamatteksts:</p>
-                  <p style={{ fontFamily: pair.body }} className="text-base">
+                  <p
+                    style={{ fontFamily: pair.body }}
+                    className="text-base"
+                    aria-label={`Pamatteksta fonts: ${pair.body}`}
+                  >
                     {pair.preview}
                   </p>
                 </div>
@@ -1229,7 +1371,6 @@ const DesignStep: React.FC<{
           ))}
         </div>
       </div>
-
       {/* Font Size Preview */}
       {project.fontPair && (
         <div className="mt-6 p-4 bg-gray-50 rounded-lg">
@@ -1259,13 +1400,11 @@ const DesignStep: React.FC<{
     </div>
   );
 };
-const LayoutStep: React.FC<{
-  project: ProjectState;
-  updateProject: (updates: Partial<ProjectState>) => void;
-}> = ({ project, updateProject }) => {
+
+const LayoutStep: React.FC<StepProps> = ({ project, updateProject }) => {
   return (
     <div className="space-y-8">
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {layouts.map((layout) => (
           <motion.div
             key={layout.id}
@@ -1277,10 +1416,13 @@ const LayoutStep: React.FC<{
                 ? "border-blue-500 bg-blue-50"
                 : "border-gray-200 hover:border-blue-200"
             }`}
+            role="button"
+            aria-pressed={project.layout === layout.id}
+            tabIndex={0}
           >
             <img
               src={layout.image}
-              alt={layout.name}
+              alt={`${layout.name} izkārtojuma piemērs`}
               className="w-full h-40 object-cover rounded-lg mb-4"
             />
             <h4 className="font-medium mb-2">{layout.name}</h4>
@@ -1321,16 +1463,30 @@ const LayoutStep: React.FC<{
           <div className="text-sm text-gray-600">
             {layouts.find((l) => l.id === project.layout)?.description}
           </div>
+
+          <div className="mt-4 space-y-2">
+            <p className="text-sm font-medium text-gray-700">
+              Ieteicams šādiem projektiem:
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {layouts
+                .find((l) => l.id === project.layout)
+                ?.recommendedFor.map((type) => (
+                  <span
+                    key={type}
+                    className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
+                  >
+                    {type}
+                  </span>
+                ))}
+            </div>
+          </div>
         </div>
       )}
     </div>
   );
 };
-
-const FeaturesStep: React.FC<{
-  project: ProjectState;
-  updateProject: (updates: Partial<ProjectState>) => void;
-}> = ({ project, updateProject }) => {
+const FeaturesStep: React.FC<StepProps> = ({ project, updateProject }) => {
   const [selectedComplexity, setSelectedComplexity] = useState<string>("all");
 
   const applicableFeatures = useMemo(
@@ -1355,7 +1511,6 @@ const FeaturesStep: React.FC<{
     [project.features, updateProject]
   );
 
-  // Setup costs section
   const relevantSetupCosts = setupCosts.filter(
     (cost) =>
       cost.applicableTypes.includes("all") ||
@@ -1366,7 +1521,7 @@ const FeaturesStep: React.FC<{
   const toggleSetupCost = useCallback(
     (costId: string) => {
       const cost = setupCosts.find((c) => c.id === costId);
-      if (cost?.required) return; // Can't untoggle required costs
+      if (cost?.required) return;
 
       updateProject({
         setupCosts: project.setupCosts.includes(costId)
@@ -1385,16 +1540,17 @@ const FeaturesStep: React.FC<{
 
         {/* Complexity Filter */}
         <div className="mb-6">
-          <div className="flex space-x-4">
+          <div className="flex flex-wrap gap-2">
             {["all", "basic", "intermediate", "advanced"].map((complexity) => (
               <button
                 key={complexity}
                 onClick={() => setSelectedComplexity(complexity)}
-                className={`px-4 py-2 rounded-lg text-sm ${
+                className={`px-4 py-2 rounded-lg text-sm transition-colors ${
                   selectedComplexity === complexity
                     ? "bg-blue-500 text-white"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
+                aria-pressed={selectedComplexity === complexity}
               >
                 {complexity === "all"
                   ? "Visas"
@@ -1408,7 +1564,7 @@ const FeaturesStep: React.FC<{
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {applicableFeatures
             .filter(
               (feature) =>
@@ -1426,11 +1582,17 @@ const FeaturesStep: React.FC<{
                     ? "border-blue-500 bg-blue-50"
                     : "border-gray-200 hover:border-blue-200"
                 }`}
+                role="button"
+                aria-pressed={project.features.includes(feature.id)}
+                tabIndex={0}
               >
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="text-xl text-blue-500">
+                      <span
+                        className="text-xl text-blue-500"
+                        aria-hidden="true"
+                      >
                         {feature.icon}
                       </span>
                       <h4 className="font-medium">{feature.name}</h4>
@@ -1464,11 +1626,10 @@ const FeaturesStep: React.FC<{
             ))}
         </div>
       </div>
-
       {/* Setup Costs Section */}
       <div className="mt-8">
         <h3 className="text-lg font-medium mb-4">Uzturēšanas izmaksas</h3>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {relevantSetupCosts.map((cost) => (
             <div
               key={cost.id}
@@ -1480,6 +1641,11 @@ const FeaturesStep: React.FC<{
                   ? "border-blue-500 bg-blue-50 cursor-pointer"
                   : "border-gray-200 hover:border-blue-200 cursor-pointer"
               }`}
+              role={cost.required ? "presentation" : "button"}
+              aria-pressed={
+                cost.required ? undefined : project.setupCosts.includes(cost.id)
+              }
+              tabIndex={cost.required ? -1 : 0}
             >
               <div className="flex justify-between items-start">
                 <div>
@@ -1511,27 +1677,217 @@ const FeaturesStep: React.FC<{
     </div>
   );
 };
-const CostSummaryStep: React.FC<{
-  project: ProjectState;
-  totalPrice: number;
-  monthlyPrice: number;
-  yearlyPrice: number;
-  onSubmit: () => void;
-}> = ({ project, totalPrice, monthlyPrice, yearlyPrice, onSubmit }) => {
-  const [paymentType, setPaymentType] = useState<"monthly" | "yearly">(
-    "monthly"
-  );
+
+const CostSummaryStep: React.FC<CostSummaryStepProps> = ({
+  project,
+  updateProject,
+  totalPrice,
+  monthlyPrice,
+  yearlyPrice,
+  onSubmit,
+}) => {
   const [agreement, setAgreement] = useState(false);
+  const [isValidating, setIsValidating] = useState(false);
 
-  const selectedType = websiteTypes.find(
-    (type) => type.id === project.websiteType
-  );
-  const selectedSubtype = selectedType?.subtypes.find(
-    (st) => st.id === project.websiteSubtype
-  );
+  // Calculate split payment amounts
+  const splitAmount = useMemo(() => {
+    if (project.paymentOption === "full") return totalPrice;
+    const fee = totalPrice * 0.02 * (project.paymentSplits - 1);
+    return (totalPrice + fee) / project.paymentSplits;
+  }, [totalPrice, project.paymentOption, project.paymentSplits]);
 
+  // Form validation
+  const validateForm = () => {
+    setIsValidating(true);
+
+    if (!project.clientName || !project.clientEmail || !project.clientPhone) {
+      toast.error("Lūdzu aizpildiet visus obligātos laukus");
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(project.clientEmail)) {
+      toast.error("Lūdzu ievadiet derīgu e-pasta adresi");
+      return false;
+    }
+
+    const phoneRegex = /^[+]?[\d\s-]{8,}$/;
+    if (!phoneRegex.test(project.clientPhone)) {
+      toast.error("Lūdzu ievadiet derīgu telefona numuru");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = () => {
+    if (validateForm()) {
+      onSubmit();
+    }
+  };
   return (
     <div className="space-y-8">
+      {/* Client Information Form */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-medium">Klienta informācija</h3>
+        <div className="grid gap-4">
+          <div>
+            <label
+              htmlFor="clientName"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Vārds Uzvārds
+            </label>
+            <input
+              id="clientName"
+              type="text"
+              placeholder="Vārds Uzvārds"
+              value={project.clientName}
+              onChange={(e) => updateProject({ clientName: e.target.value })}
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
+                ${isValidating && !project.clientName ? "border-red-500" : ""}`}
+              required
+              aria-required="true"
+              aria-invalid={isValidating && !project.clientName}
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="clientEmail"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              E-pasts
+            </label>
+            <input
+              id="clientEmail"
+              type="email"
+              placeholder="E-pasts"
+              value={project.clientEmail}
+              onChange={(e) => updateProject({ clientEmail: e.target.value })}
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                ${
+                  isValidating &&
+                  (!project.clientEmail ||
+                    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(project.clientEmail))
+                    ? "border-red-500"
+                    : ""
+                }`}
+              required
+              aria-required="true"
+              aria-invalid={
+                isValidating &&
+                (!project.clientEmail ||
+                  !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(project.clientEmail))
+              }
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="clientPhone"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Telefons
+            </label>
+            <input
+              id="clientPhone"
+              type="tel"
+              placeholder="Telefons"
+              value={project.clientPhone}
+              onChange={(e) => updateProject({ clientPhone: e.target.value })}
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                ${
+                  isValidating &&
+                  (!project.clientPhone ||
+                    !/^[+]?[\d\s-]{8,}$/.test(project.clientPhone))
+                    ? "border-red-500"
+                    : ""
+                }`}
+              required
+              aria-required="true"
+              aria-invalid={
+                isValidating &&
+                (!project.clientPhone ||
+                  !/^[+]?[\d\s-]{8,}$/.test(project.clientPhone))
+              }
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Payment Options */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-medium">Maksājuma veids</h3>
+        <div className="space-y-4">
+          <div className="flex flex-col space-y-2">
+            <label className="flex items-center space-x-2">
+              <input
+                type="radio"
+                checked={project.paymentOption === "full"}
+                onChange={() =>
+                  updateProject({ paymentOption: "full", paymentSplits: 1 })
+                }
+                className="text-blue-500 focus:ring-blue-500"
+                name="paymentOption"
+              />
+              <span>Pilns maksājums</span>
+            </label>
+
+            <label className="flex items-center space-x-2">
+              <input
+                type="radio"
+                checked={project.paymentOption === "split"}
+                onChange={() =>
+                  updateProject({ paymentOption: "split", paymentSplits: 2 })
+                }
+                className="text-blue-500 focus:ring-blue-500"
+                name="paymentOption"
+              />
+              <span>Dalīts maksājums</span>
+            </label>
+          </div>
+          {project.paymentOption === "split" && (
+            <div className="pl-6 space-y-4">
+              <select
+                value={project.paymentSplits}
+                onChange={(e) =>
+                  updateProject({ paymentSplits: parseInt(e.target.value) })
+                }
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                aria-label="Izvēlieties maksājumu skaitu"
+              >
+                <option value={2}>2 maksājumi</option>
+                <option value={3}>3 maksājumi</option>
+                <option value={4}>4 maksājumi</option>
+              </select>
+
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h4 className="font-medium mb-2">Maksājumu grafiks:</h4>
+                <div className="space-y-2">
+                  {Array.from({ length: project.paymentSplits }).map(
+                    (_, index) => (
+                      <div key={index} className="flex justify-between text-sm">
+                        <span>{index + 1}. maksājums</span>
+                        <span className="font-medium">
+                          {splitAmount.toFixed(2)}€
+                        </span>
+                      </div>
+                    )
+                  )}
+                  {project.paymentSplits > 1 && (
+                    <div className="text-sm text-gray-500 mt-2">
+                      * Iekļauta {(project.paymentSplits - 1) * 2}% apstrādes
+                      maksa
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* Cost Breakdown */}
       <div className="bg-gray-50 rounded-lg p-6">
         <h3 className="text-lg font-medium mb-4">Izmaksu sadalījums</h3>
@@ -1544,17 +1900,50 @@ const CostSummaryStep: React.FC<{
             </h4>
             <div className="space-y-2">
               {/* Base Price */}
-              <div className="flex justify-between text-sm">
-                <span>Pamata cena ({selectedType?.name})</span>
-                <span className="font-medium">{selectedType?.basePrice}€</span>
-              </div>
+              {project.websiteType && (
+                <div className="flex justify-between text-sm">
+                  <span>
+                    Pamata cena (
+                    {
+                      websiteTypes.find((t) => t.id === project.websiteType)
+                        ?.name
+                    }
+                    )
+                  </span>
+                  <span className="font-medium">
+                    {
+                      websiteTypes.find((t) => t.id === project.websiteType)
+                        ?.basePrice
+                    }
+                    €
+                  </span>
+                </div>
+              )}
 
               {/* Subtype Price */}
-              {selectedSubtype && (
+              {project.websiteType && project.websiteSubtype && (
                 <div className="flex justify-between text-sm">
-                  <span>Papildus ({selectedSubtype.name})</span>
+                  <span>
+                    Papildus (
+                    {
+                      websiteTypes
+                        .find((t) => t.id === project.websiteType)
+                        ?.subtypes.find(
+                          (st) => st.id === project.websiteSubtype
+                        )?.name
+                    }
+                    )
+                  </span>
                   <span className="font-medium">
-                    +{selectedSubtype.additionalPrice}€
+                    +
+                    {
+                      websiteTypes
+                        .find((t) => t.id === project.websiteType)
+                        ?.subtypes.find(
+                          (st) => st.id === project.websiteSubtype
+                        )?.additionalPrice
+                    }
+                    €
                   </span>
                 </div>
               )}
@@ -1572,7 +1961,6 @@ const CostSummaryStep: React.FC<{
                   </div>
                 ) : null;
               })}
-
               {/* Layout Price Modifier */}
               {project.layout && (
                 <div className="flex justify-between text-sm">
@@ -1587,6 +1975,26 @@ const CostSummaryStep: React.FC<{
                 </div>
               )}
 
+              {/* Split Payment Fee */}
+              {project.paymentOption === "split" &&
+                project.paymentSplits > 1 && (
+                  <div className="flex justify-between text-sm">
+                    <span>
+                      Dalītā maksājuma maksa ({(project.paymentSplits - 1) * 2}
+                      %)
+                    </span>
+                    <span className="font-medium">
+                      +
+                      {(
+                        totalPrice *
+                        0.02 *
+                        (project.paymentSplits - 1)
+                      ).toFixed(2)}
+                      €
+                    </span>
+                  </div>
+                )}
+
               <div className="border-t pt-2 mt-2">
                 <div className="flex justify-between font-medium">
                   <span>Kopā vienreizējās izmaksas</span>
@@ -1596,45 +2004,25 @@ const CostSummaryStep: React.FC<{
             </div>
           </div>
 
-          {/* Recurring Costs */}
+          {/* Monthly/Yearly Costs */}
           <div>
             <h4 className="text-sm font-medium text-gray-700 mb-2">
               Regulārās izmaksas
             </h4>
-            <div className="flex gap-4 mb-4">
-              <button
-                onClick={() => setPaymentType("monthly")}
-                className={`px-4 py-2 rounded-lg text-sm ${
-                  paymentType === "monthly"
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200 text-gray-700"
-                }`}
-              >
-                Mēneša maksājums
-              </button>
-              <button
-                onClick={() => setPaymentType("yearly")}
-                className={`px-4 py-2 rounded-lg text-sm ${
-                  paymentType === "yearly"
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200 text-gray-700"
-                }`}
-              >
-                Gada maksājums
-              </button>
-            </div>
-
             <div className="space-y-2">
               {project.setupCosts.map((costId) => {
                 const cost = setupCosts.find((c) => c.id === costId);
                 return cost ? (
                   <div key={cost.id} className="flex justify-between text-sm">
                     <span>{cost.name}</span>
-                    <span className="font-medium">
-                      {paymentType === "monthly"
-                        ? `${cost.monthlyPrice}€/mēn`
-                        : `${cost.yearlyPrice}€/gadā`}
-                    </span>
+                    <div className="text-right">
+                      <div className="font-medium">
+                        {cost.monthlyPrice}€/mēn
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        vai {cost.yearlyPrice}€/gadā
+                      </div>
+                    </div>
                   </div>
                 ) : null;
               })}
@@ -1642,11 +2030,12 @@ const CostSummaryStep: React.FC<{
               <div className="border-t pt-2 mt-2">
                 <div className="flex justify-between font-medium">
                   <span>Kopā regulārās izmaksas</span>
-                  <span className="text-blue-500">
-                    {paymentType === "monthly"
-                      ? `${monthlyPrice}€/mēn`
-                      : `${yearlyPrice}€/gadā`}
-                  </span>
+                  <div className="text-right">
+                    <div className="text-blue-500">{monthlyPrice}€/mēn</div>
+                    <div className="text-sm text-gray-500">
+                      vai {yearlyPrice}€/gadā
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1654,49 +2043,14 @@ const CostSummaryStep: React.FC<{
         </div>
       </div>
 
-      {/* Project Summary */}
-      <div className="bg-gray-50 rounded-lg p-6">
-        <h3 className="text-lg font-medium mb-4">Projekta kopsavilkums</h3>
-        <div className="space-y-4">
-          <div>
-            <h4 className="text-sm text-gray-500">Projekta nosaukums</h4>
-            <p className="font-medium">{project.name}</p>
-          </div>
-
-          <div>
-            <h4 className="text-sm text-gray-500">Izstrādes termiņš</h4>
-            <p className="font-medium">{project.timeline}</p>
-          </div>
-
-          <div>
-            <h4 className="text-sm text-gray-500">Mērķa auditorija</h4>
-            <p className="font-medium">{project.targetAudience}</p>
-          </div>
-
-          <div>
-            <h4 className="text-sm text-gray-500">Galvenie mērķi</h4>
-            <div className="flex flex-wrap gap-2 mt-1">
-              {project.businessGoals?.map((goal) => (
-                <span
-                  key={goal}
-                  className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded-full"
-                >
-                  {goal}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Agreement and Submit */}
       <div className="space-y-4">
-        <label className="flex items-start gap-2">
+        <label className="flex items-start gap-2 cursor-pointer">
           <input
             type="checkbox"
             checked={agreement}
             onChange={(e) => setAgreement(e.target.checked)}
-            className="mt-1"
+            className="mt-1.5 rounded text-blue-500 focus:ring-blue-500"
           />
           <span className="text-sm text-gray-600">
             Es piekrītu, ka manis sniegtā informācija tiks izmantota projekta
@@ -1707,11 +2061,11 @@ const CostSummaryStep: React.FC<{
         </label>
 
         <button
-          onClick={onSubmit}
+          onClick={handleSubmit}
           disabled={!agreement}
           className="w-full py-3 px-4 bg-blue-500 text-white rounded-lg font-medium
                    disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-600
-                   transition-colors"
+                   transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
           Apstiprināt un nosūtīt pieprasījumu
         </button>
@@ -1719,13 +2073,12 @@ const CostSummaryStep: React.FC<{
     </div>
   );
 };
-
-const PreviewPanel: React.FC<{
-  project: ProjectState;
-  totalPrice: number;
-  monthlyPrice: number;
-  yearlyPrice: number;
-}> = ({ project, totalPrice, monthlyPrice, yearlyPrice }) => {
+const PreviewPanel: React.FC<PreviewPanelProps> = ({
+  project,
+  totalPrice,
+  monthlyPrice,
+  yearlyPrice,
+}) => {
   const selectedWebsiteType = websiteTypes.find(
     (type) => type.id === project.websiteType
   );
@@ -1753,6 +2106,33 @@ const PreviewPanel: React.FC<{
             Projekta nosaukums
           </h4>
           <p className="font-medium">{project.name}</p>
+        </div>
+      )}
+
+      {/* Client Information */}
+      {(project.clientName || project.clientEmail || project.clientPhone) && (
+        <div className="space-y-3">
+          <h4 className="text-sm font-medium text-gray-600">
+            Klienta informācija
+          </h4>
+          {project.clientName && (
+            <div>
+              <span className="text-sm text-gray-500">Vārds: </span>
+              <span className="text-sm">{project.clientName}</span>
+            </div>
+          )}
+          {project.clientEmail && (
+            <div>
+              <span className="text-sm text-gray-500">E-pasts: </span>
+              <span className="text-sm">{project.clientEmail}</span>
+            </div>
+          )}
+          {project.clientPhone && (
+            <div>
+              <span className="text-sm text-gray-500">Telefons: </span>
+              <span className="text-sm">{project.clientPhone}</span>
+            </div>
+          )}
         </div>
       )}
 
@@ -1814,7 +2194,6 @@ const PreviewPanel: React.FC<{
           </div>
         </div>
       )}
-
       {/* Font Pair */}
       {selectedFontPair && (
         <div>
@@ -1879,6 +2258,25 @@ const PreviewPanel: React.FC<{
         </div>
       )}
 
+      {/* Payment Details */}
+      {project.paymentOption && (
+        <div>
+          <h4 className="text-sm font-medium text-gray-600 mb-1">
+            Maksājuma veids
+          </h4>
+          <p className="text-sm">
+            {project.paymentOption === "full"
+              ? "Pilns maksājums"
+              : `Dalīts maksājums (${project.paymentSplits} daļās)`}
+          </p>
+          {project.paymentOption === "split" && (
+            <p className="text-xs text-gray-500 mt-1">
+              Maksa par dalīto maksājumu: {(project.paymentSplits - 1) * 2}%
+            </p>
+          )}
+        </div>
+      )}
+
       {/* Total Costs */}
       <div className="border-t pt-4 mt-6">
         <div className="space-y-2">
@@ -1894,10 +2292,18 @@ const PreviewPanel: React.FC<{
             <span>Kopā pirmajā mēnesī</span>
             <span className="text-blue-500">{totalPrice + monthlyPrice}€</span>
           </div>
+          {project.paymentOption === "split" && (
+            <div className="text-xs text-gray-500 mt-2">
+              * Dalītā maksājuma gadījumā:{" "}
+              {(totalPrice / project.paymentSplits).toFixed(2)}€ ×{" "}
+              {project.paymentSplits}
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
+// Export the main component
 export default SketchBuilder;
