@@ -515,7 +515,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, setIsOpen }) => {
             >
               <Image
                 src="/images/webworks.svg"
-                alt="Your Company Logo"
+                alt="WebWorks Logo"
                 width={180}
                 height={60}
                 className="w-48 h-auto"
@@ -579,28 +579,36 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, setIsOpen }) => {
                         />
                       </svg>
                     </button>
-                    {openDropdown === item.name && (
-                      <div className="mt-2 ml-8 space-y-2">
-                        {item.dropdown.map((dropdownItem) => (
-                          <Link
-                            key={dropdownItem.name}
-                            href={dropdownItem.href}
-                            className="block text-lg text-[#3D3B4A] hover:text-[#8CB8B4] transition-colors duration-150 py-2"
-                            onClick={() => setIsOpen(false)}
-                          >
-                            <span className="flex items-center">
-                              {dropdownItem.icon && (
-                                <dropdownItem.icon
-                                  className="w-5 h-5 mr-2"
-                                  aria-hidden="true"
-                                />
-                              )}
-                              {dropdownItem.name}
-                            </span>
-                          </Link>
-                        ))}
-                      </div>
-                    )}
+                    <AnimatePresence>
+                      {openDropdown === item.name && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="mt-2 ml-8 space-y-2 overflow-hidden"
+                        >
+                          {item.dropdown.map((dropdownItem) => (
+                            <Link
+                              key={dropdownItem.name}
+                              href={dropdownItem.href}
+                              className="block text-lg text-[#3D3B4A] hover:text-[#8CB8B4] transition-colors duration-150 py-2"
+                              onClick={() => setIsOpen(false)}
+                            >
+                              <span className="flex items-center">
+                                {dropdownItem.icon && (
+                                  <dropdownItem.icon
+                                    className="w-5 h-5 mr-2"
+                                    aria-hidden="true"
+                                  />
+                                )}
+                                {dropdownItem.name}
+                              </span>
+                            </Link>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 ) : (
                   <Link
@@ -633,10 +641,10 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, setIsOpen }) => {
               </div>
             ))}
           </div>
-          <div className="mt-auto flex justify-center">
+          <div className="mt-12 flex justify-center">
             <Link
-              href="/apreksinat-aptuvenu-lapas-izmaksas-cenu"
-              className="bg-[#8CB8B4] text-[#3D3B4A] px-8 py-3 rounded-full hover:bg-[#EEC71B] transition-colors duration-300 text-lg font-semibold shadow-md relative overflow-hidden group"
+              href="/sakt-projekta-skici"
+              className="bg-[#8CB8B4] text-[#3D3B4A] px-6 py-2 rounded-lg hover:bg-[#EEC71B] transition-colors duration-300 relative overflow-hidden group shadow-md font-bold"
               onClick={() => setIsOpen(false)}
               aria-label="Saņemt piedāvājumu"
             >
