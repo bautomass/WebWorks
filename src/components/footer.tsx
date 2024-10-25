@@ -251,10 +251,10 @@ const Footer: React.FC = () => {
             </ul>
             <div className="mt-6 p-3 bg-white bg-opacity-5 rounded-lg">
               <h4 className="font-semibold text-[#EEC71B] mb-2">
-                Sertificets Partners
+                Sertificēts Partners
               </h4>
               <p className="text-sm text-gray-300">
-                ISO 9001:2015 Sertificets uznemums
+                ISO 9001:2015 Sertificēts uzņēmums
               </p>
             </div>
           </motion.div>
@@ -316,11 +316,11 @@ const Footer: React.FC = () => {
             <div className="mt-6 p-4 bg-white bg-opacity-5 rounded-lg">
               <div className="flex items-center mb-2">
                 <FiShield className="text-[#EEC71B] mr-2" />
-                <span className="font-semibold">Drosiba un Kvalitate</span>
+                <span className="font-semibold">Drošība un Kvalitāte</span>
               </div>
               <p className="text-sm text-gray-300">
-                Mes izmantojam modernakas tehnologijas un drosibas protokolus,
-                lai aizsargatu jusu datus.
+                Mēs izmantojam modernākās tehnoloģijas un drošibas protokolus,
+                lai aizsargātu jūsu datus.
               </p>
             </div>
           </motion.div>
