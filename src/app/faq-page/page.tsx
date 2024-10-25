@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import Head from "next/head";
 import { motion, AnimatePresence } from "framer-motion";
@@ -15,10 +16,14 @@ import {
   FiDollarSign,
   FiMonitor,
   FiBook,
+  FiX,
+  FiCheck,
   IconType,
 } from "react-icons/fi";
 import Header from "../../components/Header";
 import Footer from "@/components/footer";
+import { supabase } from "../../utils/supabase";
+import { Dialog } from "@/components/ui/dialog";
 
 interface FAQ {
   question: string;
@@ -28,6 +33,70 @@ interface FAQ {
   icon: React.ReactElement<IconType>;
   relatedQuestions: number[];
 }
+
+interface FAQVote {
+  faq_index: number;
+  vote_type: "up" | "down";
+  feedback?: string;
+}
+
+interface VoteStats {
+  upvotes: number;
+  downvotes: number;
+}
+
+interface VoteState {
+  [key: number]: {
+    hasVoted: boolean;
+    voteType?: "up" | "down";
+    stats: VoteStats;
+  };
+}
+
+interface FormData {
+  question: string;
+}
+
+interface FormErrors {
+  question?: string;
+  submit?: string;
+}
+
+interface FeedbackDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSubmit: (feedback: string) => void;
+}
+
+interface ComplexityIndicatorProps {
+  level: 1 | 2 | 3;
+}
+
+interface RelatedQuestionProps {
+  question: string;
+  answer: string;
+  isOpen: boolean;
+  toggleOpen: () => void;
+}
+
+interface FAQItemProps {
+  faq: FAQ;
+  faqIndex: number;
+  isOpen: boolean;
+  toggleOpen: () => void;
+  relatedFAQs: FAQ[];
+  voteState: VoteState;
+  onVote: (faqIndex: number, voteType: "up" | "down") => void;
+}
+
+// Constants for localStorage keys
+const VOTE_STORAGE_KEY = "faq_votes_v1";
+const FAQ_SUBMISSION_KEY = "faq_submission_v1";
+
+const DEFAULT_VOTE_STATS: VoteStats = {
+  upvotes: 0,
+  downvotes: 0,
+};
 
 const faqs: FAQ[] = [
   {
@@ -157,11 +226,263 @@ const relatedAnswers: Record<string, string> = {
   "Kā es varu uzlabot savas mājaslapas ielādes ātrumu?":
     "Lai uzlabotu ielādes ātrumu, optimizējiet attēlus, izmantojiet pārlūka kešatmiņu, minimizējiet un apvienojiet CSS/JavaScript failus, izmantojiet CDN un izvēlieties ātru hostingu. Izmantojiet lazy loading attēliem un saturam, kas nav tūlītēji nepieciešams. Regulāri testējiet vietnes ātrumu ar rīkiem kā Google PageSpeed Insights un veiciet ieteiktos uzlabojumus.",
 };
+// Helper function to manage votes in localStorage
+const getStoredVotes = (): { [key: number]: { type: "up" | "down" } } => {
+  if (typeof window === "undefined") return {};
+  const stored = localStorage.getItem(VOTE_STORAGE_KEY);
+  return stored ? JSON.parse(stored) : {};
+};
 
-interface ComplexityIndicatorProps {
-  level: 1 | 2 | 3;
-}
+const setStoredVote = (faqIndex: number, voteType: "up" | "down") => {
+  if (typeof window === "undefined") return;
+  const votes = getStoredVotes();
+  votes[faqIndex] = { type: voteType };
+  localStorage.setItem(VOTE_STORAGE_KEY, JSON.stringify(votes));
+};
 
+// Supabase integration functions
+const submitVote = async (vote: FAQVote) => {
+  try {
+    const { error } = await supabase.from("faq_votes").insert([
+      {
+        faq_index: vote.faq_index,
+        vote_type: vote.vote_type,
+        feedback: vote.feedback,
+      },
+    ]);
+
+    if (error) throw error;
+    return true;
+  } catch (error) {
+    console.error("Error submitting vote:", error);
+    return false;
+  }
+};
+
+const submitQuestion = async (question: string) => {
+  try {
+    const { error } = await supabase.from("faq_submissions").insert([
+      {
+        question: question,
+        status: "new",
+      },
+    ]);
+
+    if (error) throw error;
+    return true;
+  } catch (error) {
+    console.error("Error submitting question:", error);
+    return false;
+  }
+};
+
+const fetchVoteStats = async (): Promise<{ [key: number]: VoteStats }> => {
+  try {
+    const { data, error } = await supabase
+      .from("faq_votes")
+      .select("faq_index, vote_type");
+
+    if (error) throw error;
+
+    const stats: { [key: number]: VoteStats } = {};
+    data.forEach((vote) => {
+      if (!stats[vote.faq_index]) {
+        stats[vote.faq_index] = { ...DEFAULT_VOTE_STATS };
+      }
+      if (vote.vote_type === "up") {
+        stats[vote.faq_index].upvotes++;
+      } else {
+        stats[vote.faq_index].downvotes++;
+      }
+    });
+
+    return stats;
+  } catch (error) {
+    console.error("Error fetching vote stats:", error);
+    return {};
+  }
+};
+
+// Custom hooks
+const useVoteManagement = () => {
+  const [voteState, setVoteState] = useState<VoteState>({});
+  const [isVoting, setIsVoting] = useState(false);
+  const [showFeedbackDialog, setShowFeedbackDialog] = useState(false);
+  const [currentVotingFAQ, setCurrentVotingFAQ] = useState<number | null>(null);
+
+  useEffect(() => {
+    const loadInitialVoteState = async () => {
+      const storedVotes = getStoredVotes();
+      const voteStats = await fetchVoteStats();
+
+      const newVoteState: VoteState = {};
+      Object.keys(voteStats).forEach((index) => {
+        const faqIndex = parseInt(index);
+        newVoteState[faqIndex] = {
+          hasVoted: !!storedVotes[faqIndex],
+          voteType: storedVotes[faqIndex]?.type,
+          stats: voteStats[faqIndex] || { ...DEFAULT_VOTE_STATS },
+        };
+      });
+
+      setVoteState(newVoteState);
+    };
+
+    loadInitialVoteState();
+  }, []);
+
+  const handleVote = async (faqIndex: number, voteType: "up" | "down") => {
+    if (voteState[faqIndex]?.hasVoted || isVoting) return;
+
+    setIsVoting(true);
+    setCurrentVotingFAQ(faqIndex);
+
+    const success = await submitVote({
+      faq_index: faqIndex,
+      vote_type: voteType,
+    });
+
+    if (success) {
+      setStoredVote(faqIndex, voteType);
+      setVoteState((prev) => ({
+        ...prev,
+        [faqIndex]: {
+          hasVoted: true,
+          voteType: voteType,
+          stats: {
+            ...(prev[faqIndex]?.stats || DEFAULT_VOTE_STATS),
+            [voteType === "up" ? "upvotes" : "downvotes"]:
+              (prev[faqIndex]?.stats?.[
+                voteType === "up" ? "upvotes" : "downvotes"
+              ] || 0) + 1,
+          },
+        },
+      }));
+
+      if (voteType === "down") {
+        setShowFeedbackDialog(true);
+      }
+    }
+
+    setIsVoting(false);
+  };
+
+  const handleFeedbackSubmit = async (feedback: string) => {
+    if (currentVotingFAQ === null) return;
+
+    await submitVote({
+      faq_index: currentVotingFAQ,
+      vote_type: "down",
+      feedback,
+    });
+
+    setShowFeedbackDialog(false);
+    setCurrentVotingFAQ(null);
+  };
+
+  return {
+    voteState,
+    isVoting,
+    showFeedbackDialog,
+    handleVote,
+    handleFeedbackSubmit,
+    setShowFeedbackDialog,
+  };
+};
+
+const useCustomQuestionSubmission = () => {
+  const [formData, setFormData] = useState<FormData>({ question: "" });
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  const validateForm = (): boolean => {
+    const errors: FormErrors = {};
+    if (!formData.question.trim()) {
+      errors.question = "Jautājums ir obligāts";
+    }
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleSubmit = async () => {
+    if (!validateForm() || isSubmitting) return;
+
+    setIsSubmitting(true);
+    const success = await submitQuestion(formData.question);
+
+    if (success) {
+      setSubmitSuccess(true);
+      setFormData({ question: "" });
+      setTimeout(() => setSubmitSuccess(false), 3000);
+    } else {
+      setFormErrors({
+        submit: "Neizdevās nosūtīt jautājumu. Lūdzu, mēģiniet vēlreiz.",
+      });
+    }
+    setIsSubmitting(false);
+  };
+
+  return {
+    formData,
+    formErrors,
+    isSubmitting,
+    submitSuccess,
+    setFormData,
+    handleSubmit,
+  };
+};
+// Feedback Dialog Component
+const FeedbackDialog: React.FC<FeedbackDialogProps> = ({
+  isOpen,
+  onClose,
+  onSubmit,
+}) => {
+  const [feedback, setFeedback] = useState("");
+
+  const handleSubmit = () => {
+    onSubmit(feedback);
+    setFeedback("");
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-lg p-6 max-w-md w-full">
+          <h3 className="text-lg font-bold mb-4">Pastāstiet mums vairāk</h3>
+          <p className="mb-4 text-gray-600">
+            Mēs vēlētos zināt, kā mēs varētu uzlabot šo atbildi.
+          </p>
+          <textarea
+            className="w-full p-2 border rounded-md mb-4"
+            rows={4}
+            value={feedback}
+            onChange={(e) => setFeedback(e.target.value)}
+            placeholder="Jūsu ieteikumi uzlabojumiem..."
+          />
+          <div className="flex justify-end space-x-2">
+            <button
+              className="px-4 py-2 border rounded-md hover:bg-gray-100"
+              onClick={onClose}
+            >
+              Atcelt
+            </button>
+            <button
+              className="px-4 py-2 bg-[#EEC71B] text-white rounded-md hover:bg-opacity-90"
+              onClick={handleSubmit}
+            >
+              Iesniegt
+            </button>
+          </div>
+        </div>
+      </div>
+    </Dialog>
+  );
+};
+
+// Complexity Indicator Component
 const ComplexityIndicator: React.FC<ComplexityIndicatorProps> = React.memo(
   ({ level }) => {
     return (
@@ -181,13 +502,7 @@ const ComplexityIndicator: React.FC<ComplexityIndicatorProps> = React.memo(
 
 ComplexityIndicator.displayName = "ComplexityIndicator";
 
-interface RelatedQuestionProps {
-  question: string;
-  answer: string;
-  isOpen: boolean;
-  toggleOpen: () => void;
-}
-
+// Related Question Component
 const RelatedQuestion: React.FC<RelatedQuestionProps> = React.memo(
   ({ question, answer, isOpen, toggleOpen }) => {
     return (
@@ -218,15 +533,9 @@ const RelatedQuestion: React.FC<RelatedQuestionProps> = React.memo(
 
 RelatedQuestion.displayName = "RelatedQuestion";
 
-interface FAQItemProps {
-  faq: FAQ;
-  isOpen: boolean;
-  toggleOpen: () => void;
-  relatedFAQs: FAQ[];
-}
-
+// FAQ Item Component
 const FAQItem: React.FC<FAQItemProps> = React.memo(
-  ({ faq, isOpen, toggleOpen, relatedFAQs }) => {
+  ({ faq, isOpen, toggleOpen, relatedFAQs, voteState, onVote, faqIndex }) => {
     const [openRelatedQuestion, setOpenRelatedQuestion] = useState<
       number | null
     >(null);
@@ -234,6 +543,11 @@ const FAQItem: React.FC<FAQItemProps> = React.memo(
     const toggleRelatedQuestion = useCallback((index: number) => {
       setOpenRelatedQuestion((prev) => (prev === index ? null : index));
     }, []);
+
+    const currentVoteState = voteState[faqIndex] || {
+      hasVoted: false,
+      stats: DEFAULT_VOTE_STATS,
+    };
 
     return (
       <motion.div
@@ -268,13 +582,34 @@ const FAQItem: React.FC<FAQItemProps> = React.memo(
                   <span className="text-sm text-gray-500">{faq.category}</span>
                   <ComplexityIndicator level={faq.complexity} />
                 </div>
-                <div className="flex space-x-2">
-                  <button className="p-1 hover:bg-gray-100 rounded">
-                    <FiThumbsUp />
-                  </button>
-                  <button className="p-1 hover:bg-gray-100 rounded">
-                    <FiThumbsDown />
-                  </button>
+                <div className="flex space-x-4 items-center">
+                  <div className="text-sm text-gray-500">
+                    {currentVoteState.stats.upvotes} noderīgi
+                  </div>
+                  <div className="flex space-x-2">
+                    <button
+                      className={`p-2 rounded-full transition-all ${
+                        currentVoteState.voteType === "up"
+                          ? "bg-green-100 text-green-600"
+                          : "hover:bg-gray-100"
+                      }`}
+                      onClick={() => onVote(faqIndex, "up")}
+                      disabled={currentVoteState.hasVoted}
+                    >
+                      <FiThumbsUp />
+                    </button>
+                    <button
+                      className={`p-2 rounded-full transition-all ${
+                        currentVoteState.voteType === "down"
+                          ? "bg-red-100 text-red-600"
+                          : "hover:bg-gray-100"
+                      }`}
+                      onClick={() => onVote(faqIndex, "down")}
+                      disabled={currentVoteState.hasVoted}
+                    >
+                      <FiThumbsDown />
+                    </button>
+                  </div>
                 </div>
               </div>
               {relatedFAQs.length > 0 && (
@@ -300,11 +635,28 @@ const FAQItem: React.FC<FAQItemProps> = React.memo(
 );
 
 FAQItem.displayName = "FAQItem";
-
 const FAQPage: React.FC = () => {
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filteredFAQs, setFilteredFAQs] = useState<FAQ[]>(faqs);
+
+  const {
+    voteState,
+    isVoting,
+    showFeedbackDialog,
+    handleVote,
+    handleFeedbackSubmit,
+    setShowFeedbackDialog,
+  } = useVoteManagement();
+
+  const {
+    formData,
+    formErrors,
+    isSubmitting,
+    submitSuccess,
+    setFormData,
+    handleSubmit,
+  } = useCustomQuestionSubmission();
 
   const handleSearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -333,12 +685,15 @@ const FAQPage: React.FC = () => {
         <FAQItem
           key={faq.question}
           faq={faq}
+          faqIndex={index}
           isOpen={openFAQ === index}
           toggleOpen={() => toggleFAQ(index)}
           relatedFAQs={getRelatedFAQs(faq.relatedQuestions)}
+          voteState={voteState}
+          onVote={handleVote}
         />
       )),
-    [filteredFAQs, openFAQ, toggleFAQ, getRelatedFAQs]
+    [filteredFAQs, openFAQ, toggleFAQ, getRelatedFAQs, voteState, handleVote]
   );
 
   return (
@@ -389,21 +744,55 @@ const FAQPage: React.FC = () => {
             atbildi uz savu jautājumu, lūdzu, uzdodiet to šeit, un mēs
             centīsimies atbildēt pēc iespējas ātrāk.
           </p>
-          <div className="flex">
-            <input
-              type="text"
-              placeholder="Jūsu jautājums..."
-              className="flex-grow p-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-[#EEC71B]"
-            />
-            <button className="bg-[#EEC71B] text-white px-4 py-2 rounded-r-md hover:bg-opacity-90 transition-colors duration-300">
-              <FiMessageSquare className="inline-block mr-2" />
-              Uzdot Jautājumu
-            </button>
+          <div className="space-y-4">
+            <div className="flex">
+              <input
+                type="text"
+                placeholder="Jūsu jautājums..."
+                value={formData.question}
+                onChange={(e) => setFormData({ question: e.target.value })}
+                className={`flex-grow p-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-[#EEC71B] ${
+                  formErrors.question ? "border-red-500" : ""
+                }`}
+                disabled={isSubmitting}
+              />
+              <button
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+                className={`bg-[#EEC71B] text-white px-4 py-2 rounded-r-md hover:bg-opacity-90 transition-colors duration-300 flex items-center ${
+                  isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+              >
+                <FiMessageSquare className="inline-block mr-2" />
+                {isSubmitting ? "Sūta..." : "Uzdot Jautājumu"}
+              </button>
+            </div>
+            {formErrors.question && (
+              <p className="text-red-500 text-sm">{formErrors.question}</p>
+            )}
+            {formErrors.submit && (
+              <p className="text-red-500 text-sm">{formErrors.submit}</p>
+            )}
+            {submitSuccess && (
+              <motion.p
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-green-500 text-sm"
+              >
+                Paldies! Jūsu jautājums ir saņemts.
+              </motion.p>
+            )}
           </div>
         </div>
       </main>
 
       <Footer />
+
+      <FeedbackDialog
+        isOpen={showFeedbackDialog}
+        onClose={() => setShowFeedbackDialog(false)}
+        onSubmit={handleFeedbackSubmit}
+      />
 
       <script
         type="application/ld+json"
