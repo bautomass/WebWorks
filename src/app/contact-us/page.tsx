@@ -342,7 +342,7 @@ const ContactUs: React.FC = () => {
                   Mūsu Kontaktinformācija
                 </h2>
                 <p className="mb-2">
-                  <strong>Adrese:</strong> Brīvības iela 123, Rīga, LV-1010
+                  <strong>Adrese:</strong> Kungu iela 23/8, Jelgava, LV-3001
                 </p>
                 <p className="mb-2">
                   <strong>E-pasts:</strong> info@webworks.lv
