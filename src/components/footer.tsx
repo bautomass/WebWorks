@@ -133,7 +133,7 @@ const Footer: React.FC = () => {
   const services = [
     "Web Izstrade",
     "E-komercija",
-    "SEO Pakalpojumi",
+    "SEO Optimizacija",
     "UI/UX Dizains",
     "Digitalais Marketings",
   ];
