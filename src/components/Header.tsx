@@ -120,7 +120,7 @@ const menuItems: MenuItem[] = [
     dropdown: [
       {
         name: "Web Izstrāde",
-        href: "#",
+        href: "/pakalpojumi/web-izstrade",
         description: "Modernas un efektīvas mājaslapas izstrāde",
         icon: FiMonitor,
       },
