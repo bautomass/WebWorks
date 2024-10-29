@@ -1,205 +1,143 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Head from "next/head";
 import { motion, AnimatePresence } from "framer-motion";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   FiShoppingCart,
-  FiBox,
-  FiLayers,
-  FiCode,
-  FiShield,
+  FiTrendingUp,
+  FiGlobe,
   FiCheckCircle,
   FiX,
-  FiGlobe,
-  FiTrendingUp,
+  FiArrowRight,
+  FiStar,
+  FiBox,
+  FiDollarSign,
+  FiShield,
   FiUsers,
-  FiClock,
+  FiZap,
 } from "react-icons/fi";
+import { supabase } from "../../../utils/supabase";
 import Header from "@/components/Header";
 import Footer from "@/components/footer";
 
 interface Package {
+  id: string;
   name: string;
+  tagline: string;
   price: string;
   features: string[];
   description: string;
+  detailedDescription: string;
   icon: JSX.Element;
   color: string;
-  bestFor: string;
-  conversion: string;
+  popular?: boolean;
+  highlightFeatures?: string[];
 }
 
-const shopifyPackages: Package[] = [
+interface FormData {
+  name: string;
+  email: string;
+  message: string;
+  phone?: string;
+  company?: string;
+  platform: "shopify" | "custom" | "";
+  current_website?: string;
+  product_count?: string;
+}
+
+const packages: Package[] = [
   {
-    name: "Shopify Starter",
-    price: "999",
+    id: "ecommerce_starter",
+    name: "E-commerce Starter",
+    tagline: "Ideāls sākums jūsu tiešsaistes pārdošanai",
+    price: "499",
     features: [
-      "Līdz 100 produktiem",
-      "Responsīvs dizains",
-      "Bāzes SEO optimizācija",
-      "Pamata maksājumu integrācija",
-      "30 dienu atbalsts",
+      "Līdz 50 produktiem",
+      "Responsīvs dizains visām ierīcēm",
+      "Shopify vai Custom risinājums",
+      "Produktu importēšana",
+      "Drošs maksājumu process",
+      "Google Analytics integrācija",
+      "2 mēnešu bezmaksas atbalsts",
+      "SEO pamata optimizācija",
+      "Izstrādes laiks: 4 nedēļas",
     ],
     description:
-      "Ideāls risinājums maziem uzņēmumiem, kas vēlas uzsākt tiešsaistes pārdošanu ar Shopify.",
-    icon: <FiShoppingCart />,
-    color: "#95BF47",
-    bestFor: "Mazie uzņēmumi",
-    conversion: "Palieliniet savus ienākumus par 50% pirmajā gadā!",
+      "Ideāls risinājums maziem uzņēmumiem, kas vēlas uzsākt tiešsaistes pārdošanu.",
+    detailedDescription:
+      "E-commerce Starter pakete ir perfekts sākums jūsu tiešsaistes veikalam. Ar modernām funkcijām un profesionālu dizainu, tas sniegs jūsu klientiem lielisku iepirkšanās pieredzi. Iekļauts viss nepieciešamais, lai ātri sāktu pārdot tiešsaistē.",
+    icon: <FiShoppingCart className="text-3xl" />,
+    color: "#4CAF50",
   },
   {
-    name: "Shopify Growth",
-    price: "1999",
+    id: "ecommerce_growth",
+    name: "E-commerce Growth",
+    tagline: "Populārākā izvēle augošiem uzņēmumiem",
+    price: "899",
     features: [
-      "Līdz 500 produktiem",
-      "Pielāgots dizains",
-      "Padziļināta SEO optimizācija",
-      "Vairāku maksājumu metožu integrācija",
-      "60 dienu atbalsts",
+      "Līdz 200 produktiem",
+      "Premium dizains un UX",
+      "Multi-valūtu atbalsts",
+      "Automatizēta produktu sinhronizācija",
+      "Paplašināta analītika",
       "Sociālo mediju integrācija",
+      "Mārketinga rīku integrācijas",
+      "2 mēnešu bezmaksas atbalsts",
+      "Padziļināta SEO optimizācija",
+      "Izstrādes laiks: 6 nedēļas",
+    ],
+    highlightFeatures: [
+      "Multi-valūtu atbalsts",
+      "Paplašināta analītika",
+      "Premium dizains un UX",
     ],
     description:
-      "Perfekts risinājums augošiem uzņēmumiem, kas vēlas paplašināt savu tiešsaistes klātbūtni.",
-    icon: <FiTrendingUp />,
-    color: "#7AB55C",
-    bestFor: "Augoši vidējie uzņēmumi",
-    conversion: "Dubultojiet savu tiešsaistes pārdošanu 6 mēnešu laikā!",
+      "Pilnvērtīgs risinājums biznesiem, kas vēlas izcelties tiešsaistes tirgū.",
+    detailedDescription:
+      "E-commerce Growth pakete nodrošina visaptverošu risinājumu augošiem uzņēmumiem. Ar paplašinātām funkcijām un automatizācijas iespējām, jūs varēsiet efektīvi pārvaldīt lielāku produktu katalogu un sniegt klientiem izcilu iepirkšanās pieredzi.",
+    icon: <FiTrendingUp className="text-3xl" />,
+    color: "#2196F3",
+    popular: true,
   },
   {
-    name: "Shopify Advanced",
-    price: "3499",
+    id: "ecommerce_enterprise",
+    name: "E-commerce Enterprise",
+    tagline: "Premium risinājums ambicioziem uzņēmumiem",
+    price: "1299",
     features: [
       "Neierobežots produktu skaits",
       "Pilnībā pielāgots dizains",
-      "Padziļināta SEO un veiktspējas optimizācija",
-      "Paplašināta analītika un atskaites",
-      "Vairāku valūtu atbalsts",
-      "12 mēnešu atbalsts un uzturēšana",
+      "B2B funkcionalitāte",
+      "Vairāku valodu atbalsts",
+      "ERP/CRM integrācijas",
+      "Pielāgoti automatizācijas risinājumi",
+      "Augsta veiktspēja un drošība",
+      "2 mēnešu bezmaksas atbalsts",
+      "Enterprise līmeņa SEO",
+      "Izstrādes laiks: 8 nedēļas",
     ],
     description:
-      "Visaptverošs Shopify risinājums lieliem uzņēmumiem ar specifiskām vajadzībām.",
-    icon: <FiGlobe />,
-    color: "#5E8E3E",
-    bestFor: "Lieli uzņēmumi",
-    conversion: "Sasniedziet 7-ciparu gada apgrozījumu tiešsaistē!",
+      "Premium e-komercijas risinājums ar pilnu pielāgošanu un integrāciju.",
+    detailedDescription:
+      "E-commerce Enterprise ir mūsu visaptverošākais risinājums, kas paredzēts uzņēmumiem ar augstām prasībām. Ar pielāgotām funkcijām, B2B iespējām un uzlabotu veiktspēju, šis risinājums nodrošinās jūsu biznesam maksimālu izaugsmi.",
+    icon: <FiGlobe className="text-3xl" />,
+    color: "#9C27B0",
   },
 ];
 
-const wooCommercePackages: Package[] = [
-  {
-    name: "WooCommerce Basic",
-    price: "799",
-    features: [
-      "Līdz 100 produktiem",
-      "WordPress + WooCommerce uzstādīšana",
-      "Responsīvs dizains",
-      "Bāzes SEO optimizācija",
-      "14 dienu atbalsts",
-    ],
-    description:
-      "Pieejams risinājums maziem uzņēmumiem, kas vēlas izmantot WooCommerce platformu.",
-    icon: <FiBox />,
-    color: "#96588A",
-    bestFor: "Mazie uzņēmumi",
-    conversion: "Uzsāciet tiešsaistes pārdošanu ar minimālām izmaksām!",
-  },
-  {
-    name: "WooCommerce Plus",
-    price: "1599",
-    features: [
-      "Līdz 500 produktiem",
-      "Pielāgots WordPress dizains",
-      "WooCommerce paplašinājumu integrācija",
-      "Padziļināta SEO optimizācija",
-      "30 dienu atbalsts",
-      "Produktu importēšana",
-    ],
-    description:
-      "Uzlabots WooCommerce risinājums ar paplašinātām funkcijām vidējiem uzņēmumiem.",
-    icon: <FiLayers />,
-    color: "#7F54B3",
-    bestFor: "Vidējie uzņēmumi",
-    conversion: "Palieliniet konversijas par 75% ar pielāgotām funkcijām!",
-  },
-  {
-    name: "WooCommerce Enterprise",
-    price: "2999",
-    features: [
-      "Neierobežots produktu skaits",
-      "Pilnībā pielāgots WordPress un WooCommerce risinājums",
-      "Paplašināta analītika un atskaites",
-      "Vairāku valūtu atbalsts",
-      "API integrācijas",
-      "60 dienu atbalsts un uzturēšana",
-    ],
-    description:
-      "Pilnvērtīgs WooCommerce risinājums lieliem uzņēmumiem ar sarežģītām prasībām.",
-    icon: <FiGlobe />,
-    color: "#674399",
-    bestFor: "Lieli uzņēmumi",
-    conversion: "Optimizējiet savu e-komercijas biznesu maksimālai peļņai!",
-  },
-];
-
-const customPackages: Package[] = [
-  {
-    name: "Pielāgots E-komercijas Starters",
-    price: "3999",
-    features: [
-      "Pilnībā pielāgota e-komercijas platforma",
-      "Līdz 500 produktiem",
-      "Unikāls, pielāgots dizains",
-      "Bāzes integrācijas",
-      "Padziļināta SEO optimizācija",
-      "30 dienu atbalsts un uzturēšana",
-    ],
-    description:
-      "Pielāgots e-komercijas risinājums maziem līdz vidējiem uzņēmumiem ar specifiskām vajadzībām.",
-    icon: <FiCode />,
-    color: "#3D3B4A",
-    bestFor: "Mazie līdz vidējie uzņēmumi ar unikālām prasībām",
-    conversion:
-      "Radiet unikālu tiešsaistes pārdošanas pieredzi saviem klientiem!",
-  },
-  {
-    name: "Pielāgots E-komercijas Pro",
-    price: "7999",
-    features: [
-      "Pilnībā pielāgota e-komercijas platforma",
-      "Neierobežots produktu skaits",
-      "Unikālas funkcijas un integrācijas",
-      "Augstas veiktspējas arhitektūra",
-      "Paplašināta drošība",
-      "60 dienu atbalsts un uzturēšana",
-    ],
-    description:
-      "Progresīvs pielāgots e-komercijas risinājums vidējiem līdz lieliem uzņēmumiem ar kompleksām prasībām.",
-    icon: <FiLayers />,
-    color: "#2C2A38",
-    bestFor: "Vidējie līdz lielie uzņēmumi ar sarežģītām prasībām",
-    conversion: "Paaugstiniet sava e-komercijas biznesa efektivitāti par 200%!",
-  },
-  {
-    name: "Pielāgots E-komercijas Enterprise",
-    price: "14999+",
-    features: [
-      "Pilnībā pielāgota uzņēmuma līmeņa e-komercijas platforma",
-      "Neierobežotas pielāgošanas iespējas",
-      "Sarežģītas sistēmu integrācijas",
-      "Augstas veiktspējas un mērogojama arhitektūra",
-      "Uzlabota drošība un datu aizsardzība",
-      "12 mēnešu atbalsts un uzturēšana",
-    ],
-    description:
-      "Visaptverošs uzņēmuma līmeņa e-komercijas risinājums ar pilnīgu pielāgošanu un integrāciju.",
-    icon: <FiGlobe />,
-    color: "#1D1C24",
-    bestFor: "Lieli uzņēmumi un korporācijas ar specifiskām prasībām",
-    conversion:
-      "Dominējiet savā nozarē ar pilnībā optimizētu e-komercijas ekosistēmu!",
-  },
-];
+const initialFormData: FormData = {
+  name: "",
+  email: "",
+  message: "",
+  phone: "",
+  company: "",
+  platform: "",
+  current_website: "",
+  product_count: "",
+};
 
 function adjustColor(color: string, amount: number): string {
   return (
@@ -218,254 +156,380 @@ function adjustColor(color: string, amount: number): string {
 const ECommerceServices: React.FC = () => {
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [timeLeft, setTimeLeft] = useState<number>(1800); // 30 minutes
+  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formErrors, setFormErrors] = useState<Partial<FormData>>({});
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
-    }, 1000);
+  const validateForm = (): boolean => {
+    const errors: Partial<FormData> = {};
 
-    return () => clearInterval(timer);
-  }, []);
+    if (!formData.name.trim()) {
+      errors.name = "Vārds ir obligāts";
+    }
 
-  const formatTime = (time: number): string => {
-    const minutes = Math.floor(time / 60);
-    const seconds = time % 60;
-    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+    if (!formData.email.trim()) {
+      errors.email = "E-pasts ir obligāts";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.email = "Nederīgs e-pasta formāts";
+    }
+
+    if (!formData.message.trim()) {
+      errors.message = "Ziņojums ir obligāts";
+    }
+
+    if (!formData.platform) {
+      errors.platform = "Platformas izvēle ir obligāta";
+    }
+
+    if (!formData.product_count?.trim()) {
+      errors.product_count = "Produktu skaits ir obligāts";
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
-  const openModal = (pkg: Package | "contact"): void => {
-    if (pkg === "contact") {
-      setSelectedPackage(null);
-    } else {
-      setSelectedPackage(pkg);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
     }
+
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase.from("ecommerce_inquiries").insert([
+        {
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          phone: formData.phone,
+          company: formData.company,
+          selected_package: selectedPackage?.id,
+          selected_platform: formData.platform,
+          current_website: formData.current_website,
+          product_count: parseInt(formData.product_count || "0"),
+        },
+      ]);
+
+      if (error) throw error;
+
+      toast.success("Paldies! Mēs ar jums sazināsimies tuvākajā laikā.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+
+      setFormData(initialFormData);
+      setShowModal(false);
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Kļūda nosūtot ziņojumu. Lūdzu mēģiniet vēlreiz.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const openModal = (pkg: Package): void => {
+    setSelectedPackage(pkg);
     setShowModal(true);
   };
 
   const closeModal = (): void => {
     setShowModal(false);
+    setFormData(initialFormData);
+    setFormErrors({});
   };
 
-  const PackageCard: React.FC<{ pkg: Package }> = ({ pkg }) => (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-      <div
-        className="p-6 text-white relative overflow-hidden"
-        style={{
-          background: `linear-gradient(135deg, ${pkg.color} 0%, ${adjustColor(
-            pkg.color,
-            -30
-          )} 100%)`,
-        }}
-      >
-        <div className="absolute top-0 right-0 -mt-4 -mr-4 bg-white bg-opacity-20 rounded-full p-8 transform rotate-12">
-          <motion.div
-            className="text-5xl"
-            whileHover={{ rotate: 360, scale: 1.2 }}
-            transition={{ duration: 0.5 }}
-          >
-            {pkg.icon}
-          </motion.div>
+  const BenefitsSection: React.FC = () => (
+    <section className="mb-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <div className="bg-[#EEC71B] w-12 h-12 rounded-full flex items-center justify-center mb-4">
+          <FiZap className="text-white text-xl" />
         </div>
-        <h3 className="text-2xl font-bold mb-2 relative z-10">{pkg.name}</h3>
-        <p className="text-4xl font-extrabold mb-1 relative z-10">
-          €{pkg.price}
+        <h3 className="text-xl font-bold mb-2">Ātra Ieviešana</h3>
+        <p className="text-gray-600">
+          Sāciet pārdot tiešsaistē jau pēc 4 nedēļām!
         </p>
-        <p className="text-sm opacity-75 relative z-10">{pkg.bestFor}</p>
       </div>
-      <div className="p-6">
-        <p className="text-gray-700 mb-4">{pkg.description}</p>
-        <ul className="mb-6" aria-label={`${pkg.name} features`}>
-          {pkg.features.map((feature, i) => (
-            <li key={i} className="flex items-center mb-2">
-              <FiCheckCircle
-                className="text-[#EEC71B] mr-2 flex-shrink-0"
-                aria-hidden="true"
-              />
-              <span>{feature}</span>
-            </li>
-          ))}
-        </ul>
-        <p className="text-[#EEC71B] font-bold mb-4">{pkg.conversion}</p>
-        <button
-          className="w-full bg-[#EEC71B] text-[#3D3B4A] px-6 py-2 rounded-full font-bold mt-auto hover:bg-[#ffd700] transition-colors duration-300"
-          onClick={() => openModal(pkg)}
-        >
-          Uzzināt Vairāk
-        </button>
-      </div>
-    </div>
-  );
 
-  const PlatformSection: React.FC<{ title: string; packages: Package[] }> = ({
-    title,
-    packages,
-  }) => (
-    <section className="mb-16">
-      <h2 className="text-3xl font-bold text-[#3D3B4A] mb-8 text-center">
-        {title}
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {packages.map((pkg, index) => (
-          <PackageCard key={index} pkg={pkg} />
-        ))}
+      <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <div className="bg-[#EEC71B] w-12 h-12 rounded-full flex items-center justify-center mb-4">
+          <FiDollarSign className="text-white text-xl" />
+        </div>
+        <h3 className="text-xl font-bold mb-2">Pārdošanas Pieaugums</h3>
+        <p className="text-gray-600">
+          Mūsu klienti vidēji palielina apgrozījumu par 200%
+        </p>
+      </div>
+
+      <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <div className="bg-[#EEC71B] w-12 h-12 rounded-full flex items-center justify-center mb-4">
+          <FiShield className="text-white text-xl" />
+        </div>
+        <h3 className="text-xl font-bold mb-2">Droša Platforma</h3>
+        <p className="text-gray-600">
+          Augstākā līmeņa drošība jūsu un klientu datiem
+        </p>
+      </div>
+
+      <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <div className="bg-[#EEC71B] w-12 h-12 rounded-full flex items-center justify-center mb-4">
+          <FiUsers className="text-white text-xl" />
+        </div>
+        <h3 className="text-xl font-bold mb-2">2 Mēnešu Atbalsts</h3>
+        <p className="text-gray-600">
+          Bezmaksas tehniskais atbalsts visām paketēm
+        </p>
       </div>
     </section>
+  );
+
+  const PackageCard: React.FC<{ pkg: Package }> = ({ pkg }) => (
+    <div
+      className={`relative transform transition-all duration-300 ${
+        pkg.popular ? "scale-105 z-10 mt-5" : "hover:-translate-y-1"
+      }`}
+    >
+      <div
+        className={`bg-white rounded-xl shadow-lg overflow-hidden
+          ${pkg.popular ? "ring-4 ring-[#EEC71B] ring-opacity-50" : ""}
+        `}
+      >
+        {pkg.popular && (
+          <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
+            <div className="bg-[#EEC71B] text-[#3D3B4A] px-8 py-2 rounded-lg font-bold text-sm flex items-center justify-center shadow-md min-w-[250px]">
+              <FiStar className="mr-2" />
+              Populārākā Izvēle
+            </div>
+          </div>
+        )}
+
+        <div
+          className="p-6 text-white relative overflow-hidden"
+          style={{
+            background: `linear-gradient(135deg, ${pkg.color} 0%, ${adjustColor(
+              pkg.color,
+              -30
+            )} 100%)`,
+          }}
+        >
+          <div className="absolute top-0 right-0 -mt-4 -mr-4 bg-white bg-opacity-20 rounded-full p-8 transform rotate-12">
+            <motion.div
+              className="text-5xl"
+              whileHover={{ rotate: 360, scale: 1.2 }}
+              transition={{ duration: 0.5 }}
+            >
+              {pkg.icon}
+            </motion.div>
+          </div>
+          <h3 className="text-2xl font-bold mb-2 relative z-10">{pkg.name}</h3>
+          <p className="text-lg opacity-90 mb-3">{pkg.tagline}</p>
+          <p className="text-4xl font-extrabold mb-1 relative z-10">
+            €{pkg.price}
+          </p>
+        </div>
+
+        <div className="p-6 space-y-6">
+          <div className="space-y-4">
+            {pkg.highlightFeatures && (
+              <div className="space-y-2">
+                {pkg.highlightFeatures.map((feature, i) => (
+                  <div
+                    key={`highlight-${i}`}
+                    className="flex items-center bg-yellow-50 p-2 rounded-lg"
+                  >
+                    <FiStar className="text-[#EEC71B] mr-2 flex-shrink-0" />
+                    <span className="text-gray-800 font-medium">{feature}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <ul className="space-y-3">
+              {pkg.features
+                .filter((f) => !pkg.highlightFeatures?.includes(f))
+                .map((feature, i) => (
+                  <li key={i} className="flex items-center">
+                    <FiCheckCircle className="text-[#EEC71B] mr-2 flex-shrink-0" />
+                    <span className="text-gray-700">{feature}</span>
+                  </li>
+                ))}
+            </ul>
+          </div>
+
+          <div className="pt-6 border-t border-gray-100">
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className={`w-full px-6 py-3 rounded-lg font-bold flex items-center justify-center
+                ${
+                  pkg.popular
+                    ? "bg-[#EEC71B] text-[#3D3B4A] hover:bg-[#ffd700]"
+                    : "bg-gray-100 text-gray-800 hover:bg-gray-200"
+                } transition-colors duration-300`}
+              onClick={() => openModal(pkg)}
+            >
+              Pieteikties
+              <FiArrowRight className="ml-2" />
+            </motion.button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 
   return (
     <>
       <Head>
         <title>
-          E-komercijas Risinājumi | WebWorks - Jūsu Ceļš uz Tiešsaistes Veiksmi
+          E-komercijas Risinājumi | WebWorks - Jūsu Tiešsaistes Veikala Izveide
         </title>
         <meta
           name="description"
-          content="WebWorks piedāvā revolucionārus e-komercijas risinājumus Latvijā. Izvēlieties starp Shopify, WooCommerce vai pielāgotu risinājumu, lai palielinātu savus ienākumus un dominētu tiešsaistes tirgū."
+          content="WebWorks piedāvā profesionālus e-komercijas risinājumus. Izveidojiet savu tiešsaistes veikalu ar Shopify vai pielāgotu risinājumu. Sāciet pārdot tiešsaistē jau 4 nedēļu laikā!"
         />
         <meta
           name="keywords"
-          content="e-komercija, tiešsaistes veikals, Shopify, WooCommerce, pielāgots e-komercijas risinājums, digitālie produkti, fiziskās preces, konversiju optimizācija, web izstrāde, Latvija"
+          content="e-komercija, tiešsaistes veikals, shopify, e-veikals, web izstrāde, e-commerce, interneta veikals, Latvija"
         />
-        <link rel="canonical" href="https://www.webworks.lv/e-komercija" />
-        <meta
-          property="og:title"
-          content="E-komercijas Risinājumi | WebWorks - Jūsu Ceļš uz Tiešsaistes Veiksmi"
-        />
-        <meta
-          property="og:description"
-          content="Revolucionāri e-komercijas risinājumi Latvijā ar Shopify, WooCommerce vai pielāgotu izstrādi. Palieliniet ienākumus un dominējiet tiešsaistes tirgū ar WebWorks."
-        />
-        <meta
-          property="og:image"
-          content="https://www.webworks.lv/images/e-komercija-og.jpg"
-        />
-        <meta property="og:url" content="https://www.webworks.lv/e-komercija" />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta
-          name="twitter:title"
-          content="E-komercijas Risinājumi | WebWorks - Jūsu Ceļš uz Tiešsaistes Veiksmi"
-        />
-        <meta
-          name="twitter:description"
-          content="Revolucionāri e-komercijas risinājumi Latvijā ar Shopify, WooCommerce vai pielāgotu izstrādi. Palieliniet ienākumus un dominējiet tiešsaistes tirgū ar WebWorks."
-        />
-        <meta
-          name="twitter:image"
-          content="https://www.webworks.lv/images/e-komercija-og.jpg"
+        <link
+          rel="canonical"
+          href="https://www.webworks.lv/pakalpojumi/e-komercija"
         />
       </Head>
 
       <div className="min-h-screen bg-gradient-to-b from-[#F3F5F4] to-white">
         <Header />
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
 
         <main className="container mx-auto px-4 py-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-center text-[#3D3B4A] mb-8">
-            Revolucionāri E-komercijas Risinājumi Jūsu Biznesa Izaugsmei
-          </h1>
-
-          <p className="text-xl text-center text-gray-700 mb-12 max-w-3xl mx-auto">
-            Pārvērtiet savu biznesu ar mūsu ekspertu veidotām e-komercijas
-            platformām. Izvēlieties starp Shopify, WooCommerce vai pielāgotu
-            risinājumu, lai palielinātu ienākumus, paplašinātu klientu loku un
-            dominētu tiešsaistes tirgū!
-          </p>
-
-          <section
-            aria-labelledby="limited-offer"
-            className="mb-16 bg-[#3D3B4A] text-white p-8 rounded-lg"
-          >
-            <h2
-              id="limited-offer"
-              className="text-3xl font-bold mb-4 text-center"
-            >
-              Īpašais Piedāvājums - Ierobežots Laiks!
-            </h2>
-            <p className="text-xl mb-4 text-center">
-              Izvēlieties jebkuru no mūsu e-komercijas pakalpojumiem un saņemiet
-              3 mēnešus BEZMAKSAS SEO optimizāciju un sociālo mediju
-              integrāciju!
-            </p>
-            <div className="flex justify-center items-center">
-              <FiClock className="text-2xl mr-2" />
-              <p className="text-2xl font-bold">
-                Piedāvājums beigsies pēc: {formatTime(timeLeft)}
+          <div className="max-w-7xl mx-auto">
+            <section className="text-center mb-16">
+              <h1 className="text-4xl md:text-5xl font-bold text-[#3D3B4A] mb-8">
+                Izveidojiet Savu Veiksmīgo E-komercijas Biznesu
+              </h1>
+              <p className="text-xl text-gray-700 mb-12 max-w-3xl mx-auto">
+                Pārvērtiet savas biznesa idejas realitātē ar mūsu
+                profesionālajiem e-komercijas risinājumiem. Sāciet pārdot
+                tiešsaistē jau 4 nedēļu laikā!
               </p>
-            </div>
-          </section>
+            </section>
 
-          <PlatformSection
-            title="Shopify E-komercijas Risinājumi"
-            packages={shopifyPackages}
-          />
-          <PlatformSection
-            title="WooCommerce E-komercijas Risinājumi"
-            packages={wooCommercePackages}
-          />
-          <PlatformSection
-            title="Pielāgoti E-komercijas Risinājumi"
-            packages={customPackages}
-          />
+            <BenefitsSection />
 
-          <section aria-labelledby="benefits" className="mb-16">
-            <h2
-              id="benefits"
-              className="text-3xl font-bold text-[#3D3B4A] mb-8 text-center"
-            >
-              Kāpēc Izvēlēties WebWorks E-komercijas Risinājumus?
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div className="bg-white rounded-lg shadow-lg p-6 text-center">
-                <FiTrendingUp className="text-4xl text-[#EEC71B] mb-4 mx-auto" />
-                <h3 className="text-xl font-bold mb-2">Palielināti Ienākumi</h3>
-                <p className="text-gray-700">
-                  Mūsu klienti vidēji palielina savus ienākumus par 200% pirmā
-                  gada laikā.
-                </p>
-              </div>
-              <div className="bg-white rounded-lg shadow-lg p-6 text-center">
-                <FiUsers className="text-4xl text-[#EEC71B] mb-4 mx-auto" />
-                <h3 className="text-xl font-bold mb-2">
-                  Paplašināts Klientu Loks
-                </h3>
-                <p className="text-gray-700">
-                  Sasniedziet jaunus klientus visā pasaulē ar mūsu globāli
-                  optimizētajām platformām.
-                </p>
-              </div>
-              <div className="bg-white rounded-lg shadow-lg p-6 text-center">
-                <FiShield className="text-4xl text-[#EEC71B] mb-4 mx-auto" />
-                <h3 className="text-xl font-bold mb-2">Uzlabota Drošība</h3>
-                <p className="text-gray-700">
-                  Pasargājiet savu biznesu un klientus ar mūsu progresīvajiem
-                  drošības risinājumiem.
-                </p>
-              </div>
-            </div>
-          </section>
+            <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+              {packages.map((pkg) => (
+                <PackageCard key={pkg.id} pkg={pkg} />
+              ))}
+            </section>
 
-          <section
-            aria-labelledby="cta"
-            className="mb-16 bg-[#3D3B4A] text-white p-8 rounded-lg"
-          >
-            <h2 id="cta" className="text-3xl font-bold mb-8 text-center">
-              Gatavs Sākt Savu E-komercijas Veiksmes Stāstu?
-            </h2>
-            <p className="text-xl mb-8 text-center">
-              Nepalaidiet garām iespēju revolucionizēt savu biznesu ar mūsu
-              pieredzējušo ekspertu palīdzību. Sāciet savu ceļu uz e-komercijas
-              panākumiem jau šodien!
-            </p>
-            <div className="flex justify-center">
-              <button
-                className="bg-[#EEC71B] text-[#3D3B4A] px-8 py-3 rounded-full font-bold text-lg hover:bg-[#ffd700] transition-colors duration-300"
-                onClick={() => openModal("contact")}
-              >
-                Sazināties ar Mums Tagad
-              </button>
-            </div>
-          </section>
+            <section className="mb-16 bg-white p-8 rounded-xl shadow-lg">
+              <h2 className="text-3xl font-bold text-center mb-12">
+                <span className="bg-gradient-to-r from-[#3D3B4A] to-[#2D2B3A] bg-clip-text text-transparent">
+                  E-komercijas Izstrādes Process
+                </span>
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow duration-300">
+                  <h3 className="font-bold text-lg mb-4 flex items-center">
+                    <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
+                      1
+                    </span>
+                    Konsultācija un Plānošana
+                  </h3>
+                  <p className="text-gray-600">
+                    Izprotam jūsu vajadzības un izveidojam detalizētu
+                    e-komercijas stratēģiju.
+                  </p>
+                </div>
+
+                <div className="bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow duration-300">
+                  <h3 className="font-bold text-lg mb-4 flex items-center">
+                    <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
+                      2
+                    </span>
+                    Dizains un Funkcionalitāte
+                  </h3>
+                  <p className="text-gray-600">
+                    Izstrādājam pielāgotu dizainu un ieviešam nepieciešamās
+                    e-komercijas funkcijas.
+                  </p>
+                </div>
+
+                <div className="bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow duration-300">
+                  <h3 className="font-bold text-lg mb-4 flex items-center">
+                    <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
+                      3
+                    </span>
+                    Produktu Ieviešana
+                  </h3>
+                  <p className="text-gray-600">
+                    Importējam produktus un optimizējam to aprakstus pārdošanai.
+                  </p>
+                </div>
+
+                <div className="bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow duration-300">
+                  <h3 className="font-bold text-lg mb-4 flex items-center">
+                    <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
+                      4
+                    </span>
+                    Maksājumu Integrācija
+                  </h3>
+                  <p className="text-gray-600">
+                    Ieviešam drošus maksājumu risinājumus un testējam
+                    transakcijas.
+                  </p>
+                </div>
+
+                <div className="bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow duration-300">
+                  <h3 className="font-bold text-lg mb-4 flex items-center">
+                    <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
+                      5
+                    </span>
+                    Testēšana un Optimizācija
+                  </h3>
+                  <p className="text-gray-600">
+                    Veicam visaptverošu testēšanu un optimizējam veiktspēju.
+                  </p>
+                </div>
+
+                <div className="bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow duration-300">
+                  <h3 className="font-bold text-lg mb-4 flex items-center">
+                    <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
+                      6
+                    </span>
+                    Palaišana un Atbalsts
+                  </h3>
+                  <p className="text-gray-600">
+                    Palaižam veikalu un nodrošinām 2 mēnešu bezmaksas atbalstu.
+                  </p>
+                </div>
+              </div>
+            </section>
+          </div>
 
           <AnimatePresence>
             {showModal && (
@@ -473,133 +537,395 @@ const ECommerceServices: React.FC = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 backdrop-blur-sm"
                 onClick={closeModal}
               >
                 <motion.div
                   initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0.9, opacity: 0 }}
-                  className="bg-white rounded-lg p-8 max-w-md w-full relative"
+                  className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative shadow-2xl"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  {selectedPackage === null ? (
-                    <>
-                      <h3 className="text-2xl font-bold mb-4">
-                        Sāciet Savu E-komercijas Ceļojumu
-                      </h3>
-                      <p className="mb-4">
-                        Aizpildiet formu zemāk, un mūsu e-komercijas eksperts
-                        sazināsies ar jums 24 stundu laikā, lai apspriestu jūsu
-                        projektu.
-                      </p>
-                      <form
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          // Handle form submission here
-                          console.log("Form submitted");
-                          closeModal();
+                  {selectedPackage && (
+                    <div>
+                      <div
+                        className="p-8 text-white relative overflow-hidden"
+                        style={{
+                          background: `linear-gradient(135deg, ${
+                            selectedPackage.color
+                          } 0%, ${adjustColor(
+                            selectedPackage.color,
+                            -30
+                          )} 100%)`,
                         }}
                       >
-                        <div className="mb-4">
-                          <label className="block mb-2" htmlFor="name">
-                            Vārds
-                          </label>
-                          <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            className="w-full p-2 border rounded"
-                            required
-                          />
-                        </div>
-                        <div className="mb-4">
-                          <label className="block mb-2" htmlFor="email">
-                            E-pasts
-                          </label>
-                          <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            className="w-full p-2 border rounded"
-                            required
-                          />
-                        </div>
-                        <div className="mb-4">
-                          <label className="block mb-2" htmlFor="phone">
-                            Tālrunis
-                          </label>
-                          <input
-                            type="tel"
-                            id="phone"
-                            name="phone"
-                            className="w-full p-2 border rounded"
-                            required
-                          />
-                        </div>
-                        <div className="mb-4">
-                          <label className="block mb-2" htmlFor="message">
-                            Jūsu ziņojums
-                          </label>
-                          <textarea
-                            id="message"
-                            name="message"
-                            className="w-full p-2 border rounded"
-                            rows={4}
-                            required
-                          ></textarea>
-                        </div>
-                        <div className="flex justify-end">
-                          <button
-                            type="submit"
-                            className="bg-[#EEC71B] text-[#3D3B4A] px-6 py-2 rounded-full font-bold"
-                          >
-                            Sūtīt Pieprasījumu
-                          </button>
-                        </div>
-                      </form>
-                    </>
-                  ) : (
-                    <>
-                      <h3 className="text-2xl font-bold mb-4">
-                        {selectedPackage.name}
-                      </h3>
-                      <p className="text-3xl font-bold text-[#EEC71B] mb-4">
-                        €{selectedPackage.price}
-                      </p>
-                      <p className="mb-4">{selectedPackage.description}</p>
-                      <h4 className="font-bold mb-2">Iekļautie pakalpojumi:</h4>
-                      <ul className="mb-6">
-                        {selectedPackage.features.map((feature, index) => (
-                          <li key={index} className="flex items-center mb-2">
-                            <FiCheckCircle
-                              className="text-[#EEC71B] mr-2"
-                              aria-hidden="true"
-                            />
-                            <span>{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      <p className="font-bold mb-4">
-                        {selectedPackage.conversion}
-                      </p>
-                      <div className="flex justify-end">
+                        {selectedPackage.popular && (
+                          <div className="absolute top-4 right-16 bg-yellow-400 text-gray-900 px-4 py-1 rounded-full text-sm font-bold">
+                            Populārākā Izvēle
+                          </div>
+                        )}
                         <button
-                          className="bg-[#EEC71B] text-[#3D3B4A] px-6 py-2 rounded-full font-bold"
-                          onClick={() => openModal("contact")}
+                          className="absolute top-4 right-4 text-white hover:text-gray-200 transition-colors duration-200"
+                          onClick={closeModal}
+                          aria-label="Aizvērt"
                         >
-                          Pieteikties Tagad
+                          <FiX size={24} />
                         </button>
+                        <h3 className="text-3xl font-bold mb-2">
+                          {selectedPackage.name}
+                        </h3>
+                        <p className="text-xl opacity-90 mb-4">
+                          {selectedPackage.tagline}
+                        </p>
+                        <div className="flex items-baseline gap-2">
+                          <p className="text-4xl font-bold">
+                            €{selectedPackage.price}
+                          </p>
+                        </div>
                       </div>
-                    </>
+
+                      <div className="p-8">
+                        <div className="prose max-w-none mb-8">
+                          <p className="text-gray-700 text-lg leading-relaxed">
+                            {selectedPackage.detailedDescription}
+                          </p>
+                        </div>
+
+                        <div className="bg-gray-50 rounded-xl p-6 mb-8">
+                          <h4 className="font-bold text-xl mb-4 text-[#3D3B4A]">
+                            Iekļautie pakalpojumi:
+                          </h4>
+                          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {selectedPackage.features.map((feature, index) => (
+                              <li key={index} className="flex items-center">
+                                <FiCheckCircle
+                                  className={`mr-3 flex-shrink-0 ${
+                                    selectedPackage.highlightFeatures?.includes(
+                                      feature
+                                    )
+                                      ? "text-yellow-500"
+                                      : "text-[#EEC71B]"
+                                  }`}
+                                />
+                                <span
+                                  className={`text-gray-700 ${
+                                    selectedPackage.highlightFeatures?.includes(
+                                      feature
+                                    )
+                                      ? "font-medium"
+                                      : ""
+                                  }`}
+                                >
+                                  {feature}
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                              <label
+                                className="block text-sm font-medium text-gray-700 mb-1"
+                                htmlFor="name"
+                              >
+                                Vārds*
+                              </label>
+                              <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                value={formData.name}
+                                onChange={(e) =>
+                                  setFormData({
+                                    ...formData,
+                                    name: e.target.value,
+                                  })
+                                }
+                                className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-[${
+                                  selectedPackage.color
+                                }] focus:border-transparent transition-colors duration-200
+                                  ${
+                                    formErrors.name
+                                      ? "border-red-500"
+                                      : "border-gray-300"
+                                  }`}
+                                required
+                              />
+                              {formErrors.name && (
+                                <p className="mt-1 text-sm text-red-600">
+                                  {formErrors.name}
+                                </p>
+                              )}
+                            </div>
+
+                            <div>
+                              <label
+                                className="block text-sm font-medium text-gray-700 mb-1"
+                                htmlFor="email"
+                              >
+                                E-pasts*
+                              </label>
+                              <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={(e) =>
+                                  setFormData({
+                                    ...formData,
+                                    email: e.target.value,
+                                  })
+                                }
+                                className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-[${
+                                  selectedPackage.color
+                                }] focus:border-transparent transition-colors duration-200
+                                  ${
+                                    formErrors.email
+                                      ? "border-red-500"
+                                      : "border-gray-300"
+                                  }`}
+                                required
+                              />
+                              {formErrors.email && (
+                                <p className="mt-1 text-sm text-red-600">
+                                  {formErrors.email}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                              <label
+                                className="block text-sm font-medium text-gray-700 mb-1"
+                                htmlFor="phone"
+                              >
+                                Tālrunis
+                              </label>
+                              <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                value={formData.phone}
+                                onChange={(e) =>
+                                  setFormData({
+                                    ...formData,
+                                    phone: e.target.value,
+                                  })
+                                }
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#EEC71B] focus:border-transparent transition-colors duration-200"
+                              />
+                            </div>
+
+                            <div>
+                              <label
+                                className="block text-sm font-medium text-gray-700 mb-1"
+                                htmlFor="company"
+                              >
+                                Uzņēmums
+                              </label>
+                              <input
+                                type="text"
+                                id="company"
+                                name="company"
+                                value={formData.company}
+                                onChange={(e) =>
+                                  setFormData({
+                                    ...formData,
+                                    company: e.target.value,
+                                  })
+                                }
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#EEC71B] focus:border-transparent transition-colors duration-200"
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <label
+                              className="block text-sm font-medium text-gray-700 mb-1"
+                              htmlFor="platform"
+                            >
+                              Vēlamā E-komercijas Platforma*
+                            </label>
+                            <select
+                              id="platform"
+                              name="platform"
+                              value={formData.platform}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  platform: e.target.value as
+                                    | "shopify"
+                                    | "custom",
+                                })
+                              }
+                              className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#EEC71B] focus:border-transparent transition-colors duration-200
+                                ${
+                                  formErrors.platform
+                                    ? "border-red-500"
+                                    : "border-gray-300"
+                                }`}
+                              required
+                            >
+                              <option value="">Izvēlieties platformu</option>
+                              <option value="shopify">Shopify</option>
+                              <option value="custom">Custom risinājums</option>
+                            </select>
+                            {formErrors.platform && (
+                              <p className="mt-1 text-sm text-red-600">
+                                {formErrors.platform}
+                              </p>
+                            )}
+                          </div>
+
+                          <div>
+                            <label
+                              className="block text-sm font-medium text-gray-700 mb-1"
+                              htmlFor="product_count"
+                            >
+                              Aptuvens Produktu Skaits*
+                            </label>
+                            <input
+                              type="number"
+                              id="product_count"
+                              name="product_count"
+                              value={formData.product_count}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  product_count: e.target.value,
+                                })
+                              }
+                              className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#EEC71B] focus:border-transparent transition-colors duration-200
+                                ${
+                                  formErrors.product_count
+                                    ? "border-red-500"
+                                    : "border-gray-300"
+                                }`}
+                              required
+                              min="1"
+                            />
+                            {formErrors.product_count && (
+                              <p className="mt-1 text-sm text-red-600">
+                                {formErrors.product_count}
+                              </p>
+                            )}
+                          </div>
+
+                          <div>
+                            <label
+                              className="block text-sm font-medium text-gray-700 mb-1"
+                              htmlFor="current_website"
+                            >
+                              Pašreizējā Mājaslapa (ja ir)
+                            </label>
+                            <input
+                              type="url"
+                              id="current_website"
+                              name="current_website"
+                              value={formData.current_website}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  current_website: e.target.value,
+                                })
+                              }
+                              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#EEC71B] focus:border-transparent transition-colors duration-200"
+                              placeholder="https://"
+                            />
+                          </div>
+
+                          <div>
+                            <label
+                              className="block text-sm font-medium text-gray-700 mb-1"
+                              htmlFor="message"
+                            >
+                              Papildus informācija*
+                            </label>
+                            <textarea
+                              id="message"
+                              name="message"
+                              value={formData.message}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  message: e.target.value,
+                                })
+                              }
+                              rows={4}
+                              className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-[${
+                                selectedPackage.color
+                              }] focus:border-transparent transition-colors duration-200
+                                ${
+                                  formErrors.message
+                                    ? "border-red-500"
+                                    : "border-gray-300"
+                                }`}
+                              required
+                              placeholder="Pastāstiet vairāk par savu projektu..."
+                            ></textarea>
+                            {formErrors.message && (
+                              <p className="mt-1 text-sm text-red-600">
+                                {formErrors.message}
+                              </p>
+                            )}
+                          </div>
+
+                          <div className="bg-gray-50 p-6 -mx-6 mt-6 flex justify-between items-center">
+                            <div className="text-sm text-gray-600">
+                              <p className="font-medium">Izvēlētā pakete:</p>
+                              <p className="text-gray-900">
+                                {selectedPackage.name}
+                              </p>
+                            </div>
+                            <button
+                              type="submit"
+                              disabled={isSubmitting}
+                              className={`inline-flex items-center px-6 py-3 border border-transparent 
+                                text-base font-medium rounded-full shadow-sm text-[#3D3B4A] 
+                                bg-[#EEC71B] hover:bg-[#ffd700] focus:outline-none focus:ring-2 
+                                focus:ring-offset-2 focus:ring-[#EEC71B] disabled:opacity-50 
+                                disabled:cursor-not-allowed transition-all duration-200`}
+                            >
+                              {isSubmitting ? (
+                                <>
+                                  <svg
+                                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-[#3D3B4A]"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <circle
+                                      className="opacity-25"
+                                      cx="12"
+                                      cy="12"
+                                      r="10"
+                                      stroke="currentColor"
+                                      strokeWidth="4"
+                                    ></circle>
+                                    <path
+                                      className="opacity-75"
+                                      fill="currentColor"
+                                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                    ></path>
+                                  </svg>
+                                  Nosūta...
+                                </>
+                              ) : (
+                                <>
+                                  Pieteikties
+                                  <FiArrowRight className="ml-2" />
+                                </>
+                              )}
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
                   )}
-                  <button
-                    className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-                    onClick={closeModal}
-                    aria-label="Close modal"
-                  >
-                    <FiX size={24} />
-                  </button>
                 </motion.div>
               </motion.div>
             )}
@@ -609,45 +935,85 @@ const ECommerceServices: React.FC = () => {
         <Footer />
       </div>
 
-      <script type="application/ld+json">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          name: "E-komercijas Risinājumi | WebWorks",
-          description:
-            "WebWorks piedāvā revolucionārus e-komercijas risinājumus Latvijā. Izvēlieties starp Shopify, WooCommerce vai pielāgotu risinājumu, lai palielinātu savus ienākumus un dominētu tiešsaistes tirgū.",
-          url: "https://www.webworks.lv/e-komercija",
-          mainEntity: {
-            "@type": "Service",
-            name: "WebWorks E-komercijas Risinājumi",
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            name: "E-komercijas Risinājumi | WebWorks",
             description:
-              "Revolucionāri e-komercijas risinājumi, izmantojot Shopify, WooCommerce vai pielāgotu izstrādi.",
+              "WebWorks piedāvā profesionālus e-komercijas risinājumus. Izveidojiet savu tiešsaistes veikalu ar Shopify vai pielāgotu risinājumu.",
+            url: "https://www.webworks.lv/pakalpojumi/e-komercija",
             provider: {
               "@type": "Organization",
               name: "WebWorks",
+              url: "https://www.webworks.lv",
+              address: {
+                "@type": "PostalAddress",
+                addressCountry: "LV",
+              },
             },
-            areaServed: "Latvija",
-            hasOfferCatalog: {
-              "@type": "OfferCatalog",
-              name: "E-komercijas Pakalpojumi",
-              itemListElement: [
-                ...shopifyPackages,
-                ...wooCommercePackages,
-                ...customPackages,
-              ].map((pkg) => ({
+            offers: {
+              "@type": "AggregateOffer",
+              priceCurrency: "EUR",
+              lowPrice: "499",
+              highPrice: "1299",
+              offerCount: packages.length,
+              offers: packages.map((pkg) => ({
                 "@type": "Offer",
+                name: pkg.name,
+                description: pkg.description,
+                price: pkg.price,
+                priceCurrency: "EUR",
                 itemOffered: {
                   "@type": "Service",
                   name: pkg.name,
-                  description: pkg.description,
+                  description: pkg.detailedDescription,
+                  serviceType: "E-commerce Development",
+                  provider: {
+                    "@type": "Organization",
+                    name: "WebWorks",
+                  },
                 },
-                price: pkg.price,
-                priceCurrency: "EUR",
               })),
             },
-          },
-        })}
-      </script>
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": "https://www.webworks.lv/pakalpojumi/e-komercija",
+            },
+            breadcrumb: {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  item: {
+                    "@id": "https://www.webworks.lv",
+                    name: "Sākums",
+                  },
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  item: {
+                    "@id": "https://www.webworks.lv/pakalpojumi",
+                    name: "Pakalpojumi",
+                  },
+                },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  item: {
+                    "@id": "https://www.webworks.lv/pakalpojumi/e-komercija",
+                    name: "E-komercija",
+                  },
+                },
+              ],
+            },
+          }),
+        }}
+      />
     </>
   );
 };

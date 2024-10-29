@@ -126,7 +126,7 @@ const menuItems: MenuItem[] = [
       },
       {
         name: "E-Komercija",
-        href: "#",
+        href: "pakalpojumi/e-komercija",
         description: "Pilnvērtīgu e-komercijas risinājumu izveide",
         icon: FiShoppingCart,
       },
