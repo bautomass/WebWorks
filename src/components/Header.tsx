@@ -138,7 +138,7 @@ const menuItems: MenuItem[] = [
       },
       {
         name: "SEO Optimizācija",
-        href: "#",
+        href: "pakalpojumi/seo-optimizacija",
         description: "Meklētājprogrammu optimizācijas pakalpojumi",
         icon: FiSearch,
       },
