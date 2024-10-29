@@ -126,7 +126,7 @@ const menuItems: MenuItem[] = [
       },
       {
         name: "E-Komercija",
-        href: "pakalpojumi/e-komercija",
+        href: "/e-komercija",
         description: "Pilnvērtīgu e-komercijas risinājumu izveide",
         icon: FiShoppingCart,
       },
@@ -138,7 +138,7 @@ const menuItems: MenuItem[] = [
       },
       {
         name: "SEO Optimizācija",
-        href: "pakalpojumi/seo-optimizacija",
+        href: "/seo-optimizacija",
         description: "Meklētājprogrammu optimizācijas pakalpojumi",
         icon: FiSearch,
       },
