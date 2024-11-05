@@ -474,7 +474,41 @@ const SEOOptimizacija: React.FC = () => {
                 <PackageCard key={pkg.id} pkg={pkg} />
               ))}
             </section>
+            <section className="mb-16">
+              <div className="bg-gradient-to-r from-[#3D3B4A] to-[#2D2B3A] p-1 rounded-lg">
+                <div className="bg-gradient-to-r from-[#3D3B4A] to-[#2D2B3A] p-12 md:p-16 rounded-lg relative overflow-hidden">
+                  {/* Background decorative elements */}
+                  <div className="absolute inset-0 overflow-hidden">
+                    <div className="absolute -right-10 -top-10 w-40 h-40 bg-[#EEC71B] opacity-10 rounded-full blur-3xl"></div>
+                    <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-[#EEC71B] opacity-10 rounded-full blur-3xl"></div>
+                  </div>
 
+                  <div className="relative z-10 max-w-3xl mx-auto text-center">
+                    <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">
+                      Meklējat individuālu SEO risinājumu?
+                    </h2>
+                    <p className="text-gray-300 text-lg mb-8">
+                      Mēs piedāvājam arī pielāgotus SEO pakalpojumus, kas
+                      atbilst tieši jūsu biznesa vajadzībām un mērķiem.
+                      Sazinieties ar mums, lai apspriestu jūsu unikālo
+                      situāciju.
+                    </p>
+                    <motion.a
+                      href="/contact-us"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="inline-flex items-center px-8 py-3 border border-transparent 
+            text-base font-medium rounded-lg shadow-md text-[#3D3B4A] 
+            bg-[#EEC71B] hover:bg-[#ffd700] focus:outline-none focus:ring-2 
+            focus:ring-offset-2 focus:ring-[#EEC71B] transition-all duration-200"
+                    >
+                      Sazināties ar mums
+                      <FiArrowRight className="ml-2" />
+                    </motion.a>
+                  </div>
+                </div>
+              </div>
+            </section>
             <ProcessSection />
           </div>
 

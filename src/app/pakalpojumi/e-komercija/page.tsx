@@ -251,51 +251,6 @@ const ECommerceServices: React.FC = () => {
     setFormData(initialFormData);
     setFormErrors({});
   };
-
-  const BenefitsSection: React.FC = () => (
-    <section className="mb-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-      <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-        <div className="bg-[#EEC71B] w-12 h-12 rounded-full flex items-center justify-center mb-4">
-          <FiZap className="text-white text-xl" />
-        </div>
-        <h3 className="text-xl font-bold mb-2">Ātra Ieviešana</h3>
-        <p className="text-gray-600">
-          Sāciet pārdot tiešsaistē jau pēc 4 nedēļām!
-        </p>
-      </div>
-
-      <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-        <div className="bg-[#EEC71B] w-12 h-12 rounded-full flex items-center justify-center mb-4">
-          <FiDollarSign className="text-white text-xl" />
-        </div>
-        <h3 className="text-xl font-bold mb-2">Pārdošanas Pieaugums</h3>
-        <p className="text-gray-600">
-          Mūsu klienti vidēji palielina apgrozījumu par 200%
-        </p>
-      </div>
-
-      <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-        <div className="bg-[#EEC71B] w-12 h-12 rounded-full flex items-center justify-center mb-4">
-          <FiShield className="text-white text-xl" />
-        </div>
-        <h3 className="text-xl font-bold mb-2">Droša Platforma</h3>
-        <p className="text-gray-600">
-          Augstākā līmeņa drošība jūsu un klientu datiem
-        </p>
-      </div>
-
-      <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-        <div className="bg-[#EEC71B] w-12 h-12 rounded-full flex items-center justify-center mb-4">
-          <FiUsers className="text-white text-xl" />
-        </div>
-        <h3 className="text-xl font-bold mb-2">2 Mēnešu Atbalsts</h3>
-        <p className="text-gray-600">
-          Bezmaksas tehniskais atbalsts visām paketēm
-        </p>
-      </div>
-    </section>
-  );
-
   const PackageCard: React.FC<{ pkg: Package }> = ({ pkg }) => (
     <div
       className={`relative transform transition-all duration-300 ${
@@ -438,14 +393,45 @@ const ECommerceServices: React.FC = () => {
               </p>
             </section>
 
-            <BenefitsSection />
-
             <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
               {packages.map((pkg) => (
                 <PackageCard key={pkg.id} pkg={pkg} />
               ))}
             </section>
+            <section className="mb-16">
+              <div className="bg-gradient-to-r from-[#3D3B4A] to-[#2D2B3A] p-1 rounded-lg">
+                <div className="bg-gradient-to-r from-[#3D3B4A] to-[#2D2B3A] p-12 md:p-16 rounded-lg relative overflow-hidden">
+                  {/* Background decorative elements */}
+                  <div className="absolute inset-0 overflow-hidden">
+                    <div className="absolute -right-10 -top-10 w-40 h-40 bg-[#EEC71B] opacity-10 rounded-full blur-3xl"></div>
+                    <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-[#EEC71B] opacity-10 rounded-full blur-3xl"></div>
+                  </div>
 
+                  <div className="relative z-10 max-w-3xl mx-auto text-center">
+                    <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">
+                      Nevarat atrast piemērotu risinājumu?
+                    </h2>
+                    <p className="text-gray-300 text-lg mb-8">
+                      Mēs piedāvājam arī individuālus e-komercijas risinājumus,
+                      kas pielāgoti tieši jūsu biznesa vajadzībām. Sazinieties
+                      ar mums, lai apspriestu jūsu projektu.
+                    </p>
+                    <motion.a
+                      href="/contact-us"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="inline-flex items-center px-8 py-3 border border-transparent 
+            text-base font-medium rounded-lg shadow-md text-[#3D3B4A] 
+            bg-[#EEC71B] hover:bg-[#ffd700] focus:outline-none focus:ring-2 
+            focus:ring-offset-2 focus:ring-[#EEC71B] transition-all duration-200"
+                    >
+                      Sazināties ar mums
+                      <FiArrowRight className="ml-2" />
+                    </motion.a>
+                  </div>
+                </div>
+              </div>
+            </section>
             <section className="mb-16 bg-white p-8 rounded-xl shadow-lg">
               <h2 className="text-3xl font-bold text-center mb-12">
                 <span className="bg-gradient-to-r from-[#3D3B4A] to-[#2D2B3A] bg-clip-text text-transparent">
@@ -530,7 +516,6 @@ const ECommerceServices: React.FC = () => {
               </div>
             </section>
           </div>
-
           <AnimatePresence>
             {showModal && (
               <motion.div
