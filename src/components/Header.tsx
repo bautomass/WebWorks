@@ -132,7 +132,7 @@ const menuItems: MenuItem[] = [
       },
       {
         name: "Mobīlo Aplikāciju Izstrāde",
-        href: "/mobilo-aplikaciju-izstrade",
+        href: "/pakalpojumi/mobilo-aplikaciju-izstrade",
         description: "iOS un Android aplikāciju izstrāde",
         icon: FiSmartphone,
       },
