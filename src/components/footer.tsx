@@ -133,9 +133,10 @@ const Footer: React.FC = () => {
   const services = [
     "Web Izstrade",
     "E-komercija",
+    "Mobilo Aplikaciju Izstrade",
     "SEO Optimizacija",
-    "UI/UX Dizains",
     "Digitalais Marketings",
+    "Web Aplikacijas",
   ];
 
   const resources: ResourceLink[] = [
