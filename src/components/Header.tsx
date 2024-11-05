@@ -150,7 +150,7 @@ const menuItems: MenuItem[] = [
       },
       {
         name: "Web Aplikāciju Izstrāde",
-        href: "#",
+        href: "pakalpojumi/web-aplikacijas",
         description: "Pielāgotu web aplikāciju izstrāde",
         icon: FiLayers,
       },
