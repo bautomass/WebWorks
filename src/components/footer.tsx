@@ -141,7 +141,7 @@ const Footer: React.FC = () => {
 
   const resources: ResourceLink[] = [
     { title: "Dokumentacija", url: "/dokumentacija" },
-    { title: "Biezak Uzdotie Jautajumi", url: "/buj" },
+    { title: "Biezak Uzdotie Jautajumi", url: "/faq-page" },
     { title: "API Dokumentacija", url: "/api-docs" },
     { title: "Web Izstrades Vadlinijas", url: "/vadlinijas" },
   ];
