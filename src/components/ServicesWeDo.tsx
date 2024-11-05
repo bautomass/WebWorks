@@ -919,6 +919,7 @@ export const getStaticProps = async () => {
   return {
     props: {},
     revalidate: 60 * 60 * 24,
+  };
 };
 
 export default React.memo(PakalpojumiPage);
