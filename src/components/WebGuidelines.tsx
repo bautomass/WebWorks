@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "../utils/supabase";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import Script from "next/script";
 import { FiBook, FiChevronDown, FiCode, FiCircle } from "react-icons/fi";
 

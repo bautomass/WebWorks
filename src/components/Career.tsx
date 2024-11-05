@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "../utils/supabase";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import Script from "next/script";
 import {
   FiUsers,
@@ -25,7 +25,7 @@ import {
   scaleIn,
   float,
 } from "@/utils/animationUtils";
-import { JobCard, NoOpenings } from "@/components/JobComponents";
+import { JobCard, NoOpenings } from "../components/JobComponents";
 
 type CareerContent = {
   title: string;
