@@ -144,7 +144,7 @@ const menuItems: MenuItem[] = [
       },
       {
         name: "Digitālā Mārketinga Pakalpojumi",
-        href: "#",
+        href: "pakalpojumi/digitalais-marketings",
         description: "Visaptveroši digitālā mārketinga risinājumi",
         icon: FiBarChart,
       },

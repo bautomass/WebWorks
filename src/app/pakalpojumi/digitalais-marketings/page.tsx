@@ -1,26 +1,33 @@
 "use client";
+
 import React, { useState } from "react";
 import Head from "next/head";
 import { motion, AnimatePresence } from "framer-motion";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Script from "next/script";
 import {
   FiTarget,
   FiTrendingUp,
-  FiUsers,
-  FiLayout,
-  FiBarChart2,
   FiMessageCircle,
   FiCheckCircle,
   FiX,
   FiArrowRight,
-  FiGlobe,
+  FiCalendar,
+  FiPercent,
+  FiDollarSign,
 } from "react-icons/fi";
+import { supabase } from "../../../utils/supabase";
 import Header from "@/components/Header";
 import Footer from "@/components/footer";
 
 interface Service {
+  id: string;
   name: string;
   price: string;
+  discount_3_months: number;
+  discount_6_months: number;
+  discount_12_months: number;
   features: string[];
   description: string;
   detailedDescription: string;
@@ -28,121 +35,103 @@ interface Service {
   color: string;
 }
 
+interface FormData {
+  name: string;
+  email: string;
+  message: string;
+  phone?: string;
+  company?: string;
+  selected_package?: string;
+  preferred_duration?: "1" | "3" | "6" | "12";
+  payment_plan_interest?: boolean;
+}
+
 const services: Service[] = [
   {
+    id: "digital_strategy",
     name: "Digitālā Mārketinga Stratēģija",
-    price: "799",
+    price: "399",
+    discount_3_months: 10,
+    discount_6_months: 15,
+    discount_12_months: 20,
     features: [
       "Pilnīga tirgus analīze",
       "Mērķauditorijas izpēte",
       "Konkurentu analīze",
       "Kanālu stratēģijas izstrāde",
       "Mērķu un KPI noteikšana",
-      "3 mēnešu īstenošanas plāns",
+      "Ikmēneša optimizācija un atskaites",
+      "Regulāras konsultācijas",
+      "Prioritārs atbalsts",
     ],
     description:
       "Visaptveroša digitālā mārketinga stratēģija, kas palīdzēs jūsu uzņēmumam sasniegt konkrētus biznesa mērķus.",
     detailedDescription:
-      "Mūsu Digitālā Mārketinga Stratēģijas pakalpojums ir ideāls risinājums uzņēmumiem, kas vēlas maksimāli izmantot digitālā mārketinga potenciālu. Mēs sākam ar padziļinātu tirgus analīzi, lai izprastu jūsu nozares tendences un iespējas. Veicam rūpīgu mērķauditorijas izpēti, lai precīzi definētu jūsu ideālo klientu. Konkurentu analīze palīdz identificēt tirgus nišas un konkurences priekšrocības. Balstoties uz šiem datiem, izstrādājam pielāgotu kanālu stratēģiju, kas ietver sociālos medijus, e-pasta mārketingu, SEO, maksas reklāmas un citus atbilstošus kanālus. Nosakām skaidrus un izmērāmus mērķus, kā arī KPI, lai varētu sekot stratēģijas efektivitātei. Visbeidzot, piedāvājam detalizētu 3 mēnešu īstenošanas plānu, kas palīdzēs jums soli pa solim realizēt izstrādāto stratēģiju.",
-    icon: <FiTarget />,
+      "Mūsu Digitālā Mārketinga Stratēģijas pakalpojums ir ideāls risinājums uzņēmumiem, kas vēlas maksimāli izmantot digitālā mārketinga potenciālu. Mēs izstrādājam pielāgotu stratēģiju, kas balstīta uz rūpīgu tirgus analīzi un jūsu biznesa mērķiem.",
+    icon: <FiTarget className="text-3xl" />,
     color: "#4CAF50",
   },
   {
+    id: "soc_media_management",
     name: "Sociālo Mediju Pārvaldība",
     price: "599",
+    discount_3_months: 10,
+    discount_6_months: 15,
+    discount_12_months: 20,
     features: [
       "Profilu optimizācija",
       "Satura plāna izstrāde",
-      "Regulāra satura publicēšana",
+      "Regulāra satura publicēšana (12x mēnesī)",
       "Kopienas pārvaldība",
       "Reklāmu pārvaldība",
-      "Ikmēneša atskaites",
+      "Konkurentu monitorings",
+      "Ikmēneša atskaites un analīze",
+      "Pastāvīga optimizācija",
     ],
     description:
-      "Pilna sociālo mediju pārvaldība, kas palielinās jūsu zīmola atpazīstamību un iesaisti ar mērķauditoriju.",
+      "Pilna sociālo mediju pārvaldība, kas palielinās jūsu zīmola atpazīstamību un iesaisti.",
     detailedDescription:
-      "Mūsu Sociālo Mediju Pārvaldības pakalpojums ir izstrādāts, lai maksimāli palielinātu jūsu zīmola klātbūtni un iesaisti sociālajos tīklos. Mēs sākam ar visu jūsu sociālo mediju profilu pilnīgu optimizāciju, nodrošinot konsekventu un profesionālu tēlu visās platformās. Izstrādājam detalizētu satura plānu, kas atbilst jūsu mērķauditorijas interesēm un jūsu biznesa mērķiem. Mūsu komanda nodrošina regulāru, augstas kvalitātes satura publicēšanu, izmantojot dažādus formātus - attēlus, video, infografikas un citus. Aktīvi pārvaldām jūsu kopienu, atbildot uz komentāriem, ziņām un atsauksmēm, veicinot pozitīvu mijiedarbību ar jūsu sekotājiem. Papildus tam, mēs izstrādājam un pārvaldām mērķtiecīgas sociālo mediju reklāmu kampaņas, lai palielinātu jūsu sasniedzamību un piesaistītu jaunus potenciālos klientus. Katru mēnesi saņemsiet detalizētas atskaites par jūsu sociālo mediju sniegumu, ietverot galvenos rādītājus un ieteikumus turpmākiem uzlabojumiem.",
-    icon: <FiUsers />,
+      "Mūsu Sociālo Mediju Pārvaldības pakalpojums nodrošina pilnu jūsu sociālo mediju kontu pārvaldību. Mēs rūpējamies par regulāru, kvalitatīvu saturu un aktīvu komunikāciju ar jūsu sekotājiem.",
+    icon: <FiMessageCircle className="text-3xl" />,
     color: "#2196F3",
   },
   {
-    name: "SEO & Satura Mārketings",
-    price: "899",
-    features: [
-      "Atslēgvārdu izpēte",
-      "On-page un off-page SEO",
-      "Satura stratēģijas izstrāde",
-      "Regulāra bloga rakstu publicēšana",
-      "Backlink veidošana",
-      "Mēneša analītika un optimizācija",
-    ],
-    description:
-      "Uzlabojiet savu redzamību meklētājprogrammās un piesaistiet organisko trafiku ar SEO un kvalitatīvu saturu.",
-    detailedDescription:
-      "Mūsu SEO & Satura Mārketinga pakalpojums ir veidots, lai palielinātu jūsu vietnes organisko trafiku un uzlabotu pozīcijas meklētājprogrammās. Sākam ar padziļinātu atslēgvārdu izpēti, identificējot vērtīgākos un relevantākos atslēgvārdus jūsu nozarē. Veicam pilnīgu on-page SEO optimizāciju, uzlabojot jūsu vietnes struktūru, meta tagus, un iekšējo saišu struktūru. Off-page SEO ietvaros strādājam pie jūsu vietnes autoritātes celšanas, veidojot kvalitatīvas backlink saites. Izstrādājam visaptverošu satura stratēģiju, kas ne tikai atbilst SEO prasībām, bet arī sniedz vērtību jūsu mērķauditorijai. Regulāri publicējam augstas kvalitātes bloga rakstus un cita veida saturu, kas palīdz piesaistīt un noturēt apmeklētājus. Katru mēnesi veicam detalizētu analīzi un nepieciešamos optimizācijas darbus, lai nodrošinātu nepārtrauktu snieguma uzlabošanos.",
-    icon: <FiTrendingUp />,
-    color: "#9C27B0",
-  },
-  {
-    name: "PPC & Displeja Reklāmas",
-    price: "749",
-    features: [
-      "Google Ads un Facebook Ads kampaņu izveide",
-      "Reklāmu tekstu un vizuālo materiālu izstrāde",
-      "Mērķauditorijas segmentācija",
-      "A/B testēšana",
-      "Budžeta optimizācija",
-      "Konversiju izsekošana un optimizācija",
-    ],
-    description:
-      "Maksimizējiet savu ROI ar profesionāli pārvaldītām PPC un displeja reklāmu kampaņām.",
-    detailedDescription:
-      "Mūsu PPC & Displeja Reklāmu pakalpojums ir veidots, lai palīdzētu jums sasniegt maksimālu atdevi no jūsu reklāmas budžeta. Mēs izveidojam un pārvaldām efektīvas Google Ads un Facebook Ads kampaņas, kas precīzi mērķētas uz jūsu potenciālajiem klientiem. Mūsu komanda izstrādā pārliecinošus reklāmu tekstus un vizuālos materiālus, kas piesaista uzmanību un veicina klikšķus. Veicam rūpīgu mērķauditorijas segmentāciju, lai nodrošinātu, ka jūsu reklāmas sasniedz tieši tos cilvēkus, kuri visticamāk būs ieinteresēti jūsu produktos vai pakalpojumos. Regulāri veicam A/B testēšanu, lai nepārtraukti uzlabotu reklāmu sniegumu. Mēs rūpīgi optimizējam jūsu reklāmas budžetu, nodrošinot, ka katra iztērētā eiro sniedz maksimālu vērtību. Ieviešam detalizētu konversiju izsekošanu un veicam nepārtrauktu optimizāciju, lai palielinātu konversijas rādītājus un samazinātu klienta piesaistes izmaksas.",
-    icon: <FiLayout />,
-    color: "#FF5722",
-  },
-  {
-    name: "E-pasta Mārketings",
-    price: "499",
-    features: [
-      "E-pasta kampaņu stratēģijas izstrāde",
-      "Abonentu saraksta pārvaldība un segmentācija",
-      "Pielāgotu e-pastu dizains un izstrāde",
-      "A/B testēšana",
-      "Automātisko e-pastu secību izveide",
-      "Snieguma analīze un optimizācija",
-    ],
-    description:
-      "Veidojiet spēcīgas attiecības ar saviem klientiem un palieliniet pārdošanas apjomus ar efektīvām e-pasta kampaņām.",
-    detailedDescription:
-      "Mūsu E-pasta Mārketinga pakalpojums ir izstrādāts, lai palīdzētu jums veidot un uzturēt ilgtermiņa attiecības ar jūsu klientiem, vienlaikus palielinot konversijas un pārdošanas apjomus. Mēs sākam ar visaptverošas e-pasta kampaņu stratēģijas izstrādi, kas atbilst jūsu biznesa mērķiem un mērķauditorijas vajadzībām. Veicam rūpīgu jūsu abonentu saraksta pārvaldību un segmentāciju, lai nodrošinātu, ka katrs klients saņem viņam visatbilstošāko saturu. Mūsu dizaineri un satura veidotāji izstrādā pielāgotus, vizuāli pievilcīgus un efektīvus e-pastus, kas motivē saņēmējus veikt vēlamās darbības. Regulāri veicam A/B testēšanu, lai nepārtraukti uzlabotu e-pastu efektivitāti. Izveidojam automatizētas e-pastu secības dažādiem klientu ceļojuma posmiem, piemēram, uvesveicināšanas e-pastus jauniem abonentiem vai pamesto grozu atgādinājumus. Katru mēnesi veicam detalizētu snieguma analīzi, izsekojot tādus rādītājus kā atvēršanas rādītāji, klikšķu rādītāji un konversijas, un veicam nepieciešamās optimizācijas, lai nepārtraukti uzlabotu jūsu e-pasta mārketinga kampaņu rezultātus.",
-    icon: <FiMessageCircle />,
-    color: "#FFC107",
-  },
-  {
+    id: "all_in_one",
     name: "All-in-One Digitālais Mārketings",
-    price: "1999",
+    price: "999",
+    discount_3_months: 15,
+    discount_6_months: 20,
+    discount_12_months: 25,
     features: [
-      "Visaptveroša digitālā mārketinga stratēģija",
-      "SEO & satura mārketings",
+      "Digitālā mārketinga stratēģija",
       "Sociālo mediju pārvaldība",
-      "PPC & displeja reklāmas",
-      "E-pasta mārketinga kampaņas",
-      "Mēneša analītika un optimizācija",
-      "Konkurentu analīze un tirgus izpēte",
-      "Zīmola identitātes stiprināšana",
-      "Konversijas ceļa optimizācija",
-      "Pielāgoti mēneša pārskati",
+      "SEO optimizācija",
+      "Google Ads pārvaldība",
+      "Facebook/Instagram Ads pārvaldība",
+      "E-pasta mārketings",
+      "Mēneša atskaites un analīze",
       "Prioritārs 24/7 atbalsts",
+      "Regulāras stratēģiskās sesijas",
     ],
     description:
       "Visaptverošs digitālā mārketinga risinājums, kas apvieno visus mūsu pakalpojumus vienā integrētā stratēģijā.",
     detailedDescription:
-      "Mūsu All-in-One Digitālā Mārketinga pakalpojums ir ideāls risinājums uzņēmumiem, kas vēlas pilnībā izmantot digitālā mārketinga potenciālu. Šis pakalpojums apvieno visus mūsu digitālā mārketinga risinājumus vienā visaptverošā stratēģijā. Mēs sākam ar padziļinātu tirgus un konkurentu analīzi, lai izstrādātu pielāgotu digitālā mārketinga stratēģiju, kas atbilst jūsu biznesa mērķiem. SEO un satura mārketings palīdzēs uzlabot jūsu vietnes redzamību meklētājprogrammās un piesaistīt organisko trafiku. Mūsu sociālo mediju eksperti pārvaldīs jūsu sociālo platformu klātbūtni, veicinot iesaisti un zīmola atpazīstamību. PPC un displeja reklāmu kampaņas tiks izstrādātas un optimizētas, lai maksimāli palielinātu jūsu ROI. E-pasta mārketinga kampaņas palīdzēs uzturēt attiecības ar esošajiem klientiem un piesaistīt jaunus. Mēs nepārtraukti analizēsim un optimizēsim visus digitālā mārketinga aspektus, sniedzot detalizētus ikmēneša pārskatus. Papildus tam, mēs strādāsim pie jūsu zīmola identitātes stiprināšanas un konversijas ceļa optimizācijas. Ar šo pakalpojumu jūs saņemsiet prioritāru 24/7 atbalstu no mūsu ekspertu komandas.",
-    icon: <FiTarget />,
-    color: "#3F51B5",
+      "All-in-One Digitālā Mārketinga pakalpojums ir mūsu visaptverošākais risinājums, kas apvieno visus digitālā mārketinga kanālus vienotā stratēģijā. Ideāls uzņēmumiem, kas vēlas maksimālu rezultātu un pilnu digitālā mārketinga pārvaldību.",
+    icon: <FiTrendingUp className="text-3xl" />,
+    color: "#9C27B0",
   },
 ];
+
+const initialFormData: FormData = {
+  name: "",
+  email: "",
+  message: "",
+  phone: "",
+  company: "",
+  selected_package: "",
+  preferred_duration: "1",
+  payment_plan_interest: false,
+};
 
 function adjustColor(color: string, amount: number): string {
   return (
@@ -161,98 +150,217 @@ function adjustColor(color: string, amount: number): string {
 const DigitalaisMarketings: React.FC = () => {
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formErrors, setFormErrors] = useState<Partial<FormData>>({});
 
-  const openModal = (service: Service | "contact"): void => {
-    if (service === "contact") {
-      setSelectedService(null);
-    } else {
-      setSelectedService(service);
+  const validateForm = (): boolean => {
+    const errors: Partial<FormData> = {};
+
+    if (!formData.name.trim()) {
+      errors.name = "Vārds ir obligāts";
     }
-    setShowModal(true);
+
+    if (!formData.email.trim()) {
+      errors.email = "E-pasts ir obligāts";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.email = "Nederīgs e-pasta formāts";
+    }
+
+    if (!formData.message.trim()) {
+      errors.message = "Ziņojums ir obligāts";
+    }
+
+    if (!formData.preferred_duration) {
+      errors.preferred_duration =
+        "Lūdzu izvēlieties vēlamo pakalpojuma termiņu";
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
-  const closeModal = (): void => {
-    setShowModal(false);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase
+        .from("digital_marketing_inquiries")
+        .insert([
+          {
+            name: formData.name,
+            email: formData.email,
+            message: formData.message,
+            phone: formData.phone,
+            company: formData.company,
+            selected_package: selectedService?.id,
+            preferred_duration: formData.preferred_duration,
+            payment_plan_interest: formData.payment_plan_interest,
+            status: "new",
+          },
+        ]);
+
+      if (error) {
+        console.error("Supabase error:", error);
+        toast.error("Kļūda nosūtot ziņojumu. Lūdzu mēģiniet vēlreiz.", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        return;
+      }
+
+      toast.success("Paldies! Mēs ar jums sazināsimies tuvākajā laikā.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+
+      setFormData(initialFormData);
+      setShowModal(false);
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Kļūda nosūtot ziņojumu. Lūdzu mēģiniet vēlreiz.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const ServiceCard: React.FC<{ service: Service }> = ({ service }) => (
-    <motion.div
-      className="bg-white rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 flex flex-col"
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <div
-        className="p-6 text-white relative overflow-hidden"
-        style={{
-          background: `linear-gradient(135deg, ${
-            service.color
-          } 0%, ${adjustColor(service.color, -30)} 100%)`,
-        }}
-      >
-        <div className="absolute top-0 right-0 -mt-4 -mr-4 bg-white bg-opacity-20 rounded-full p-8 transform rotate-12">
-          <motion.div
-            className="text-5xl"
-            whileHover={{ rotate: 360, scale: 1.2 }}
-            transition={{ duration: 0.5 }}
-          >
-            {service.icon}
-          </motion.div>
-        </div>
-        <h3 className="text-2xl font-bold mb-2 relative z-10">
-          {service.name}
-        </h3>
-        <p className="text-4xl font-extrabold mb-1 relative z-10">
-          €{service.price}
-        </p>
-      </div>
-      <div className="p-6 flex-grow">
-        <p className="text-gray-700 mb-4">{service.description}</p>
-        <ul className="mb-6" aria-label={`${service.name} features`}>
-          {service.features.map((feature, i) => (
-            <li key={i} className="flex items-center mb-2">
-              <FiCheckCircle
-                className="text-[#EEC71B] mr-2 flex-shrink-0"
-                aria-hidden="true"
-              />
-              <span>{feature}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="p-6 pt-0">
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="w-full bg-[#EEC71B] text-[#3D3B4A] px-6 py-3 rounded-full font-bold mt-auto hover:bg-[#ffd700] transition-colors duration-300 flex items-center justify-center"
-          onClick={() => openModal(service)}
+  const calculateDiscountedPrice = (
+    basePrice: number,
+    months: number,
+    discount: number
+  ) => {
+    const discountedPrice = basePrice * (1 - discount / 100);
+    return Math.round(discountedPrice);
+  };
+
+  const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
+    const basePrice = parseInt(service.price);
+
+    return (
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 flex flex-col h-full">
+        <div
+          className="p-6 text-white relative overflow-hidden"
+          style={{
+            background: `linear-gradient(135deg, ${
+              service.color
+            } 0%, ${adjustColor(service.color, -30)} 100%)`,
+          }}
         >
-          Uzzināt Vairāk
-          <FiArrowRight className="ml-2" />
-        </motion.button>
-      </div>
-    </motion.div>
-  );
+          <div className="absolute top-0 right-0 -mt-4 -mr-4 bg-white bg-opacity-20 rounded-full p-8 transform rotate-12">
+            <motion.div
+              className="text-5xl"
+              whileHover={{ rotate: 360, scale: 1.2 }}
+              transition={{ duration: 0.5 }}
+            >
+              {service.icon}
+            </motion.div>
+          </div>
+          <h3 className="text-2xl font-bold mb-2 relative z-10">
+            {service.name}
+          </h3>
+          <div className="relative z-10">
+            <p className="text-4xl font-bold">€{service.price}</p>
+            <p className="text-sm opacity-75">mēnesī</p>
+          </div>
+          <div className="mt-2 space-y-1 text-sm opacity-90">
+            <div className="flex items-center gap-2">
+              <FiCalendar />
+              <span>
+                3 mēneši: €
+                {calculateDiscountedPrice(
+                  basePrice,
+                  3,
+                  service.discount_3_months
+                )}
+                /mēn
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <FiCalendar />
+              <span>
+                6 mēneši: €
+                {calculateDiscountedPrice(
+                  basePrice,
+                  6,
+                  service.discount_6_months
+                )}
+                /mēn
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <FiCalendar />
+              <span>
+                12 mēneši: €
+                {calculateDiscountedPrice(
+                  basePrice,
+                  12,
+                  service.discount_12_months
+                )}
+                /mēn
+              </span>
+            </div>
+          </div>
+        </div>
 
-  const FeatureCard: React.FC<{
-    icon: JSX.Element;
-    title: string;
-    description: string;
-  }> = ({ icon, title, description }) => (
-    <motion.div
-      className="bg-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform duration-300"
-      whileHover={{ y: -5 }}
-    >
-      <div
-        className="text-4xl text-[#EEC71B] mb-4 flex justify-center"
-        aria-hidden="true"
-      >
-        {icon}
+        <div className="p-6 flex-grow flex flex-col">
+          <p className="text-gray-700 mb-4">{service.description}</p>
+          <ul className="space-y-3 mb-6 flex-grow">
+            {service.features.map((feature, i) => (
+              <li key={i} className="flex items-center">
+                <FiCheckCircle className="text-[#EEC71B] mr-2 flex-shrink-0" />
+                <span className="text-gray-700">{feature}</span>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-auto">
+            <div className="text-sm text-gray-600 mb-4">
+              <div className="flex items-center gap-2">
+                <FiPercent className="text-[#EEC71B]" />
+                <span>Pieejamas atlaides garākiem termiņiem</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FiDollarSign className="text-[#EEC71B]" />
+                <span>Iespējami dalītie maksājumi</span>
+              </div>
+            </div>
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full bg-[#EEC71B] text-[#3D3B4A] px-6 py-3 rounded-lg font-bold flex items-center justify-center hover:bg-[#ffd700] transition-colors duration-300"
+              onClick={() => {
+                setSelectedService(service);
+                setShowModal(true);
+              }}
+            >
+              Pieteikties
+              <FiArrowRight className="ml-2" />
+            </motion.button>
+          </div>
+        </div>
       </div>
-      <h3 className="text-xl font-bold mb-2">{title}</h3>
-      <p className="text-gray-700">{description}</p>
-    </motion.div>
-  );
+    );
+  };
 
   return (
     <>
@@ -262,7 +370,7 @@ const DigitalaisMarketings: React.FC = () => {
         </title>
         <meta
           name="description"
-          content="WebWorks piedāvā profesionālus digitālā mārketinga pakalpojumus Latvijā. Palieliniet savu tiešsaistes klātbūtni, piesaistiet vairāk klientu un uzlabojiet sava zīmola atpazīstamību ar mūsu ekspertu izstrādātajām digitālā mārketinga stratēģijām."
+          content="WebWorks piedāvā profesionālus digitālā mārketinga pakalpojumus. Palieliniet savu tiešsaistes klātbūtni, piesaistiet vairāk klientu un uzlabojiet sava zīmola atpazīstamību."
         />
         <meta
           name="keywords"
@@ -272,222 +380,77 @@ const DigitalaisMarketings: React.FC = () => {
           rel="canonical"
           href="https://www.webworks.lv/digitalais-marketings"
         />
-        <meta
-          property="og:title"
-          content="Digitālais Mārketings Latvijā | WebWorks"
-        />
-        <meta
-          property="og:description"
-          content="Profesionāli digitālā mārketinga pakalpojumi Latvijā. Palieliniet savu tiešsaistes klātbūtni un piesaistiet vairāk klientu ar WebWorks."
-        />
-        <meta
-          property="og:image"
-          content="https://www.webworks.lv/images/digitalais-marketings-og.jpg"
-        />
-        <meta
-          property="og:url"
-          content="https://www.webworks.lv/digitalais-marketings"
-        />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta
-          name="twitter:title"
-          content="Digitālais Mārketings Latvijā | WebWorks"
-        />
-        <meta
-          name="twitter:description"
-          content="Profesionāli digitālā mārketinga pakalpojumi Latvijā. Palieliniet savu tiešsaistes klātbūtni un piesaistiet vairāk klientu ar WebWorks."
-        />
-        <meta
-          name="twitter:image"
-          content="https://www.webworks.lv/images/digitalais-marketings-og.jpg"
-        />
       </Head>
 
       <div className="min-h-screen bg-gradient-to-b from-[#F3F5F4] to-white">
         <Header />
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
 
         <main className="container mx-auto px-4 py-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-center text-[#3D3B4A] mb-8">
-            Digitālais Mārketings, kas Virza Jūsu Biznesu uz Priekšu
-          </h1>
+          <div className="max-w-7xl mx-auto">
+            <section className="text-center mb-16">
+              <h1 className="text-4xl md:text-5xl font-bold text-[#3D3B4A] mb-8">
+                Digitālais Mārketings, kas Virza Jūsu Biznesu uz Priekšu
+              </h1>
+              <p className="text-xl text-gray-700 mb-12 max-w-3xl mx-auto">
+                Atklājiet sava uzņēmuma potenciālu ar mūsu ekspertu digitālā
+                mārketinga pakalpojumiem. Mēs palīdzēsim jums sasniegt jaunas
+                virsotnes tiešsaistē un palielināt peļņu.
+              </p>
+            </section>
 
-          <p className="text-xl text-center text-gray-700 mb-12 max-w-3xl mx-auto">
-            Atklājiet sava uzņēmuma potenciālu ar mūsu ekspertu digitālā
-            mārketinga pakalpojumiem. Mēs palīdzēsim jums sasniegt jaunas
-            virsotnes tiešsaistē, piesaistīt vairāk klientu un palielināt peļņu.
-          </p>
-
-          <section aria-labelledby="services" className="mb-16">
-            <h2
-              id="services"
-              className="text-3xl font-bold text-[#3D3B4A] mb-8 text-center"
-            >
-              Mūsu Digitālā Mārketinga Pakalpojumi
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {services.map((service, index) => (
-                <ServiceCard key={index} service={service} />
+            <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+              {services.map((service) => (
+                <ServiceCard key={service.id} service={service} />
               ))}
-            </div>
-          </section>
+            </section>
 
-          <section aria-labelledby="why-digital-marketing" className="mb-16">
-            <h2
-              id="why-digital-marketing"
-              className="text-3xl font-bold text-[#3D3B4A] mb-8 text-center"
-            >
-              Kāpēc Izvēlēties Digitālo Mārketingu?
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <FeatureCard
-                icon={<FiTarget />}
-                title="Precīza Mērķauditorijas Sasniegšana"
-                description="Digitālais mārketings ļauj jums precīzi mērķēt uz jūsu ideālo klientu, maksimāli palielinot jūsu mārketinga budžeta efektivitāti."
-              />
-              <FeatureCard
-                icon={<FiTrendingUp />}
-                title="Izmērāmi Rezultāti"
-                description="Ar digitālo mārketingu jūs varat precīzi izmērīt katras kampaņas sniegumu un ROI, ļaujot jums nepārtraukti optimizēt savus centienus."
-              />
-              <FeatureCard
-                icon={<FiUsers />}
-                title="Uzlabota Klientu Iesaiste"
-                description="Digitālās platformas ļauj jums veidot dziļākas un jēgpilnākas attiecības ar jūsu klientiem, veicinot lojalitāti un atkārtotus pirkumus."
-              />
-              <FeatureCard
-                icon={<FiGlobe />}
-                title="Globāla Sasniedzamība"
-                description="Digitālais mārketings ļauj jūsu biznesam sasniegt klientus visā pasaulē, paplašinot jūsu potenciālo tirgu."
-              />
-              <FeatureCard
-                icon={<FiBarChart2 />}
-                title="Konkurētspējas Priekšrocība"
-                description="Efektīva digitālā mārketinga stratēģija var palīdzēt jums izcelties pārpildītā tirgū un apsteigt konkurentus."
-              />
-              <FeatureCard
-                icon={<FiLayout />}
-                title="Personalizēta Pieredze"
-                description="Digitālais mārketings ļauj jums personalizēt savu vēstījumu un piedāvājumus, uzlabojot klientu pieredzi un palielinot konversijas."
-              />
-            </div>
-          </section>
+            <section className="mb-16">
+              <div className="bg-gradient-to-r from-[#3D3B4A] to-[#2D2B3A] p-1 rounded-lg">
+                <div className="bg-gradient-to-r from-[#3D3B4A] to-[#2D2B3A] p-12 md:p-16 rounded-lg relative overflow-hidden">
+                  <div className="absolute inset-0 overflow-hidden">
+                    <div className="absolute -right-10 -top-10 w-40 h-40 bg-[#EEC71B] opacity-10 rounded-full blur-3xl"></div>
+                    <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-[#EEC71B] opacity-10 rounded-full blur-3xl"></div>
+                  </div>
 
-          <section
-            aria-labelledby="our-process"
-            className="mb-16 bg-white p-8 rounded-lg shadow-lg"
-          >
-            <h2
-              id="our-process"
-              className="text-3xl font-bold text-[#3D3B4A] mb-8 text-center"
-            >
-              Mūsu Digitālā Mārketinga Process
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div className="bg-gray-100 p-6 rounded-lg">
-                <h3 className="font-bold text-lg mb-4 flex items-center">
-                  <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
-                    1
-                  </span>
-                  Audits un Analīze
-                </h3>
-                <p>
-                  Mēs sākam ar rūpīgu jūsu pašreizējās digitālās klātbūtnes un
-                  mārketinga centienu analīzi, identificējot stiprās puses un
-                  uzlabojamās jomas.
-                </p>
+                  <div className="relative z-10 max-w-3xl mx-auto text-center">
+                    <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">
+                      Meklējat Individuālu Risinājumu?
+                    </h2>
+                    <p className="text-gray-300 text-lg mb-8">
+                      Mēs piedāvājam arī pielāgotus digitālā mārketinga
+                      risinājumus, kas atbilst tieši jūsu biznesa vajadzībām un
+                      mērķiem. Sazinieties ar mums, lai apspriestu jūsu unikālo
+                      situāciju.
+                    </p>
+                    <motion.a
+                      href="/contact-us"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="inline-flex items-center px-8 py-3 border border-transparent 
+                        text-base font-medium rounded-lg shadow-md text-[#3D3B4A] 
+                        bg-[#EEC71B] hover:bg-[#ffd700] focus:outline-none focus:ring-2 
+                        focus:ring-offset-2 focus:ring-[#EEC71B] transition-all duration-200"
+                    >
+                      Sazināties ar mums
+                      <FiArrowRight className="ml-2" />
+                    </motion.a>
+                  </div>
+                </div>
               </div>
-              <div className="bg-gray-100 p-6 rounded-lg">
-                <h3 className="font-bold text-lg mb-4 flex items-center">
-                  <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
-                    2
-                  </span>
-                  Stratēģijas Izstrāde
-                </h3>
-                <p>
-                  Balstoties uz analīzes rezultātiem, mēs izstrādājam pielāgotu
-                  digitālā mārketinga stratēģiju, kas atbilst jūsu biznesa
-                  mērķiem un mērķauditorijai.
-                </p>
-              </div>
-              <div className="bg-gray-100 p-6 rounded-lg">
-                <h3 className="font-bold text-lg mb-4 flex items-center">
-                  <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
-                    3
-                  </span>
-                  Īstenošana
-                </h3>
-                <p>
-                  Mēs realizējam izstrādāto stratēģiju, izmantojot dažādus
-                  digitālos kanālus un rīkus, lai maksimāli palielinātu jūsu
-                  sasniegto auditoriju un iesaisti.
-                </p>
-              </div>
-              <div className="bg-gray-100 p-6 rounded-lg">
-                <h3 className="font-bold text-lg mb-4 flex items-center">
-                  <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
-                    4
-                  </span>
-                  Monitorings un Optimizācija
-                </h3>
-                <p>
-                  Mēs nepārtraukti uzraugām kampaņu sniegumu, analizējam datus
-                  un veicam nepieciešamās korekcijas, lai nodrošinātu optimālus
-                  rezultātus.
-                </p>
-              </div>
-              <div className="bg-gray-100 p-6 rounded-lg">
-                <h3 className="font-bold text-lg mb-4 flex items-center">
-                  <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
-                    5
-                  </span>
-                  Atskaites un Analīze
-                </h3>
-                <p>
-                  Regulāri sniedzam detalizētas atskaites par kampaņu
-                  rezultātiem, ROI un ieteikumus turpmākiem uzlabojumiem.
-                </p>
-              </div>
-              <div className="bg-gray-100 p-6 rounded-lg">
-                <h3 className="font-bold text-lg mb-4 flex items-center">
-                  <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
-                    6
-                  </span>
-                  Nepārtraukta Pilnveidošana
-                </h3>
-                <p>
-                  Mēs nepārtraukti meklējam jaunas iespējas un inovācijas
-                  digitālajā mārketingā, lai nodrošinātu, ka jūsu stratēģija
-                  vienmēr ir aktuāla un efektīva.
-                </p>
-              </div>
-            </div>
-          </section>
-
-          <section
-            aria-labelledby="cta"
-            className="mb-16 bg-[#3D3B4A] text-white p-8 rounded-lg"
-          >
-            <h2 id="cta" className="text-3xl font-bold mb-8 text-center">
-              Gatavs Uzlabot Savu Digitālo Klātbūtni?
-            </h2>
-            <p className="text-xl mb-8 text-center">
-              Ļaujiet mums palīdzēt jums sasniegt jaunus augstumus digitālajā
-              vidē un pārvērst jūsu tiešsaistes klātbūtni par spēcīgu biznesa
-              izaugsmes dzinējspēku.
-            </p>
-            <div className="flex justify-center">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-[#EEC71B] text-[#3D3B4A] px-8 py-3 rounded-full font-bold text-lg flex items-center"
-                onClick={() => openModal("contact")}
-              >
-                Sazināties ar Mums
-                <FiArrowRight className="ml-2" />
-              </motion.button>
-            </div>
-          </section>
+            </section>
+          </div>
 
           <AnimatePresence>
             {showModal && (
@@ -495,133 +458,393 @@ const DigitalaisMarketings: React.FC = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-                onClick={closeModal}
+                className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 backdrop-blur-sm"
+                onClick={() => setShowModal(false)}
               >
                 <motion.div
                   initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0.9, opacity: 0 }}
-                  className="bg-white rounded-lg p-8 max-w-md w-full relative"
+                  className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative shadow-2xl"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  {selectedService === null ? (
-                    <>
-                      <h3 className="text-2xl font-bold mb-4">
-                        Sazināties ar Mums
-                      </h3>
-                      <p className="mb-4">
-                        Aizpildiet formu zemāk, un mūsu digitālā mārketinga
-                        eksperts sazināsies ar jums 24 stundu laikā, lai
-                        apspriestu jūsu projektu.
-                      </p>
-                      <form
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          // Handle form submission here
-                          console.log("Form submitted");
-                          closeModal();
+                  {selectedService && (
+                    <div>
+                      <div
+                        className="p-8 text-white relative overflow-hidden"
+                        style={{
+                          background: `linear-gradient(135deg, ${
+                            selectedService.color
+                          } 0%, ${adjustColor(
+                            selectedService.color,
+                            -30
+                          )} 100%)`,
                         }}
                       >
-                        <div className="mb-4">
-                          <label className="block mb-2" htmlFor="name">
-                            Vārds
-                          </label>
-                          <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            className="w-full p-2 border rounded"
-                            required
-                          />
-                        </div>
-                        <div className="mb-4">
-                          <label className="block mb-2" htmlFor="email">
-                            E-pasts
-                          </label>
-                          <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            className="w-full p-2 border rounded"
-                            required
-                          />
-                        </div>
-                        <div className="mb-4">
-                          <label className="block mb-2" htmlFor="company">
-                            Uzņēmums
-                          </label>
-                          <input
-                            type="text"
-                            id="company"
-                            name="company"
-                            className="w-full p-2 border rounded"
-                          />
-                        </div>
-                        <div className="mb-4">
-                          <label className="block mb-2" htmlFor="message">
-                            Jūsu ziņojums
-                          </label>
-                          <textarea
-                            id="message"
-                            name="message"
-                            className="w-full p-2 border rounded"
-                            rows={4}
-                            required
-                          ></textarea>
-                        </div>
-                        <div className="flex justify-end">
-                          <button
-                            type="submit"
-                            className="bg-[#EEC71B] text-[#3D3B4A] px-6 py-2 rounded-full font-bold flex items-center"
-                          >
-                            Nosūtīt
-                            <FiArrowRight className="ml-2" />
-                          </button>
-                        </div>
-                      </form>
-                    </>
-                  ) : (
-                    <>
-                      <h3 className="text-2xl font-bold mb-4">
-                        {selectedService.name}
-                      </h3>
-                      <p className="text-3xl font-bold text-[#EEC71B] mb-4">
-                        €{selectedService.price}
-                      </p>
-                      <p className="mb-4">
-                        {selectedService.detailedDescription}
-                      </p>
-                      <h4 className="font-bold mb-2">Iekļautie pakalpojumi:</h4>
-                      <ul className="mb-6">
-                        {selectedService.features.map((feature, index) => (
-                          <li key={index} className="flex items-center mb-2">
-                            <FiCheckCircle
-                              className="text-[#EEC71B] mr-2"
-                              aria-hidden="true"
-                            />
-                            <span>{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      <div className="flex justify-end">
                         <button
-                          className="bg-[#EEC71B] text-[#3D3B4A] px-6 py-2 rounded-full font-bold flex items-center"
-                          onClick={() => openModal("contact")}
+                          className="absolute top-4 right-4 text-white hover:text-gray-200 transition-colors duration-200"
+                          onClick={() => setShowModal(false)}
+                          aria-label="Aizvērt"
                         >
-                          Pieteikties
-                          <FiArrowRight className="ml-2" />
+                          <FiX size={24} />
                         </button>
+                        <h3 className="text-3xl font-bold mb-2">
+                          {selectedService.name}
+                        </h3>
+                        <p className="text-xl opacity-90 mb-4">
+                          Sākot no €{selectedService.price} mēnesī
+                        </p>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                          <div className="bg-white bg-opacity-20 rounded-lg p-3">
+                            <p className="font-bold">3 mēneši</p>
+                            <p>
+                              €
+                              {calculateDiscountedPrice(
+                                parseInt(selectedService.price),
+                                3,
+                                selectedService.discount_3_months
+                              )}
+                              /mēn
+                            </p>
+                            <p className="text-xs">
+                              ({selectedService.discount_3_months}% atlaide)
+                            </p>
+                          </div>
+                          <div className="bg-white bg-opacity-20 rounded-lg p-3">
+                            <p className="font-bold">6 mēneši</p>
+                            <p>
+                              €
+                              {calculateDiscountedPrice(
+                                parseInt(selectedService.price),
+                                6,
+                                selectedService.discount_6_months
+                              )}
+                              /mēn
+                            </p>
+                            <p className="text-xs">
+                              ({selectedService.discount_6_months}% atlaide)
+                            </p>
+                          </div>
+                          <div className="bg-white bg-opacity-20 rounded-lg p-3">
+                            <p className="font-bold">12 mēneši</p>
+                            <p>
+                              €
+                              {calculateDiscountedPrice(
+                                parseInt(selectedService.price),
+                                12,
+                                selectedService.discount_12_months
+                              )}
+                              /mēn
+                            </p>
+                            <p className="text-xs">
+                              ({selectedService.discount_12_months}% atlaide)
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                    </>
+
+                      <div className="p-8">
+                        <div className="prose max-w-none mb-8">
+                          <p className="text-gray-700 text-lg leading-relaxed">
+                            {selectedService.detailedDescription}
+                          </p>
+                        </div>
+
+                        <div className="bg-gray-50 rounded-xl p-6 mb-8">
+                          <h4 className="font-bold text-xl mb-4 text-[#3D3B4A]">
+                            Iekļautie pakalpojumi:
+                          </h4>
+                          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {selectedService.features.map((feature, index) => (
+                              <li key={index} className="flex items-center">
+                                <FiCheckCircle className="text-[#EEC71B] mr-2 flex-shrink-0" />
+                                <span className="text-gray-700">{feature}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                              <label
+                                className="block text-sm font-medium text-gray-700 mb-1"
+                                htmlFor="name"
+                              >
+                                Vārds*
+                              </label>
+                              <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                value={formData.name}
+                                onChange={(e) =>
+                                  setFormData({
+                                    ...formData,
+                                    name: e.target.value,
+                                  })
+                                }
+                                className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#EEC71B] focus:border-transparent transition-colors duration-200
+                                  ${
+                                    formErrors.name
+                                      ? "border-red-500"
+                                      : "border-gray-300"
+                                  }`}
+                                required
+                              />
+                              {formErrors.name && (
+                                <p className="mt-1 text-sm text-red-600">
+                                  {formErrors.name}
+                                </p>
+                              )}
+                            </div>
+
+                            <div>
+                              <label
+                                className="block text-sm font-medium text-gray-700 mb-1"
+                                htmlFor="email"
+                              >
+                                E-pasts*
+                              </label>
+                              <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={(e) =>
+                                  setFormData({
+                                    ...formData,
+                                    email: e.target.value,
+                                  })
+                                }
+                                className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#EEC71B] focus:border-transparent transition-colors duration-200
+                                  ${
+                                    formErrors.email
+                                      ? "border-red-500"
+                                      : "border-gray-300"
+                                  }`}
+                                required
+                              />
+                              {formErrors.email && (
+                                <p className="mt-1 text-sm text-red-600">
+                                  {formErrors.email}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                              <label
+                                className="block text-sm font-medium text-gray-700 mb-1"
+                                htmlFor="phone"
+                              >
+                                Tālrunis
+                              </label>
+                              <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                value={formData.phone}
+                                onChange={(e) =>
+                                  setFormData({
+                                    ...formData,
+                                    phone: e.target.value,
+                                  })
+                                }
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#EEC71B] focus:border-transparent transition-colors duration-200"
+                              />
+                            </div>
+
+                            <div>
+                              <label
+                                className="block text-sm font-medium text-gray-700 mb-1"
+                                htmlFor="company"
+                              >
+                                Uzņēmums
+                              </label>
+                              <input
+                                type="text"
+                                id="company"
+                                name="company"
+                                value={formData.company}
+                                onChange={(e) =>
+                                  setFormData({
+                                    ...formData,
+                                    company: e.target.value,
+                                  })
+                                }
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#EEC71B] focus:border-transparent transition-colors duration-200"
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <label
+                              className="block text-sm font-medium text-gray-700 mb-1"
+                              htmlFor="preferred_duration"
+                            >
+                              Vēlamais pakalpojuma termiņš*
+                            </label>
+                            <select
+                              id="preferred_duration"
+                              name="preferred_duration"
+                              value={formData.preferred_duration}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  preferred_duration: e.target.value as
+                                    | "1"
+                                    | "3"
+                                    | "6"
+                                    | "12",
+                                })
+                              }
+                              className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#EEC71B] focus:border-transparent transition-colors duration-200
+                                ${
+                                  formErrors.preferred_duration
+                                    ? "border-red-500"
+                                    : "border-gray-300"
+                                }`}
+                              required
+                            >
+                              <option value="">Izvēlieties termiņu</option>
+                              <option value="1">1 mēnesis</option>
+                              <option value="3">
+                                3 mēneši (-{selectedService.discount_3_months}%)
+                              </option>
+                              <option value="6">
+                                6 mēneši (-{selectedService.discount_6_months}%)
+                              </option>
+                              <option value="12">
+                                12 mēneši (-{selectedService.discount_12_months}
+                                %)
+                              </option>
+                            </select>
+                            {formErrors.preferred_duration && (
+                              <p className="mt-1 text-sm text-red-600">
+                                {formErrors.preferred_duration}
+                              </p>
+                            )}
+                          </div>
+
+                          <div>
+                            <label
+                              className="block text-sm font-medium text-gray-700 mb-1"
+                              htmlFor="message"
+                            >
+                              Jūsu ziņojums*
+                            </label>
+                            <textarea
+                              id="message"
+                              name="message"
+                              value={formData.message}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  message: e.target.value,
+                                })
+                              }
+                              rows={4}
+                              className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#EEC71B] focus:border-transparent transition-colors duration-200
+                              ${
+                                formErrors.message
+                                  ? "border-red-500"
+                                  : "border-gray-300"
+                              }`}
+                              required
+                              placeholder="Pastāstiet vairāk par savām vajadzībām un mērķiem..."
+                            ></textarea>
+                            {formErrors.message && (
+                              <p className="mt-1 text-sm text-red-600">
+                                {formErrors.message}
+                              </p>
+                            )}
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              id="payment_plan_interest"
+                              name="payment_plan_interest"
+                              checked={formData.payment_plan_interest}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  payment_plan_interest: e.target.checked,
+                                })
+                              }
+                              className="h-4 w-4 text-[#EEC71B] rounded border-gray-300 focus:ring-[#EEC71B]"
+                            />
+                            <label
+                              htmlFor="payment_plan_interest"
+                              className="text-sm text-gray-700"
+                            >
+                              Esmu ieinteresēts(-a) dalītajos maksājumos
+                            </label>
+                          </div>
+
+                          <div className="bg-gray-50 p-6 -mx-6 mt-6 flex justify-between items-center">
+                            <div className="text-sm text-gray-600">
+                              <p className="font-medium">Izvēlētā pakete:</p>
+                              <p className="text-gray-900">
+                                {selectedService.name}
+                                {formData.preferred_duration && (
+                                  <span className="ml-1">
+                                    ({formData.preferred_duration}{" "}
+                                    {formData.preferred_duration === "1"
+                                      ? "mēnesis"
+                                      : "mēneši"}
+                                    )
+                                  </span>
+                                )}
+                              </p>
+                            </div>
+                            <button
+                              type="submit"
+                              disabled={isSubmitting}
+                              className={`inline-flex items-center px-6 py-3 border border-transparent 
+                              text-base font-medium rounded-lg shadow-sm text-[#3D3B4A] 
+                              bg-[#EEC71B] hover:bg-[#ffd700] focus:outline-none focus:ring-2 
+                              focus:ring-offset-2 focus:ring-[#EEC71B] disabled:opacity-50 
+                              disabled:cursor-not-allowed transition-all duration-200`}
+                            >
+                              {isSubmitting ? (
+                                <>
+                                  <svg
+                                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-[#3D3B4A]"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <circle
+                                      className="opacity-25"
+                                      cx="12"
+                                      cy="12"
+                                      r="10"
+                                      stroke="currentColor"
+                                      strokeWidth="4"
+                                    ></circle>
+                                    <path
+                                      className="opacity-75"
+                                      fill="currentColor"
+                                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                    ></path>
+                                  </svg>
+                                  Nosūta...
+                                </>
+                              ) : (
+                                <>
+                                  Pieteikties
+                                  <FiArrowRight className="ml-2" />
+                                </>
+                              )}
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
                   )}
-                  <button
-                    className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-                    onClick={closeModal}
-                    aria-label="Close modal"
-                  >
-                    <FiX size={24} />
-                  </button>
                 </motion.div>
               </motion.div>
             )}
@@ -629,49 +852,56 @@ const DigitalaisMarketings: React.FC = () => {
         </main>
 
         <Footer />
-
-        <JsonLd services={services} />
       </div>
+
+      <Script
+        id="schema-script"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            name: "Digitālais Mārketings Latvijā | WebWorks",
+            description:
+              "WebWorks piedāvā profesionālus digitālā mārketinga pakalpojumus. Palieliniet savu tiešsaistes klātbūtni, piesaistiet vairāk klientu un uzlabojiet sava zīmola atpazīstamību.",
+            url: "https://www.webworks.lv/digitalais-marketings",
+            provider: {
+              "@type": "Organization",
+              name: "WebWorks",
+              url: "https://www.webworks.lv",
+              address: {
+                "@type": "PostalAddress",
+                addressCountry: "LV",
+              },
+            },
+            offers: {
+              "@type": "AggregateOffer",
+              priceCurrency: "EUR",
+              lowPrice: Math.min(...services.map((s) => parseInt(s.price))),
+              highPrice: Math.max(...services.map((s) => parseInt(s.price))),
+              offerCount: services.length,
+              offers: services.map((service) => ({
+                "@type": "Offer",
+                name: service.name,
+                description: service.description,
+                price: service.price,
+                priceCurrency: "EUR",
+                itemOffered: {
+                  "@type": "Service",
+                  name: service.name,
+                  description: service.detailedDescription,
+                  provider: {
+                    "@type": "Organization",
+                    name: "WebWorks",
+                  },
+                },
+              })),
+            },
+          }),
+        }}
+      />
     </>
   );
 };
-
-const JsonLd: React.FC<{ services: Service[] }> = ({ services }) => (
-  <Script id="json-ld" type="application/ld+json">
-    {JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      name: "Digitālais Mārketings Latvijā | WebWorks",
-      description:
-        "WebWorks piedāvā profesionālus digitālā mārketinga pakalpojumus Latvijā. Palieliniet savu tiešsaistes klātbūtni, piesaistiet vairāk klientu un uzlabojiet sava zīmola atpazīstamību ar mūsu ekspertu izstrādātajām digitālā mārketinga stratēģijām.",
-      url: "https://www.webworks.lv/digitalais-marketings",
-      mainEntity: {
-        "@type": "Service",
-        name: "WebWorks Digitālā Mārketinga Pakalpojumi",
-        description:
-          "Profesionāli digitālā mārketinga pakalpojumi, kas palīdz uzņēmumiem uzlabot savu tiešsaistes klātbūtni un piesaistīt vairāk klientu.",
-        provider: {
-          "@type": "Organization",
-          name: "WebWorks",
-        },
-        areaServed: "Latvija",
-        hasOfferCatalog: {
-          "@type": "OfferCatalog",
-          name: "Digitālā Mārketinga Pakalpojumi",
-          itemListElement: services.map((service) => ({
-            "@type": "Offer",
-            itemOffered: {
-              "@type": "Service",
-              name: service.name,
-              description: service.description,
-            },
-            price: service.price,
-            priceCurrency: "EUR",
-          })),
-        },
-      },
-    })}
-  </Script>
-);
 
 export default DigitalaisMarketings;
