@@ -105,29 +105,78 @@ interface FAQCardProps {
   readonly totalFAQs: number;
 }
 
-// Enhanced Sparkle components with accessibility considerations
+// // Enhanced Sparkle components with accessibility considerations
+// const Sparkle: React.FC<{ delay: number; position: string }> = React.memo(
+//   ({ delay, position }) => {
+//     const sparkleVariants = {
+//       animate: {
+//         scale: [0, 1, 0],
+//         opacity: [0, 1, 0],
+//         y: [0, -10, -20],
+//         x: [0, 5, 10],
+//       },
+//     };
+
 const Sparkle: React.FC<{ delay: number; position: string }> = React.memo(
   ({ delay, position }) => {
+    const colors = [
+      "bg-[#EEC71B]", // Original gold
+      "bg-[#FFE074]", // Lighter gold
+      "bg-[#8CB8B4]/70", // Subtle teal
+      "bg-white", // White sparkle
+    ];
+
+    const sizes = ["w-1 h-1", "w-1.5 h-1.5", "w-2 h-2", "w-0.5 h-0.5"];
+
+    // Randomly select color and size
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const size = sizes[Math.floor(Math.random() * sizes.length)];
+
     const sparkleVariants = {
       animate: {
         scale: [0, 1, 0],
-        opacity: [0, 1, 0],
-        y: [0, -10, -20],
-        x: [0, 5, 10],
+        opacity: [0, 0.8, 0],
+        y: [0, -15, -30],
+        x: [0, Math.random() * 10 - 5, Math.random() * 20 - 10],
+        rotate: [0, 180, 360],
       },
     };
 
+    //     return (
+    //       <motion.div
+    //         className={`absolute w-1 h-1 bg-[#EEC71B] rounded-full ${position}`}
+    //         initial={{ scale: 0, opacity: 0 }}
+    //         animate="animate"
+    //         variants={sparkleVariants}
+    //         transition={{
+    //           duration: 1.5,
+    //           delay,
+    //           repeat: Infinity,
+    //           repeatDelay: 2,
+    //         }}
+    //         aria-hidden="true"
+    //       />
+    //     );
+    //   }
+    // );
+
+    // Sparkle.displayName = "Sparkle";
+
     return (
       <motion.div
-        className={`absolute w-1 h-1 bg-[#EEC71B] rounded-full ${position}`}
+        className={`absolute ${position} ${size} ${color} rounded-full 
+      backdrop-blur-[0.5px] shadow-sm`}
         initial={{ scale: 0, opacity: 0 }}
         animate="animate"
         variants={sparkleVariants}
         transition={{
-          duration: 1.5,
+          duration: 2 + Math.random(),
           delay,
           repeat: Infinity,
-          repeatDelay: 2,
+          repeatDelay: 1 + Math.random() * 2,
+        }}
+        style={{
+          filter: "blur(0.2px)",
         }}
         aria-hidden="true"
       />
@@ -137,26 +186,81 @@ const Sparkle: React.FC<{ delay: number; position: string }> = React.memo(
 
 Sparkle.displayName = "Sparkle";
 
+// const SparkleGroup: React.FC = React.memo(() => {
+//   const positions = useMemo(
+//     () => [
+//       "top-1/4 left-1/4",
+//       "top-1/3 right-1/4",
+//       "bottom-1/4 left-1/3",
+//       "top-1/2 right-1/3",
+//       "bottom-1/3 right-1/4",
+//       "bottom-1/2 left-1/4",
+//     ],
+//     []
+//   );
+
 const SparkleGroup: React.FC = React.memo(() => {
   const positions = useMemo(
     () => [
+      // Top section
       "top-1/4 left-1/4",
+      "top-1/6 right-1/3",
       "top-1/3 right-1/4",
-      "bottom-1/4 left-1/3",
+      // Middle section
+      "top-1/2 left-1/3",
       "top-1/2 right-1/3",
+      "top-[45%] left-1/4",
+      // Bottom section
+      "bottom-1/4 left-1/3",
       "bottom-1/3 right-1/4",
       "bottom-1/2 left-1/4",
+      // Additional corner positions
+      "top-[15%] left-[15%]",
+      "top-[20%] right-[20%]",
+      "bottom-[20%] left-[20%]",
     ],
     []
   );
 
+  // Create additional randomized positions
+  const extraPositions = useMemo(() => {
+    return Array.from({ length: 6 }, () => {
+      const top = Math.random() * 80 + 10; // 10% to 90%
+      const left = Math.random() * 80 + 10;
+      return `top-[${top}%] left-[${left}%]`;
+    });
+  }, []);
+
+  const allPositions = [...positions, ...extraPositions];
+
+  //   return (
+  //     <div
+  //       className="absolute inset-0 overflow-hidden pointer-events-none"
+  //       aria-hidden="true"
+  //     >
+  //       {positions.map((position, index) => (
+  //         <Sparkle key={position} position={position} delay={index * 0.2} />
+  //       ))}
+  //     </div>
+  //   );
+  // });
+
+  // SparkleGroup.displayName = "SparkleGroup";
+
   return (
     <div
       className="absolute inset-0 overflow-hidden pointer-events-none"
-      aria-hidden="true"
+      style={{
+        perspective: "1000px",
+        transformStyle: "preserve-3d",
+      }}
     >
-      {positions.map((position, index) => (
-        <Sparkle key={position} position={position} delay={index * 0.2} />
+      {allPositions.map((position, index) => (
+        <Sparkle
+          key={`sparkle-${index}`}
+          position={position}
+          delay={index * 0.15}
+        />
       ))}
     </div>
   );
@@ -452,7 +556,7 @@ const ServiceCard: React.FC<ServiceCardProps> = React.memo(
                   </li>
                 ))}
               </ul>
-              <Card className="bg-gradient-to-br from-white to-gray-50 mb-4 overflow-hidden relative">
+              {/* <Card className="bg-gradient-to-br from-white to-gray-50 mb-4 overflow-hidden relative">
                 <div
                   className="absolute inset-0 bg-gradient-to-r from-[#EEC71B]/5 to-transparent"
                   aria-hidden="true"
@@ -474,7 +578,35 @@ const ServiceCard: React.FC<ServiceCardProps> = React.memo(
                     </div>
                   </div>
                 </CardContent>
+              </Card> */}
+
+              <Card className="bg-gradient-to-br from-white to-gray-50 mb-4 overflow-hidden relative">
+                <div
+                  className="absolute inset-0 bg-gradient-to-r from-[#EEC71B]/5 to-transparent"
+                  style={{
+                    backgroundImage:
+                      "radial-gradient(circle at 50% 50%, rgba(238, 199, 27, 0.05), transparent)",
+                  }}
+                />
+                <SparkleGroup />
+                <CardHeader className="border-b border-gray-100">
+                  <CardTitle className="text-lg">Veiksmes Stāsts</CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <div className="space-y-2">
+                    <p className="text-gray-700">{service.caseStudy.result}</p>
+                    <div className="flex items-center gap-2 text-sm text-gray-500 mt-2">
+                      <FiClock
+                        className="text-[#EEC71B]"
+                        aria-hidden="true"
+                        role="img"
+                      />
+                      <span>{service.caseStudy.timeline}</span>
+                    </div>
+                  </div>
+                </CardContent>
               </Card>
+
               <Button
                 asChild
                 className="w-full bg-[#EEC71B] text-[#3D3B4A] hover:bg-[#3D3B4A] hover:text-white transition-colors duration-300"
