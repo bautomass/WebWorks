@@ -105,18 +105,6 @@ interface FAQCardProps {
   readonly totalFAQs: number;
 }
 
-// // Enhanced Sparkle components with accessibility considerations
-// const Sparkle: React.FC<{ delay: number; position: string }> = React.memo(
-//   ({ delay, position }) => {
-//     const sparkleVariants = {
-//       animate: {
-//         scale: [0, 1, 0],
-//         opacity: [0, 1, 0],
-//         y: [0, -10, -20],
-//         x: [0, 5, 10],
-//       },
-//     };
-
 const Sparkle: React.FC<{ delay: number; position: string }> = React.memo(
   ({ delay, position }) => {
     const colors = [
@@ -141,30 +129,9 @@ const Sparkle: React.FC<{ delay: number; position: string }> = React.memo(
         rotate: [0, 180, 360],
       },
     };
-
-    //     return (
-    //       <motion.div
-    //         className={`absolute w-1 h-1 bg-[#EEC71B] rounded-full ${position}`}
-    //         initial={{ scale: 0, opacity: 0 }}
-    //         animate="animate"
-    //         variants={sparkleVariants}
-    //         transition={{
-    //           duration: 1.5,
-    //           delay,
-    //           repeat: Infinity,
-    //           repeatDelay: 2,
-    //         }}
-    //         aria-hidden="true"
-    //       />
-    //     );
-    //   }
-    // );
-
-    // Sparkle.displayName = "Sparkle";
-
     return (
       <motion.div
-        className={`absolute ${position} ${size} ${color} rounded-full 
+        className={`absolute ${position} ${size} ${color} rounded-full
       backdrop-blur-[0.5px] shadow-sm`}
         initial={{ scale: 0, opacity: 0 }}
         animate="animate"
@@ -185,19 +152,6 @@ const Sparkle: React.FC<{ delay: number; position: string }> = React.memo(
 );
 
 Sparkle.displayName = "Sparkle";
-
-// const SparkleGroup: React.FC = React.memo(() => {
-//   const positions = useMemo(
-//     () => [
-//       "top-1/4 left-1/4",
-//       "top-1/3 right-1/4",
-//       "bottom-1/4 left-1/3",
-//       "top-1/2 right-1/3",
-//       "bottom-1/3 right-1/4",
-//       "bottom-1/2 left-1/4",
-//     ],
-//     []
-//   );
 
 const SparkleGroup: React.FC = React.memo(() => {
   const positions = useMemo(
@@ -222,7 +176,6 @@ const SparkleGroup: React.FC = React.memo(() => {
     []
   );
 
-  // Create additional randomized positions
   const extraPositions = useMemo(() => {
     return Array.from({ length: 6 }, () => {
       const top = Math.random() * 80 + 10; // 10% to 90%
@@ -232,21 +185,6 @@ const SparkleGroup: React.FC = React.memo(() => {
   }, []);
 
   const allPositions = [...positions, ...extraPositions];
-
-  //   return (
-  //     <div
-  //       className="absolute inset-0 overflow-hidden pointer-events-none"
-  //       aria-hidden="true"
-  //     >
-  //       {positions.map((position, index) => (
-  //         <Sparkle key={position} position={position} delay={index * 0.2} />
-  //       ))}
-  //     </div>
-  //   );
-  // });
-
-  // SparkleGroup.displayName = "SparkleGroup";
-
   return (
     <div
       className="absolute inset-0 overflow-hidden pointer-events-none"
@@ -482,18 +420,139 @@ const faqs: ReadonlyArray<FAQ> = [
   },
 ];
 // Enhanced ServiceCard Component with full accessibility
+// const ServiceCard: React.FC<ServiceCardProps> = React.memo(
+//   ({ service, isSelected, onClick, index }) => {
+//     const cardRef = useRef<HTMLDivElement>(null);
+
+//     // Handle keyboard interactions
+//     const handleKeyDown = useCallback(
+//       (e: React.KeyboardEvent) => {
+//         if (e.key === "Enter" || e.key === " ") {
+//           e.preventDefault();
+//           onClick();
+//         }
+//         // Handle Escape key when card is expanded
+//         if (e.key === "Escape" && isSelected) {
+//           e.preventDefault();
+//           onClick();
+//         }
+//       },
+//       [onClick, isSelected]
+//     );
+
+//     return (
+//       <motion.div
+//         ref={cardRef}
+//         layout
+//         onClick={onClick}
+//         className={`bg-white bg-opacity-90 rounded-lg shadow-lg p-6 cursor-pointer transition-all duration-300 ${
+//           isSelected ? "col-span-2 row-span-2" : ""
+//         }`}
+//         whileHover={{ scale: 1.05 }}
+//         whileTap={{ scale: 0.95 }}
+//         role="button"
+//         tabIndex={0}
+//         aria-expanded={isSelected}
+//         aria-label={service.ariaLabel || service.title}
+//         aria-controls={`service-content-${index}`}
+//         onKeyDown={handleKeyDown}
+//         data-expanded={isSelected}
+//       >
+//         <div className="text-4xl text-[#EEC71B] mb-4" aria-hidden="true">
+//           {service.icon}
+//         </div>
+//         <h2 className="text-xl font-bold mb-2 text-[#3D3B4A]">
+//           {service.title}
+//         </h2>
+//         <p className="text-gray-600 mb-4">{service.description}</p>
+//         <AnimatePresence mode="wait">
+//           {isSelected && (
+//             <motion.div
+//               id={`service-content-${index}`}
+//               initial={{ opacity: 0 }}
+//               animate={{ opacity: 1 }}
+//               exit={{ opacity: 0 }}
+//               aria-label={`${service.title} detalizēta informācija`}
+//             >
+//               <h3 className="font-bold mb-2">Galvenās Iezīmes:</h3>
+//               <ul
+//                 className="list-none pl-0 mb-4"
+//                 role="list"
+//                 aria-label={`${service.title} galvenās iezīmes`}
+//               >
+//                 {service.details.map((detail, idx) => (
+//                   <li
+//                     key={idx}
+//                     className="flex items-center mb-2"
+//                     role="listitem"
+//                   >
+//                     <FiCheck
+//                       className="text-[#EEC71B] mr-2"
+//                       aria-hidden="true"
+//                     />
+//                     <span>{detail}</span>
+//                   </li>
+//                 ))}
+//               </ul>
+//               <Card className="bg-gradient-to-br from-white to-gray-50 mb-4 overflow-hidden relative">
+//                 <div
+//                   className="absolute inset-0 bg-gradient-to-r from-[#EEC71B]/5 to-transparent"
+//                   style={{
+//                     backgroundImage:
+//                       "radial-gradient(circle at 50% 50%, rgba(238, 199, 27, 0.05), transparent)",
+//                   }}
+//                 />
+//                 <SparkleGroup />
+//                 <CardHeader className="border-b border-gray-100">
+//                   <CardTitle className="text-lg">Veiksmes Stāsts</CardTitle>
+//                 </CardHeader>
+//                 <CardContent className="pt-4">
+//                   <div className="space-y-2">
+//                     <p className="text-gray-700">{service.caseStudy.result}</p>
+//                     <div className="flex items-center gap-2 text-sm text-gray-500 mt-2">
+//                       <FiClock
+//                         className="text-[#EEC71B]"
+//                         aria-hidden="true"
+//                         role="img"
+//                       />
+//                       <span>{service.caseStudy.timeline}</span>
+//                     </div>
+//                   </div>
+//                 </CardContent>
+//               </Card>
+
+//               <Button
+//                 asChild
+//                 className="w-full bg-[#EEC71B] text-[#3D3B4A] hover:bg-[#3D3B4A] hover:text-white transition-colors duration-300"
+//               >
+//                 <a
+//                   href={service.link}
+//                   onClick={(e) => e.stopPropagation()}
+//                   className="flex items-center justify-center"
+//                   aria-label={`Uzzināt vairāk par ${service.title.toLowerCase()}`}
+//                 >
+//                   <span>Uzzināt Vairāk</span>
+//                   <FiExternalLink className="ml-2" aria-hidden="true" />
+//                 </a>
+//               </Button>
+//             </motion.div>
+//           )}
+//         </AnimatePresence>
+//       </motion.div>
+//     );
+//   }
+// );
+
 const ServiceCard: React.FC<ServiceCardProps> = React.memo(
   ({ service, isSelected, onClick, index }) => {
     const cardRef = useRef<HTMLDivElement>(null);
 
-    // Handle keyboard interactions
     const handleKeyDown = useCallback(
       (e: React.KeyboardEvent) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           onClick();
         }
-        // Handle Escape key when card is expanded
         if (e.key === "Escape" && isSelected) {
           e.preventDefault();
           onClick();
@@ -506,27 +565,30 @@ const ServiceCard: React.FC<ServiceCardProps> = React.memo(
       <motion.div
         ref={cardRef}
         layout
-        onClick={onClick}
-        className={`bg-white bg-opacity-90 rounded-lg shadow-lg p-6 cursor-pointer transition-all duration-300 ${
+        role="listitem"
+        className={`bg-white bg-opacity-90 rounded-lg shadow-lg p-6 transition-all duration-300 ${
           isSelected ? "col-span-2 row-span-2" : ""
         }`}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        role="button"
-        tabIndex={0}
-        aria-expanded={isSelected}
-        aria-label={service.ariaLabel || service.title}
-        aria-controls={`service-content-${index}`}
-        onKeyDown={handleKeyDown}
-        data-expanded={isSelected}
       >
-        <div className="text-4xl text-[#EEC71B] mb-4" aria-hidden="true">
-          {service.icon}
-        </div>
-        <h2 className="text-xl font-bold mb-2 text-[#3D3B4A]">
-          {service.title}
-        </h2>
-        <p className="text-gray-600 mb-4">{service.description}</p>
+        <button
+          onClick={onClick}
+          onKeyDown={handleKeyDown}
+          className="w-full text-left focus:outline-none focus:ring-2 focus:ring-[#EEC71B] rounded"
+          aria-expanded={isSelected}
+          aria-controls={`service-content-${index}`}
+          aria-label={service.ariaLabel || service.title}
+        >
+          <div className="text-4xl text-[#EEC71B] mb-4" aria-hidden="true">
+            {service.icon}
+          </div>
+          <h2 className="text-xl font-bold mb-2 text-[#3D3B4A]">
+            {service.title}
+          </h2>
+          <p className="text-gray-600 mb-4">{service.description}</p>
+        </button>
+
         <AnimatePresence mode="wait">
           {isSelected && (
             <motion.div
@@ -539,15 +601,10 @@ const ServiceCard: React.FC<ServiceCardProps> = React.memo(
               <h3 className="font-bold mb-2">Galvenās Iezīmes:</h3>
               <ul
                 className="list-none pl-0 mb-4"
-                role="list"
                 aria-label={`${service.title} galvenās iezīmes`}
               >
                 {service.details.map((detail, idx) => (
-                  <li
-                    key={idx}
-                    className="flex items-center mb-2"
-                    role="listitem"
-                  >
+                  <li key={idx} className="flex items-center mb-2">
                     <FiCheck
                       className="text-[#EEC71B] mr-2"
                       aria-hidden="true"
@@ -556,30 +613,6 @@ const ServiceCard: React.FC<ServiceCardProps> = React.memo(
                   </li>
                 ))}
               </ul>
-              {/* <Card className="bg-gradient-to-br from-white to-gray-50 mb-4 overflow-hidden relative">
-                <div
-                  className="absolute inset-0 bg-gradient-to-r from-[#EEC71B]/5 to-transparent"
-                  aria-hidden="true"
-                />
-                <SparkleGroup />
-                <CardHeader className="border-b border-gray-100">
-                  <CardTitle className="text-lg">Veiksmes Stāsts</CardTitle>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <div className="space-y-2">
-                    <p className="text-gray-700">{service.caseStudy.result}</p>
-                    <div className="flex items-center gap-2 text-sm text-gray-500 mt-2">
-                      <FiClock
-                        className="text-[#EEC71B]"
-                        aria-hidden="true"
-                        role="img"
-                      />
-                      <span>{service.caseStudy.timeline}</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card> */}
-
               <Card className="bg-gradient-to-br from-white to-gray-50 mb-4 overflow-hidden relative">
                 <div
                   className="absolute inset-0 bg-gradient-to-r from-[#EEC71B]/5 to-transparent"
@@ -607,20 +640,14 @@ const ServiceCard: React.FC<ServiceCardProps> = React.memo(
                 </CardContent>
               </Card>
 
-              <Button
-                asChild
-                className="w-full bg-[#EEC71B] text-[#3D3B4A] hover:bg-[#3D3B4A] hover:text-white transition-colors duration-300"
+              <a
+                href={service.link}
+                className="w-full inline-flex items-center justify-center px-4 py-2 bg-[#EEC71B] text-[#3D3B4A] hover:bg-[#3D3B4A] hover:text-white transition-colors duration-300 rounded-md"
+                aria-label={`Uzzināt vairāk par ${service.title.toLowerCase()}`}
               >
-                <a
-                  href={service.link}
-                  onClick={(e) => e.stopPropagation()}
-                  className="flex items-center justify-center"
-                  aria-label={`Uzzināt vairāk par ${service.title.toLowerCase()}`}
-                >
-                  <span>Uzzināt Vairāk</span>
-                  <FiExternalLink className="ml-2" aria-hidden="true" />
-                </a>
-              </Button>
+                <span>Uzzināt Vairāk</span>
+                <FiExternalLink className="ml-2" aria-hidden="true" />
+              </a>
             </motion.div>
           )}
         </AnimatePresence>

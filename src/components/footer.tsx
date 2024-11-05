@@ -202,7 +202,7 @@ const Footer: React.FC = () => {
               </div>
               <div className="flex items-center text-gray-300">
                 <FiMapPin className="mr-3 text-[#EEC71B]" />
-                <span>Jelgava, Latvia</span>
+                <span>Latvia</span>
               </div>
               <div className="flex items-center text-gray-300">
                 <FiClock className="mr-3 text-[#EEC71B]" />
