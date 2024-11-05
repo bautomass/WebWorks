@@ -718,8 +718,8 @@ const PakalpojumiPage: React.FC = () => {
   );
 
   // FAQ expansion handling
-  const handleFAQExpand = useCallback((index: number) => {
-    setExpandedFAQ((prev) => (prev === index ? null : index));
+  const handleFAQExpand = useCallback((index: number | null) => {
+    setExpandedFAQ(index);
   }, []);
 
   // Keyboard navigation for FAQ section
