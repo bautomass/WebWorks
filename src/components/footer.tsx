@@ -143,13 +143,13 @@ const Footer: React.FC = () => {
     { title: "Dokumentacija", url: "/dokumentacija" },
     { title: "Biezak Uzdotie Jautajumi", url: "/faq-page" },
     { title: "API Dokumentacija", url: "/api-docs" },
-    { title: "Web Izstrades Vadlinijas", url: "/vadlinijas" },
+    { title: "Web Izstrades Vadlinijas", url: "/info/vadlinijas" },
   ];
 
   const companyInfo: ResourceLink[] = [
     { title: "Par Mums", url: "/about-us" },
-    { title: "Karjera", url: "/karjera" },
-    { title: "Partneri", url: "/partneri" },
+    { title: "Karjera", url: "/info/karjera" },
+    { title: "Partneri", url: "/info/partneri" },
     { title: "Kontakti", url: "/contact-us" },
   ];
 
@@ -356,7 +356,7 @@ const Footer: React.FC = () => {
           </p>
           <div className="flex space-x-4 mt-4 md:mt-0">
             <Link
-              href="/privatuma-politika"
+              href="/info/privatuma-politika"
               className="hover:text-[#EEC71B] transition-colors duration-300"
             >
               Privātuma Politika
