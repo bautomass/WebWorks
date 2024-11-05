@@ -154,18 +154,6 @@ const menuItems: MenuItem[] = [
         description: "Pielāgotu web aplikāciju izstrāde",
         icon: FiLayers,
       },
-      {
-        name: "Kiberdrošības Pakalpojumi",
-        href: "#",
-        description: "Visaptveroši kiberdrošības risinājumi",
-        icon: FiShield,
-      },
-      {
-        name: "Mājas Lapu Uzturēšana un Atjaunināšana",
-        href: "#",
-        description: "Regulāra mājas lapu apkope un atjaunināšana",
-        icon: FiRefreshCw,
-      },
     ],
   },
   { name: "Faq", href: "/faq-page" },
