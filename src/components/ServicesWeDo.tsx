@@ -665,7 +665,6 @@ const PakalpojumiPage: React.FC = () => {
           </motion.section>
         </main>
 
-        {/* Scroll to top button */}
         <motion.button
           initial={{ opacity: 0 }}
           animate={{
@@ -691,8 +690,6 @@ const PakalpojumiPage: React.FC = () => {
             />
           </svg>
         </motion.button>
-
-        {/* Loading indicator for dynamic imports */}
         <div
           role="progressbar"
           aria-valuemin={0}
