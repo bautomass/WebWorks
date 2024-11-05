@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "../utils/supabase";
 import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Footer from "../components/footer";
 import Script from "next/script";
 import {
   FiUsers,
