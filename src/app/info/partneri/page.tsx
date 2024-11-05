@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     type: "website",
   },
   alternates: {
-    canonical: "https://www.webworks.lv/partneri",
+    canonical: "https://www.webworks.lv/info/partneri",
   },
   robots: {
     index: true,

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     type: "website",
   },
   alternates: {
-    canonical: "https://www.webworks.lv/vadlinijas",
+    canonical: "https://www.webworks.lv/info/vadlinijas",
   },
   robots: {
     index: true,

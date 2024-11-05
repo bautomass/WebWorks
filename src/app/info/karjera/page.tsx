@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     type: "website",
   },
   alternates: {
-    canonical: "https://www.webworks.lv/karjera",
+    canonical: "https://www.webworks.lv/info/karjera",
   },
   robots: {
     index: true,
