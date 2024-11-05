@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef,
+} from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiMonitor,
@@ -20,42 +26,126 @@ import {
   FiExternalLink,
   FiClock,
   FiGlobe,
-  IconType,
+  type IconType,
 } from "react-icons/fi";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import DownArrowGuide from "../components/DownArrowGuide";
-import DoContainer from "../components/DoContainer";
-import WhyChooseWebWorksSection from "./WhyChooseWebWorksSection";
-import OurInnovativeApproachesSection from "./InnovativeApproaches";
-import CallToAction from "./CallToAction";
-import TechStack from "./techStack";
+import dynamic from "next/dynamic";
 
+const DownArrowGuide = dynamic(() => import("../components/DownArrowGuide"), {
+  ssr: false,
+});
+const DoContainer = dynamic(() => import("../components/DoContainer"), {
+  ssr: false,
+});
+const WhyChooseWebWorksSection = dynamic(
+  () => import("./WhyChooseWebWorksSection"),
+  {
+    ssr: false,
+  }
+);
+const OurInnovativeApproachesSection = dynamic(
+  () => import("./InnovativeApproaches"),
+  {
+    ssr: false,
+  }
+);
+const CallToAction = dynamic(() => import("./CallToAction"), {
+  ssr: false,
+});
+const TechStack = dynamic(() => import("./techStack"), {
+  ssr: false,
+});
+
+// Types
 interface Service {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  details: string[];
-  caseStudy: {
-    client: string;
-    result: string;
+  readonly icon: React.ReactNode;
+  readonly title: string;
+  readonly description: string;
+  readonly details: readonly string[];
+  readonly caseStudy: {
+    readonly result: string;
+    readonly timeline: string;
   };
-  link: string;
+  readonly link: string;
 }
 
 interface ServiceCardProps {
-  service: Service;
-  isSelected: boolean;
-  onClick: () => void;
+  readonly service: Service;
+  readonly isSelected: boolean;
+  readonly onClick: () => void;
 }
 
 interface FAQ {
-  q: string;
-  a: string;
-  icon: React.ReactElement<IconType>;
+  readonly q: string;
+  readonly a: string;
+  readonly icon: React.ReactElement<IconType>;
 }
 
+interface FAQCardProps {
+  readonly faq: FAQ;
+  readonly index: number;
+  readonly expandedFAQ: number | null;
+  readonly setExpandedFAQ: (index: number | null) => void;
+}
+
+// Sparkle Components
+const Sparkle: React.FC<{ delay: number; position: string }> = React.memo(
+  ({ delay, position }) => {
+    const sparkleVariants = {
+      animate: {
+        scale: [0, 1, 0],
+        opacity: [0, 1, 0],
+        y: [0, -10, -20],
+        x: [0, 5, 10],
+      },
+    };
+
+    return (
+      <motion.div
+        className={`absolute w-1 h-1 bg-[#EEC71B] rounded-full ${position}`}
+        initial={{ scale: 0, opacity: 0 }}
+        animate="animate"
+        variants={sparkleVariants}
+        transition={{
+          duration: 1.5,
+          delay,
+          repeat: Infinity,
+          repeatDelay: 2,
+        }}
+      />
+    );
+  }
+);
+
+Sparkle.displayName = "Sparkle";
+
+const SparkleGroup: React.FC = React.memo(() => {
+  const positions = useMemo(
+    () => [
+      "top-1/4 left-1/4",
+      "top-1/3 right-1/4",
+      "bottom-1/4 left-1/3",
+      "top-1/2 right-1/3",
+      "bottom-1/3 right-1/4",
+      "bottom-1/2 left-1/4",
+    ],
+    []
+  );
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {positions.map((position, index) => (
+        <Sparkle key={position} position={position} delay={index * 0.2} />
+      ))}
+    </div>
+  );
+});
+
+SparkleGroup.displayName = "SparkleGroup";
+
+// Services Data
 const services: ReadonlyArray<Service> = [
   {
     icon: <FiMonitor />,
@@ -69,8 +159,9 @@ const services: ReadonlyArray<Service> = [
       "Integrācija ar populārākajām CMS platformām",
     ],
     caseStudy: {
-      client: "Zaļā Kafija",
-      result: "300% pieaugums tiešsaistes pārdošanā",
+      result:
+        "Vietējam restorānam izveidojām jaunu mājaslapu, kas uzlaboja mobilos pasūtījumus par 47%. Google Core Web Vitals rādītāji sasniedza zaļo līmeni visos mērījumos.",
+      timeline: "Projekts realizēts 6 nedēļās",
     },
     link: "/pakalpojumi/web-izstrade",
   },
@@ -86,8 +177,9 @@ const services: ReadonlyArray<Service> = [
       "Pastāvīga atbalsta un uzturēšanas pakalpojumi",
     ],
     caseStudy: {
-      client: "FitBuddy",
-      result: "100,000+ lejupielādes pirmajā mēnesī",
+      result:
+        "Sporta centra aplikācija sasniedza 2,800 aktīvus lietotājus pirmajā mēnesī. Treniņu rezervācijas pieauga par 34%, lietotāju atsauksmes - 4.7/5.",
+      timeline: "Izstrādes periods: 4 mēneši",
     },
     link: "/pakalpojumi/mobilo-aplikaciju-izstrade",
   },
@@ -103,8 +195,9 @@ const services: ReadonlyArray<Service> = [
       "Klientu lojalitātes programmas",
     ],
     caseStudy: {
-      client: "EcoGoods",
-      result: "500% pieaugums konversijas rādītājos",
+      result:
+        "Mājražotāju kooperatīva e-veikals sasniedza 22% konversijas rādītāju. Vidējais pirkuma grozs pieauga par 31% pēc personalizācijas ieviešanas.",
+      timeline: "Izstrāde: 2 mēneši",
     },
     link: "/pakalpojumi/e-komercija",
   },
@@ -120,8 +213,9 @@ const services: ReadonlyArray<Service> = [
       "Regulāra veiktspējas analīze un ziņojumi",
     ],
     caseStudy: {
-      client: "Local Tours",
-      result: "1. vieta Google meklējumos galvenajiem atslēgvārdiem",
+      result:
+        "Veselības pakalpojumu sniedzējam organiskā satiksme pieauga par 156% 6 mēnešu laikā. Konversijas no organiskās meklēšanas uzlabojās par 43%.",
+      timeline: "6 mēnešu optimizācijas periods",
     },
     link: "/pakalpojumi/seo-optimizacija",
   },
@@ -137,8 +231,9 @@ const services: ReadonlyArray<Service> = [
       "E-pasta mārketinga kampaņas",
     ],
     caseStudy: {
-      client: "TechGadgets",
-      result: "200% ROI no digitālā mārketinga kampaņām",
+      result:
+        "B2B pakalpojumu sniedzējam LinkedIn kampaņa ģenerēja 47 kvalificētus potenciālos klientus. E-pasta kampaņu atvēršanas rādītājs pieauga līdz 32%.",
+      timeline: "3 mēnešu kampaņas periods",
     },
     link: "/pakalpojumi/digitalais-marketings",
   },
@@ -154,8 +249,9 @@ const services: ReadonlyArray<Service> = [
       "Mākslīgā intelekta integrācija",
     ],
     caseStudy: {
-      client: "LogisticsPro",
-      result: "40% efektivitātes pieaugums loģistikas procesos",
+      result:
+        "Izstrādātā noliktavas vadības sistēma samazināja pasūtījumu apstrādes laiku par 42% un uzlaboja krājumu precizitāti līdz 99.2%.",
+      timeline: "Izstrāde un ieviešana: 4 mēneši",
     },
     link: "/pakalpojumi/web-aplikacijas",
   },
@@ -171,10 +267,11 @@ const services: ReadonlyArray<Service> = [
       "Darbinieku drošības apmācības",
     ],
     caseStudy: {
-      client: "SecureBank",
-      result: "0 veiksmīgi kiberuzbrukumi pēc mūsu risinājumu ieviešanas",
+      result:
+        "Finanšu pakalpojumu uzņēmumam ieviestie protokoli novērsa 99.9% automatizēto uzbrukumu. Darbinieku drošības novērtējums pieauga no 62% līdz 94%.",
+      timeline: "Ieviests 3 mēnešu laikā",
     },
-    link: "/#",
+    link: "/pakalpojumi/kiberdrosiba",
   },
   {
     icon: <FiRefreshCw />,
@@ -188,232 +285,276 @@ const services: ReadonlyArray<Service> = [
       "Tehniskā atbalsta pakalpojumi",
     ],
     caseStudy: {
-      client: "NewsPortal",
-      result: "99.99% vietnes pieejamība gada laikā",
+      result:
+        "E-komercijas platformas optimizācija samazināja lapu ielādes laiku par 64%. Servera pieejamība sasniedza 99.98%.",
+      timeline: "Nepārtraukta uzturēšana kopš 2023. gada",
     },
-    link: "/#",
+    link: "/pakalpojumi/uzturesana",
   },
 ];
 
+// FAQ Data
+const faqs: ReadonlyArray<FAQ> = [
+  {
+    q: "Kāds ir tipiskais mājas lapas izstrādes process un laiks?",
+    a: "Mājas lapas izstrādes process ietver vairākus posmus: izpēti, plānošanu, dizainu, izstrādi, testēšanu un palaišanu. Vienkāršākiem projektiem tas var aizņemt 4-6 nedēļas, savukārt sarežģītākiem – 2-4 mēnešus. Mēs vienmēr cenšamies optimizēt procesu, saglabājot augstu kvalitāti.",
+    icon: <FiCode />,
+  },
+  {
+    q: "Kādus mājas lapu uzturēšanas pakalpojumus jūs piedāvājat?",
+    a: "Mēs piedāvājam visaptverošus mājas lapu uzturēšanas pakalpojumus, kas ietver regulārus drošības atjauninājumus, veiktspējas optimizāciju, satura pārvaldību, rezerves kopēšanu un tehnisko atbalstu. Mūsu mērķis ir nodrošināt, lai jūsu vietne vienmēr darbotos nevainojami un būtu droša.",
+    icon: <FiRefreshCw />,
+  },
+  {
+    q: "Kā jūs nodrošināt projektu termiņu ievērošanu?",
+    a: "Mēs izmantojam Agile metodoloģiju un rūpīgi plānojam katru projekta posmu. Regulāras tikšanās ar klientiem un iekšējās komandas sapulces palīdz mums sekot līdzi progresam un ātri risināt jebkādas problēmas. Mūsu mērķis ir nodrošināt ne tikai termiņu ievērošanu, bet arī augstu kvalitāti.",
+    icon: <FiClock />,
+  },
+  {
+    q: "Kā jūs nodrošināt mājas lapu drošību?",
+    a: "Drošība ir mūsu galvenā prioritāte. Mēs izmantojam jaunākos drošības protokolus, regulāri veicam drošības auditus, izmantojam SSL sertifikātus un implementējam vairāku līmeņu autentifikāciju. Turklāt mēs regulāri atjauninām visas sistēmas un apmācām klientus par labākajām drošības praksēm.",
+    icon: <FiShield />,
+  },
+  {
+    q: "Kā jūs nodrošināt, ka mājas lapa būs optimizēta meklētājprogrammām (SEO)?",
+    a: "SEO ir integrēta mūsu izstrādes procesā no paša sākuma. Mēs izmantojam jaunākās SEO prakses, tostarp tehnisko optimizāciju, satura stratēģiju un off-page SEO taktikas. Mēs arī nodrošinām, ka vietne ir ātra, mobilajām ierīcēm draudzīga un ar kvalitatīvu saturu, kas ir būtiski mūsdienu SEO prasībām.",
+    icon: <FiSearch />,
+  },
+  {
+    q: "Vai jūs varat palīdzēt ar esošas mājas lapas modernizāciju?",
+    a: "Jā, mēs specializējamies esošu mājas lapu atjaunināšanā un modernizācijā. Mūsu eksperti veic rūpīgu jūsu pašreizējās vietnes analīzi, identificē uzlabojumu iespējas un izstrādā stratēģiju, lai paaugstinātu tās veiktspēju, uzlabotu lietotāju pieredzi un palielinātu konversijas rādītājus.",
+    icon: <FiZap />,
+  },
+  {
+    q: "Kādas tehnoloģijas jūs izmantojat web risinājumu izstrādē?",
+    a: "Mēs izmantojam jaunākās un efektīvākās web tehnoloģijas, tostarp React, Vue.js, Angular front-end izstrādei, Node.js un Python back-end risinājumiem, kā arī AWS un Azure mākoņpakalpojumus hostinga risinājumiem. Mūsu pieeja ir elastīga, un mēs izvēlamies tehnoloģijas, kas vislabāk atbilst katra projekta specifiskajām vajadzībām.",
+    icon: <FiLayers />,
+  },
+  {
+    q: "Vai jūs piedāvājat atbalstu pēc projekta pabeigšanas?",
+    a: "Jā, mēs piedāvājam dažādus pēcprojekta atbalsta plānus. Tie ietver regulāru uzturēšanu, satura atjaunināšanu, veiktspējas optimizāciju un tehnisko atbalstu. Mēs uzskatām, ka ilgtermiņa partnerība ir atslēga uz jūsu digitālā projekta ilgtspējīgu panākumu.",
+    icon: <FiUsers />,
+  },
+  {
+    q: "Kā jūs pielāgojat savus pakalpojumus dažādu nozaru uzņēmumiem?",
+    a: "Mēs lepojamies ar savu spēju pielāgoties dažādu nozaru specifiskajām vajadzībām. Mūsu komanda veic padziļinātu izpēti par katru nozari, ar kuru strādājam, lai izprastu tās unikālās problēmas un iespējas. Mēs izmantojam šīs zināšanas, lai pielāgotu mūsu risinājumus, integrējot nozarei specifiskas funkcijas un labākās prakses.",
+    icon: <FiGlobe />,
+  },
+];
+
+// ServiceCard Component
 const ServiceCard: React.FC<ServiceCardProps> = React.memo(
-  ({ service, isSelected, onClick }) => (
-    <motion.div
-      layout
-      onClick={onClick}
-      className={`bg-white bg-opacity-90 rounded-lg shadow-lg p-6 cursor-pointer transition-all duration-300 ${
-        isSelected ? "col-span-2 row-span-2" : ""
-      }`}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-    >
-      <div className="text-4xl text-[#EEC71B] mb-4" aria-hidden="true">
-        {service.icon}
-      </div>
-      <h2 className="text-xl font-bold mb-2 text-[#3D3B4A]">{service.title}</h2>
-      <p className="text-gray-600 mb-4">{service.description}</p>
-      <AnimatePresence>
-        {isSelected && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <h3 className="font-bold mb-2">Galvenās Iezīmes:</h3>
-            <ul className="list-none pl-0 mb-4">
-              {service.details.map((detail, index) => (
-                <li key={index} className="flex items-center mb-2">
-                  <FiCheck className="text-[#EEC71B] mr-2" aria-hidden="true" />
-                  <span>{detail}</span>
-                </li>
-              ))}
-            </ul>
-            <Card className="bg-gray-100 mb-4">
-              <CardHeader>
-                <CardTitle className="text-lg">
-                  Veiksmes Stāsts: {service.caseStudy.client}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p>{service.caseStudy.result}</p>
-              </CardContent>
-            </Card>
-            <Button
-              asChild
-              className="w-full bg-[#EEC71B] text-[#3D3B4A] hover:bg-[#3D3B4A] hover:text-white transition-colors duration-300"
+  ({ service, isSelected, onClick }) => {
+    const cardRef = useRef<HTMLDivElement>(null);
+
+    return (
+      <motion.div
+        ref={cardRef}
+        layout
+        onClick={onClick}
+        className={`bg-white bg-opacity-90 rounded-lg shadow-lg p-6 cursor-pointer transition-all duration-300 ${
+          isSelected ? "col-span-2 row-span-2" : ""
+        }`}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        role="button"
+        tabIndex={0}
+        aria-expanded={isSelected}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onClick();
+          }
+        }}
+      >
+        <div className="text-4xl text-[#EEC71B] mb-4" aria-hidden="true">
+          {service.icon}
+        </div>
+        <h2 className="text-xl font-bold mb-2 text-[#3D3B4A]">
+          {service.title}
+        </h2>
+        <p className="text-gray-600 mb-4">{service.description}</p>
+        <AnimatePresence mode="wait">
+          {isSelected && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
             >
-              <a href={service.link}>
-                Uzzināt Vairāk
-                <FiExternalLink className="ml-2" aria-hidden="true" />
-              </a>
-            </Button>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
-  )
+              <h3 className="font-bold mb-2">Galvenās Iezīmes:</h3>
+              <ul className="list-none pl-0 mb-4" role="list">
+                {service.details.map((detail, index) => (
+                  <li key={index} className="flex items-center mb-2">
+                    <FiCheck
+                      className="text-[#EEC71B] mr-2"
+                      aria-hidden="true"
+                    />
+                    <span>{detail}</span>
+                  </li>
+                ))}
+              </ul>
+              <Card className="bg-gradient-to-br from-white to-gray-50 mb-4 overflow-hidden relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#EEC71B]/5 to-transparent" />
+                <SparkleGroup />
+                <CardHeader className="border-b border-gray-100">
+                  <CardTitle className="text-lg">Veiksmes Stāsts</CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <div className="space-y-2">
+                    <p className="text-gray-700">{service.caseStudy.result}</p>
+                    <div className="flex items-center gap-2 text-sm text-gray-500 mt-2">
+                      <FiClock className="text-[#EEC71B]" aria-hidden="true" />
+                      <span>{service.caseStudy.timeline}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Button
+                asChild
+                className="w-full bg-[#EEC71B] text-[#3D3B4A] hover:bg-[#3D3B4A] hover:text-white transition-colors duration-300"
+              >
+                <a
+                  href={service.link}
+                  onClick={(e) => e.stopPropagation()}
+                  className="flex items-center justify-center"
+                >
+                  <span>Uzzināt Vairāk</span>
+                  <FiExternalLink className="ml-2" aria-hidden="true" />
+                </a>
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    );
+  }
 );
 
 ServiceCard.displayName = "ServiceCard";
 
-const FAQCard: React.FC<{
-  faq: FAQ;
-  index: number;
-  expandedFAQ: number | null;
-  setExpandedFAQ: (index: number | null) => void;
-}> = React.memo(({ faq, index, expandedFAQ, setExpandedFAQ }) => {
-  const isExpanded = expandedFAQ === index;
-  const isAnyExpanded = expandedFAQ !== null;
+// FAQ Card Component
+const FAQCard: React.FC<FAQCardProps> = React.memo(
+  ({ faq, index, expandedFAQ, setExpandedFAQ }) => {
+    const isExpanded = expandedFAQ === index;
+    const isAnyExpanded = expandedFAQ !== null;
 
-  return (
-    <motion.div
-      className={`bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 flex flex-col
-          ${
-            isAnyExpanded && !isExpanded ? "opacity-40 pointer-events-none" : ""
-          }
-          ${isExpanded ? "row-span-2" : ""}`}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.1 * index }}
-    >
-      <div className="p-6 flex-grow flex flex-col">
-        <button
-          className="flex items-center mb-4 cursor-pointer w-full text-left"
-          onClick={() => setExpandedFAQ(isExpanded ? null : index)}
-          aria-expanded={isExpanded}
-        >
-          <motion.div
-            className="text-3xl text-[#EEC71B] mr-4 flex-shrink-0"
-            animate={
-              isExpanded
-                ? {}
-                : {
-                    scale: [1, 1.1, 1],
-                    transition: { repeat: Infinity, duration: 2 },
-                  }
-            }
-            aria-hidden="true"
-          >
-            {faq.icon}
-          </motion.div>
-          <h3 className="font-bold text-lg text-[#3D3B4A]">{faq.q}</h3>
-        </button>
-        <AnimatePresence>
-          {isExpanded && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="mt-2"
-            >
-              <p className="text-gray-700">{faq.a}</p>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-      <button
-        className={`w-full p-4 text-left focus:outline-none bg-gray-100 hover:bg-gray-200 transition-colors duration-300 cursor-pointer mt-auto`}
-        onClick={() => setExpandedFAQ(isExpanded ? null : index)}
+    const handleKeyDown = useCallback(
+      (e: React.KeyboardEvent) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          setExpandedFAQ(isExpanded ? null : index);
+        }
+      },
+      [isExpanded, index, setExpandedFAQ]
+    );
+
+    return (
+      <motion.div
+        className={`bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 flex flex-col
+        ${isAnyExpanded && !isExpanded ? "opacity-40 pointer-events-none" : ""}
+        ${isExpanded ? "row-span-2" : ""}`}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 * index }}
       >
-        <div className="flex justify-between items-center">
-          <span className="font-semibold text-[#3D3B4A]">
-            {isExpanded ? "Aizvērt" : "Lasīt vairāk"}
-          </span>
-          {isExpanded ? (
-            <FiMinusCircle
-              className="text-[#EEC71B] text-xl"
+        <div className="p-6 flex-grow flex flex-col">
+          <button
+            className="flex items-center mb-4 cursor-pointer w-full text-left focus:outline-none focus:ring-2 focus:ring-[#EEC71B] rounded"
+            onClick={() => setExpandedFAQ(isExpanded ? null : index)}
+            onKeyDown={handleKeyDown}
+            aria-expanded={isExpanded}
+          >
+            <motion.div
+              className="text-3xl text-[#EEC71B] mr-4 flex-shrink-0"
+              animate={
+                isExpanded
+                  ? {}
+                  : {
+                      scale: [1, 1.1, 1],
+                      transition: { repeat: Infinity, duration: 2 },
+                    }
+              }
               aria-hidden="true"
-            />
-          ) : (
-            <FiPlusCircle
-              className="text-[#EEC71B] text-xl"
-              aria-hidden="true"
-            />
-          )}
+            >
+              {faq.icon}
+            </motion.div>
+            <h3 className="font-bold text-lg text-[#3D3B4A]">{faq.q}</h3>
+          </button>
+          <AnimatePresence mode="wait">
+            {isExpanded && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+                className="mt-2"
+              >
+                <p className="text-gray-700">{faq.a}</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-      </button>
-    </motion.div>
-  );
-});
+        <button
+          className="w-full p-4 text-left focus:outline-none focus:ring-2 focus:ring-[#EEC71B] bg-gray-100 hover:bg-gray-200 transition-colors duration-300 cursor-pointer mt-auto"
+          onClick={() => setExpandedFAQ(isExpanded ? null : index)}
+        >
+          <div className="flex justify-between items-center">
+            <span className="font-semibold text-[#3D3B4A]">
+              {isExpanded ? "Aizvērt" : "Lasīt vairāk"}
+            </span>
+            {isExpanded ? (
+              <FiMinusCircle
+                className="text-[#EEC71B] text-xl"
+                aria-hidden="true"
+              />
+            ) : (
+              <FiPlusCircle
+                className="text-[#EEC71B] text-xl"
+                aria-hidden="true"
+              />
+            )}
+          </div>
+        </button>
+      </motion.div>
+    );
+  }
+);
 
 FAQCard.displayName = "FAQCard";
 
+// Main PakalpojumiPage Component
 const PakalpojumiPage: React.FC = () => {
   const [selectedService, setSelectedService] = useState<number | null>(null);
   const [scrollProgress, setScrollProgress] = useState<number>(0);
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
+  const scrollListener = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      const totalScroll =
-        document.documentElement.scrollHeight - window.innerHeight;
-      const currentScroll = window.pageYOffset;
-      setScrollProgress(currentScroll / totalScroll);
+      requestAnimationFrame(() => {
+        const totalScroll =
+          document.documentElement.scrollHeight - window.innerHeight;
+        const currentScroll = window.pageYOffset;
+        setScrollProgress(currentScroll / totalScroll);
+      });
     };
 
+    scrollListener.current = handleScroll;
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    return () => {
+      if (scrollListener.current) {
+        window.removeEventListener("scroll", scrollListener.current);
+      }
+    };
   }, []);
 
-  const faqs: ReadonlyArray<FAQ> = useMemo(
-    () => [
-      {
-        q: "Kāds ir tipiskais mājas lapas izstrādes process un laiks?",
-        a: "Mājas lapas izstrādes process ietver vairākus posmus: izpēti, plānošanu, dizainu, izstrādi, testēšanu un palaišanu. Vienkāršākiem projektiem tas var aizņemt 4-6 nedēļas, savukārt sarežģītākiem – 2-4 mēnešus. Mēs vienmēr cenšamies optimizēt procesu, saglabājot augstu kvalitāti.",
-        icon: <FiCode />,
-      },
-      {
-        q: "Kādus mājas lapu uzturēšanas pakalpojumus jūs piedāvājat?",
-        a: "Mēs piedāvājam visaptverošus mājas lapu uzturēšanas pakalpojumus, kas ietver regulārus drošības atjauninājumus, veiktspējas optimizāciju, satura pārvaldību, rezerves kopēšanu un tehnisko atbalstu. Mūsu mērķis ir nodrošināt, lai jūsu vietne vienmēr darbotos nevainojami un būtu droša.",
-        icon: <FiRefreshCw />,
-      },
-      {
-        q: "Kā jūs nodrošināt projektu termiņu ievērošanu?",
-        a: "Mēs izmantojam Agile metodoloģiju un rūpīgi plānojam katru projekta posmu. Regulāras tikšanās ar klientiem un iekšējās komandas sapulces palīdz mums sekot līdzi progresam un ātri risināt jebkādas problēmas. Mūsu mērķis ir nodrošināt ne tikai termiņu ievērošanu, bet arī augstu kvalitāti.",
-        icon: <FiClock />,
-      },
-      {
-        q: "Kā jūs nodrošināt mājas lapu drošību?",
-        a: "Drošība ir mūsu galvenā prioritāte. Mēs izmantojam jaunākos drošības protokolus, regulāri veicam drošības auditus, izmantojam SSL sertifikātus un implementējam vairāku līmeņu autentifikāciju. Turklāt mēs regulāri atjauninām visas sistēmas un apmācām klientus par labākajām drošības praksēm.",
-        icon: <FiShield />,
-      },
-      {
-        q: "Kā jūs nodrošināt, ka mājas lapa būs optimizēta meklētājprogrammām (SEO)?",
-        a: "SEO ir integrēta mūsu izstrādes procesā no paša sākuma. Mēs izmantojam jaunākās SEO prakses, tostarp tehnisko optimizāciju, satura stratēģiju un off-page SEO taktikas. Mēs arī nodrošinām, ka vietne ir ātra, mobilajām ierīcēm draudzīga un ar kvalitatīvu saturu, kas ir būtiski mūsdienu SEO prasībām.",
-        icon: <FiSearch />,
-      },
-      {
-        q: "Vai jūs varat palīdzēt ar esošas mājas lapas modernizāciju?",
-        a: "Jā, mēs specializējamies esošu mājas lapu atjaunināšanā un modernizācijā. Mūsu eksperti veic rūpīgu jūsu pašreizējās vietnes analīzi, identificē uzlabojumu iespējas un izstrādā stratēģiju, lai paaugstinātu tās veiktspēju, uzlabotu lietotāju pieredzi un palielinātu konversijas rādītājus.",
-        icon: <FiZap />,
-      },
-      {
-        q: "Kādas tehnoloģijas jūs izmantojat web risinājumu izstrādē?",
-        a: "Mēs izmantojam jaunākās un efektīvākās web tehnoloģijas, tostarp React, Vue.js, Angular front-end izstrādei, Node.js un Python back-end risinājumiem, kā arī AWS un Azure mākoņpakalpojumus hostinga risinājumiem. Mūsu pieeja ir elastīga, un mēs izvēlamies tehnoloģijas, kas vislabāk atbilst katra projekta specifiskajām vajadzībām.",
-        icon: <FiLayers />,
-      },
-      {
-        q: "Vai jūs piedāvājat atbalstu pēc projekta pabeigšanas?",
-        a: "Jā, mēs piedāvājam dažādus pēcprojekta atbalsta plānus. Tie ietver regulāru uzturēšanu, satura atjaunināšanu, veiktspējas optimizāciju un tehnisko atbalstu. Mēs uzskatām, ka ilgtermiņa partnerība ir atslēga uz jūsu digitālā projekta ilgtspējīgu panākumu.",
-        icon: <FiUsers />,
-      },
-      {
-        q: "Kā jūs pielāgojat savus pakalpojumus dažādu nozaru uzņēmumiem?",
-        a: "Mēs lepojamies ar savu spēju pielāgoties dažādu nozaru specifiskajām vajadzībām. Mūsu komanda veic padziļinātu izpēti par katru nozari, ar kuru strādājam, lai izprastu tās unikālās problēmas un iespējas. Mēs izmantojam šīs zināšanas, lai pielāgotu mūsu risinājumus, integrējot nozarei specifiskas funkcijas un labākās prakses. Turklāt mēs cieši sadarbojamies ar klientiem, lai nodrošinātu, ka mūsu risinājumi pilnībā atbilst viņu biznesa mērķiem un nozares standartiem.",
-        icon: <FiGlobe />,
-      },
-    ],
-    []
-  );
-
   const handleServiceClick = useCallback((index: number) => {
-    setSelectedService((prevSelected) =>
-      prevSelected === index ? null : index
-    );
+    setSelectedService((prev) => (prev === index ? null : index));
   }, []);
 
   const handleFAQExpand = useCallback((index: number) => {
-    setExpandedFAQ((prevExpanded) => (prevExpanded === index ? null : index));
+    setExpandedFAQ((prev) => (prev === index ? null : index));
   }, []);
 
   return (
@@ -432,7 +573,6 @@ const PakalpojumiPage: React.FC = () => {
             transition={{ duration: 0.5 }}
             className="text-center mb-16 relative"
           >
-            {/* Subtle design elements */}
             <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl">
               <div className="relative mb-4">
                 <div className="w-full h-2 bg-[#8CB8B4] rounded-full blur-[3px]"></div>
@@ -461,6 +601,7 @@ const PakalpojumiPage: React.FC = () => {
               </p>
             </div>
           </motion.div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {services.map((service, index) => (
               <ServiceCard
@@ -471,8 +612,9 @@ const PakalpojumiPage: React.FC = () => {
               />
             ))}
           </div>
+
           <WhyChooseWebWorksSection />
-          {/* Enhanced FAQ Section */}
+
           <motion.section
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -494,13 +636,90 @@ const PakalpojumiPage: React.FC = () => {
               ))}
             </div>
           </motion.section>
-          <OurInnovativeApproachesSection />
-          <TechStack />
-          <CallToAction />
+
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 1.2 }}
+            className="mt-24"
+          >
+            <OurInnovativeApproachesSection />
+          </motion.section>
+
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 1.5 }}
+            className="mt-24"
+          >
+            <TechStack />
+          </motion.section>
+
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 1.8 }}
+            className="mt-24 mb-16"
+          >
+            <CallToAction />
+          </motion.section>
         </main>
+
+        {/* Scroll to top button */}
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{
+            opacity: scrollProgress > 0.2 ? 1 : 0,
+            y: scrollProgress > 0.2 ? 0 : 20,
+          }}
+          className="fixed bottom-8 right-8 bg-[#EEC71B] text-[#3D3B4A] p-4 rounded-full shadow-lg hover:bg-[#3D3B4A] hover:text-white transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#EEC71B] focus:ring-offset-2"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          aria-label="Scroll to top"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M5 10l7-7m0 0l7 7m-7-7v18"
+            />
+          </svg>
+        </motion.button>
+
+        {/* Loading indicator for dynamic imports */}
+        <div
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={scrollProgress * 100}
+          className="sr-only"
+        >
+          Loading progress: {Math.round(scrollProgress * 100)}%
+        </div>
+
+        {/* Keyboard navigation helper */}
+        <div className="sr-only">
+          Use tab to navigate between services and press Enter to expand them.
+          Use arrow keys to navigate between FAQ items.
+        </div>
       </div>
     </TooltipProvider>
   );
 };
+
+export const getStaticProps = async () => {
+  return {
+    props: {},
+    revalidate: 60 * 60 * 24,
+  };
+};
+
+PakalpojumiPage.displayName = "PakalpojumiPage";
 
 export default React.memo(PakalpojumiPage);
