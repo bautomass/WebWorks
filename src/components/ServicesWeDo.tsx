@@ -41,6 +41,7 @@ interface Service {
     client: string;
     result: string;
   };
+  link: string;
 }
 
 interface ServiceCardProps {
@@ -71,6 +72,7 @@ const services: ReadonlyArray<Service> = [
       client: "Zaļā Kafija",
       result: "300% pieaugums tiešsaistes pārdošanā",
     },
+    link: "/pakalpojumi/web-izstrade",
   },
   {
     icon: <FiSmartphone />,
@@ -87,6 +89,7 @@ const services: ReadonlyArray<Service> = [
       client: "FitBuddy",
       result: "100,000+ lejupielādes pirmajā mēnesī",
     },
+    link: "/pakalpojumi/mobilo-aplikaciju-izstrade",
   },
   {
     icon: <FiShoppingCart />,
@@ -103,6 +106,7 @@ const services: ReadonlyArray<Service> = [
       client: "EcoGoods",
       result: "500% pieaugums konversijas rādītājos",
     },
+    link: "/pakalpojumi/e-komercija",
   },
   {
     icon: <FiSearch />,
@@ -119,6 +123,7 @@ const services: ReadonlyArray<Service> = [
       client: "Local Tours",
       result: "1. vieta Google meklējumos galvenajiem atslēgvārdiem",
     },
+    link: "/pakalpojumi/seo-optimizacija",
   },
   {
     icon: <FiBarChart />,
@@ -135,6 +140,7 @@ const services: ReadonlyArray<Service> = [
       client: "TechGadgets",
       result: "200% ROI no digitālā mārketinga kampaņām",
     },
+    link: "/pakalpojumi/digitalais-marketings",
   },
   {
     icon: <FiLayers />,
@@ -151,6 +157,7 @@ const services: ReadonlyArray<Service> = [
       client: "LogisticsPro",
       result: "40% efektivitātes pieaugums loģistikas procesos",
     },
+    link: "/pakalpojumi/web-aplikacijas",
   },
   {
     icon: <FiShield />,
@@ -167,6 +174,7 @@ const services: ReadonlyArray<Service> = [
       client: "SecureBank",
       result: "0 veiksmīgi kiberuzbrukumi pēc mūsu risinājumu ieviešanas",
     },
+    link: "/#",
   },
   {
     icon: <FiRefreshCw />,
@@ -183,6 +191,7 @@ const services: ReadonlyArray<Service> = [
       client: "NewsPortal",
       result: "99.99% vietnes pieejamība gada laikā",
     },
+    link: "/#",
   },
 ];
 
@@ -232,11 +241,7 @@ const ServiceCard: React.FC<ServiceCardProps> = React.memo(
               asChild
               className="w-full bg-[#EEC71B] text-[#3D3B4A] hover:bg-[#3D3B4A] hover:text-white transition-colors duration-300"
             >
-              <a
-                href={`/services/${service.title
-                  .toLowerCase()
-                  .replace(/\s+/g, "-")}`}
-              >
+              <a href={service.link}>
                 Uzzināt Vairāk
                 <FiExternalLink className="ml-2" aria-hidden="true" />
               </a>
