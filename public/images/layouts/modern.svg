@@ -1,0 +1,54 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="headerGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1E40AF"/>
+      <stop offset="100%" style="stop-color:#3B82F6"/>
+    </linearGradient>
+    <linearGradient id="contentGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2563EB"/>
+      <stop offset="100%" style="stop-color:#1E40AF"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background Pattern -->
+  <rect width="800" height="400" fill="#F8FAFC"/>
+  <path d="M0 0 L800 0 L800 400 L0 400 Z" fill="#F8FAFC" stroke="#EFF6FF" strokeWidth="1" strokeDasharray="4 4"/>
+  
+  <!-- Floating Header -->
+  <rect x="40" y="30" width="720" height="50" fill="url(#headerGrad2)" rx="25"/>
+  <circle cx="80" cy="55" r="15" fill="#93C5FD"/>
+  
+  <!-- Header Elements -->
+  <rect x="500" y="42" width="220" height="26" fill="#60A5FA" rx="13"/>
+  <circle cx="740" cy="55" r="8" fill="#FFFFFF"/>
+  <circle cx="710" cy="55" r="8" fill="#FFFFFF"/>
+  
+  <!-- Main Content Area -->
+  <rect x="40" y="100" width="340" height="280" fill="url(#contentGrad2)" rx="16"/>
+  <rect x="60" y="130" width="300" height="30" fill="#FFFFFF" rx="4"/>
+  <rect x="60" y="170" width="300" height="80" fill="#93C5FD" rx="8"/>
+  <rect x="60" y="260" width="300" height="80" fill="#93C5FD" rx="8"/>
+  
+  <!-- Interactive Side Sections -->
+  <g>
+    <rect x="400" y="100" width="360" height="130" fill="#3B82F6" rx="16"/>
+    <rect x="420" y="120" width="320" height="90" fill="#93C5FD" rx="8"/>
+    <!-- Decorative Elements -->
+    <circle cx="440" cy="140" r="6" fill="#1E40AF"/>
+    <circle cx="460" cy="140" r="6" fill="#1E40AF"/>
+    <path d="M720 180 L740 160 L740 200 Z" fill="#1E40AF"/>
+  </g>
+  
+  <g>
+    <rect x="400" y="250" width="360" height="130" fill="#3B82F6" rx="16"/>
+    <rect x="420" y="270" width="320" height="90" fill="#93C5FD" rx="8"/>
+    <!-- Decorative Elements -->
+    <circle cx="440" cy="290" r="6" fill="#1E40AF"/>
+    <circle cx="460" cy="290" r="6" fill="#1E40AF"/>
+    <path d="M720 330 L740 310 L740 350 Z" fill="#1E40AF"/>
+  </g>
+  
+  <!-- Floating Elements -->
+  <circle cx="720" cy="80" r="20" fill="#60A5FA" opacity="0.2"/>
+  <circle cx="680" cy="60" r="15" fill="#60A5FA" opacity="0.2"/>
+</svg>

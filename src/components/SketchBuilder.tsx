@@ -485,7 +485,7 @@ const layouts: Layout[] = [
     id: "classic",
     name: "Klasiskais",
     description: "Tradicionals, pārbaudīts izkārtojums ar skaidru hierarhiju",
-    image: "/layouts/classic.svg",
+    image: "/images/layouts/classic.svg",
     priceModifier: 1,
     recommendedFor: ["business", "portfolio", "business-card"],
     features: ["header", "footer", "navigation", "sidebar"],
@@ -494,7 +494,7 @@ const layouts: Layout[] = [
     id: "modern",
     name: "Modernais",
     description: "Mūsdienīgs izkārtojums ar dinamiskām sekcijām",
-    image: "/layouts/modern.svg",
+    image: "/images/layouts/modern.svg",
     priceModifier: 1.2,
     recommendedFor: ["portfolio", "landing", "starter-blog"],
     features: ["animations", "parallax", "smoothScroll", "fullscreen"],
@@ -503,7 +503,7 @@ const layouts: Layout[] = [
     id: "minimal",
     name: "Minimālais",
     description: "Vienkāršs un elegants dizains ar fokusu uz saturu",
-    image: "/layouts/minimal.svg",
+    image: "/images/layouts/minimal.svg",
     priceModifier: 0.9,
     recommendedFor: ["portfolio", "business-card", "landing"],
     features: ["whitespace", "typography", "cleanNav"],
@@ -1120,7 +1120,13 @@ const LayoutStep: React.FC<StepProps> = ({ project, updateProject }) => {
               <img
                 src={layout.image}
                 alt={`${layout.name} layout`}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                  objectFit: "contain",
+                  aspectRatio: "16/9",
+                }}
               />
             </div>
 
