@@ -700,7 +700,7 @@ const BlogSystem: React.FC = () => {
     </article>
   );
   return (
-    <div className="min-h-screen flex bg-gray-50">
+    <div className="min-h-screen w-full flex bg-gray-50">
       {/* Sidebar */}
       <aside
         className={`
