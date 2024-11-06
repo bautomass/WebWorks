@@ -62,7 +62,7 @@ const EnhancedInteractiveCTASection: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          Pārveidojiet Savu Biznesu ar WebWorks
+          Atklājiet Jaunas Digitālās Iespējas ar WebWorks
         </motion.h2>
         <motion.p
           className="text-xl text-gray-700 mb-12 max-w-3xl mx-auto text-center"
@@ -70,43 +70,43 @@ const EnhancedInteractiveCTASection: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          Digitālā transformācija nav tikai par tehnoloģijām - tā ir par jūsu
-          biznesa nākotni. Ar WebWorks, jūs iegūstat partneri, kas ne tikai
-          saprot jaunākās tendences, bet arī to, kā tās var palīdzēt jūsu
-          biznesam augt un attīstīties.
+          Mūsdienu digitālajā laikmetā katram uzņēmumam ir iespēja izcelties. Kā
+          jauns un inovatīvs digitālo risinājumu uzņēmums, mēs piedāvājam svaigu
+          skatījumu un mūsdienīgas pieejas, kas palīdzēs jūsu biznesam ne tikai
+          sekot līdzi laikam, bet būt soli priekšā konkurentiem.
         </motion.p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           <InteractiveCard
             icon={<FiAward />}
-            title="Pierādīta Pieredze"
-            description="Ar vairāk nekā 10 gadu pieredzi digitālajā nozarē, mēs esam palīdzējuši simtiem uzņēmumu sasniegt savus mērķus."
+            title="Inovatīva Pieeja"
+            description="Mēs ienesam svaigu skatījumu jūsu biznesa digitalizācijā, izmantojot jaunākās tehnoloģijas un radošus risinājumus."
             achievements={[
-              "500+ veiksmīgi pabeigti projekti",
-              "98% klientu apmierinātība",
-              "Nozares atzinības un balvas",
+              "Personalizēti risinājumi katram klientam",
+              "Modernās tehnoloģijas par saprātīgu cenu",
+              "Ātra un efektīva projektu īstenošana",
             ]}
             color="text-yellow-500"
           />
           <InteractiveCard
             icon={<FiTrendingUp />}
-            title="Izmērāmi Rezultāti"
-            description="Mūsu fokuss ir uz reāliem, izmērāmiem rezultātiem, kas tiešā veidā ietekmē jūsu biznesa panākumus."
+            title="Reāli Biznesa Ieguvumi"
+            description="Mūsu mērķis ir radīt digitālos risinājumus, kas tiešā veidā veicina jūsu biznesa izaugsmi un peļņu."
             achievements={[
-              "Vidēji 200% ROI mūsu klientiem",
-              "35% pieaugums konversijās",
-              "50% uzlabojums vietnes ātrumā",
+              "Uzlabota klientu pieredze un piesaiste",
+              "Optimizēti biznesa procesi",
+              "Mērāmi rezultāti un atdeve",
             ]}
             color="text-green-500"
           />
           <InteractiveCard
             icon={<FiShield />}
-            title="Ilgtermiņa Partnerība"
-            description="Mēs neesam tikai pakalpojumu sniedzēji - mēs esam jūsu ilgtermiņa partneri digitālajā izaugsmē."
+            title="Uzticams Partneris"
+            description="Mēs ticam ilgtermiņa attiecībām un esam gatavi augt kopā ar jūsu uzņēmumu."
             achievements={[
-              "Nepārtraukts atbalsts un uzturēšana",
-              "Regulāras stratēģiskās konsultācijas",
-              "Elastīga pieeja mainīgām vajadzībām",
+              "24/7 tehniskais atbalsts",
+              "Regulāras sistēmu atjauninājumi",
+              "Elastīga pieeja jūsu vajadzībām",
             ]}
             color="text-blue-500"
           />
@@ -119,14 +119,14 @@ const EnhancedInteractiveCTASection: React.FC = () => {
           transition={{ delay: 0.5 }}
         >
           <h2 className="text-3xl font-bold mb-6 text-center">
-            Gatavi Sākt Savu Digitālo Transformāciju?
+            Gatavi Uzsākt Kaut Ko Jaunu?
           </h2>
           <p className="text-xl mb-8 text-center max-w-3xl mx-auto">
-            Neatkarīgi no tā, vai jūs vēlaties uzlabot savu esošo digitālo
-            klātbūtni vai sākt pilnīgi no jauna, mūsu komanda ir gatava palīdzēt
-            jums sasniegt un pārsniegt jūsu mērķus. Kopā mēs varam izstrādāt
-            stratēģiju, kas ne tikai atbilst jūsu šodienas vajadzībām, bet arī
-            nodrošina pamatu ilgtermiņa izaugsmei un panākumiem.
+            Katrs veiksmīgs bizness sākas ar pirmo soli digitālajā pasaulē.
+            Ļaujiet mums būt jūsu ceļabiedriem šajā aizraujošajā ceļojumā! Mēs
+            piedāvājam ne tikai tehnoloģiskos risinājumus, bet arī skaidru
+            vīziju un stratēģiju jūsu biznesa digitālajai transformācijai. Kopā
+            mēs varam radīt kaut ko īpašu.
           </p>
           <div className="flex justify-center">
             <Button
@@ -139,7 +139,7 @@ const EnhancedInteractiveCTASection: React.FC = () => {
                 whileTap={{ scale: 0.95 }}
                 className="flex items-center"
               >
-                Sazinies Ar Mums
+                Sāciet Savu Digitālo Ceļojumu
                 <FiArrowRight className="ml-2 transition-transform duration-300 group-hover:translate-x-2" />
               </motion.a>
             </Button>
