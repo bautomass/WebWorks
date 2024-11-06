@@ -17,8 +17,8 @@ import {
   FiUsers,
 } from "react-icons/fi";
 import { supabase } from "../utils/supabase";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import Header from "../components/Header";
+import Footer from "../components/footer";
 import confetti from "canvas-confetti";
 
 // Types
