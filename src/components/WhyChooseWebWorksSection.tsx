@@ -66,7 +66,7 @@ const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
   }, [items.length]);
 
   return (
-    <div className="relative w-full h-full overflow-hidden rounded-lg shadow-2xl bg-gradient-to-br from-[#8CB8B4] to-[#EEC71B]">
+    <div className="relative w-full h-full min-h-[500px] overflow-hidden rounded-lg shadow-2xl bg-gradient-to-br from-[#8CB8B4] to-[#EEC71B]">
       <AnimatePresence initial={false}>
         <motion.div
           key={currentIndex}
@@ -74,7 +74,7 @@ const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
           transition={{ duration: 0.5 }}
-          className="absolute inset-0 flex items-center justify-center"
+          className="absolute inset-0 flex items-center justify-center min-h-[500px]"
         >
           <div className="text-center p-4 sm:p-8 relative">
             <motion.div
@@ -615,7 +615,7 @@ const WhyChooseWebWorksSection: React.FC = () => {
         </h2>
 
         <div className="flex flex-col lg:flex-row gap-6 sm:gap-8">
-          <div className="lg:w-2/5">
+          <div className="lg:w-2/5 min-h-[500px]">
             <Carousel items={carouselItems} />
           </div>
 
