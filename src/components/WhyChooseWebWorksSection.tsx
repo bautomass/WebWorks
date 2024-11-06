@@ -76,12 +76,12 @@ const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
           transition={{ duration: 0.5 }}
           className="absolute inset-0 flex items-center justify-center min-h-[500px]"
         >
-          <div className="text-center p-4 sm:p-8 relative">
+          <div className="text-center w-full p-4 sm:p-8 relative">
             <motion.div
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="text-5xl sm:text-8xl text-white mb-4 sm:mb-6 transform hover:scale-110 transition-transform duration-300"
+              className="text-6xl sm:text-8xl text-white mb-6 sm:mb-6 transform hover:scale-110 transition-transform duration-300"
             >
               {items[currentIndex].icon}
             </motion.div>
@@ -89,7 +89,7 @@ const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.5 }}
-              className="text-xl sm:text-3xl font-bold text-white mb-2 sm:mb-4"
+              className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-4 px-2"
             >
               {items[currentIndex].title}
             </motion.h3>
@@ -97,7 +97,7 @@ const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.4, duration: 0.5 }}
-              className="text-sm sm:text-xl text-white mb-3 sm:mb-6"
+              className="text-base sm:text-xl text-white mb-6 sm:mb-6 px-4 max-w-[90%] mx-auto"
             >
               {items[currentIndex].description}
             </motion.p>
@@ -105,15 +105,15 @@ const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.5 }}
-              className="space-y-1 sm:space-y-2"
+              className="space-y-3 sm:space-y-2 px-4 sm:px-8 max-w-[90%] mx-auto"
             >
               {items[currentIndex].bullets.map((bullet, index) => (
                 <li
                   key={index}
-                  className="flex items-center text-white text-sm sm:text-base"
+                  className="flex items-center text-white text-base sm:text-base"
                 >
                   <FiCheck
-                    className="mr-2 flex-shrink-0 text-[#EEC71B]"
+                    className="mr-3 flex-shrink-0 text-[#EEC71B] text-xl"
                     aria-hidden="true"
                   />
                   <span>{bullet}</span>
@@ -135,11 +135,11 @@ const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
         {items.map((_, index) => (
           <button
             key={index}
-            className={`w-3 h-3 sm:w-6 sm:h-6 p-0.5 sm:p-1 rounded-full transition-all duration-300 ${
+            className={`w-4 h-4 sm:w-6 sm:h-6 p-0.5 sm:p-1 rounded-full transition-all duration-300 ${
               index === currentIndex ? "bg-white scale-125" : "bg-white/50"
             }`}
             onClick={() => setCurrentIndex(index)}
-            aria-label={`Go to slide ${index + 1}`}
+            aria-label={`Pāriet uz slaidu ${index + 1}`}
           >
             <span className="block w-full h-full rounded-full bg-current"></span>
           </button>
