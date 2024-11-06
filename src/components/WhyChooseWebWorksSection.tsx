@@ -276,210 +276,202 @@ const WhyChooseWebWorksSection: React.FC = () => {
     () => ({
       efficiency: {
         icon: <FiTrendingUp />,
-        title: "Efektivitāte un ROI",
+        title: "Darba Efektivitāte",
         content: [
           {
-            subtitle: "Biznesa Procesu Optimizācija",
+            subtitle: "Mūsdienīga Pieeja Izstrādei",
             description:
-              "Mūsu risinājumi optimizē jūsu procesus, ietaupot laiku un resursus.",
+              "Izmantojam progresīvākās tehnoloģijas, lai nodrošinātu efektīvu darba procesu.",
             stats: [
-              { value: "35%", label: "Efektivitātes pieaugums" },
-              { value: "28%", label: "Izmaksu samazinājums" },
-              { value: "40%", label: "Ātrāka time-to-market" },
+              { value: "50%", label: "Ātrāka izstrāde" },
+              { value: "90%", label: "Automatizēti procesi" },
+              { value: "100%", label: "Pārskatāms kods" },
             ],
           },
           {
-            subtitle: "Mērāmi Rezultāti",
+            subtitle: "Projektu Vadība",
             description:
-              "Detalizēti pārskati par jūsu digitālo aktīvu veiktspēju.",
+              "Nodrošinām caurskatāmu projektu vadību ar regulāriem progresa pārskatiem.",
             list: [
-              "Reāllaika datu vizualizācija",
-              "Pielāgoti KPI un mērķu izsekošana",
-              "Regulāri optimizācijas ieteikumi",
-              "A/B testēšanas iespējas",
+              "Iknedēļas progresa atskaites",
+              "Tiešsaistes projektu pārvaldība",
+              "Operatīva saziņa",
+              "Pielāgojama plānošana",
             ],
           },
         ],
       },
       security: {
         icon: <FiShield />,
-        title: "Drošība un Uzticamība",
+        title: "Drošība",
         content: [
           {
-            subtitle: "Visaptverošs Drošības Protokols",
-            description: "Augstākie nozares standarti jūsu datu aizsardzībai.",
+            subtitle: "Mūsdienīgi Drošības Risinājumi",
+            description: "Ieviešam nozares vadošās drošības prakses.",
             stats: [
-              { value: "99.9%", label: "Pakalpojumu pieejamība" },
-              { value: "0", label: "Veiksmīgi novērsti uzbrukumi" },
-              { value: "100%", label: "GDPR atbilstība" },
+              { value: "100%", label: "Šifrēti savienojumi" },
+              { value: "24/7", label: "Sistēmu uzraudzība" },
+              { value: "100%", label: "Datu aizsardzība" },
             ],
           },
           {
-            subtitle: "Nepārtraukta Uzraudzība",
-            description:
-              "24/7 sistēmu monitorings un ātra reaģēšana uz draudiem.",
+            subtitle: "Droša Izstrāde",
+            description: "Rūpējamies par drošību katrā izstrādes posmā.",
             list: [
-              "Automātiska draudu atklāšana",
-              "Regulāri drošības auditi",
-              "Penetrācijas testi",
-              "Darbinieku drošības apmācības",
+              "Regulāras drošības pārbaudes",
+              "Droša koda glabātuve",
+              "Modernizēta autentifikācija",
+              "Pilnīga datu šifrēšana",
             ],
           },
         ],
       },
       scalability: {
         icon: <FiZap />,
-        title: "Mērogojamība un Elastība",
+        title: "Mērogojamība",
         content: [
           {
-            subtitle: "Elastīga Arhitektūra",
-            description: "Risinājumi, kas pielāgojas jūsu biznesa izaugsmei.",
+            subtitle: "Progresīva Arhitektūra",
+            description: "Veidojam nākotnē vērstus risinājumus.",
             stats: [
-              { value: "10x", label: "Mērogošanas kapacitāte" },
-              { value: "99%", label: "Klientu apmierinātība" },
-              { value: "<0.1s", label: "Vidējais atbildes laiks" },
+              { value: "100%", label: "Mākoņrisinājumi" },
+              { value: "95%", label: "Sistēmu pieejamība" },
+              { value: "<1s", label: "Ielādes ātrums" },
             ],
           },
           {
-            subtitle: "Modulāra Pieeja",
-            description: "Viegla jaunu funkciju pievienošana un integrācija.",
+            subtitle: "Pielāgojami Risinājumi",
+            description: "Sistēmas, kas attīstās līdz ar jūsu uzņēmumu.",
             list: [
-              "Ātra funkciju ieviešana",
-              "Vienkārša trešo pušu integrācija",
-              "Efektīva resursu izmantošana",
-              "Automatizēta testēšana un izvietošana",
+              "Mikroservisu arhitektūra",
+              "Mākoņdatošanas infrastruktūra",
+              "Veiktspējas optimizācija",
+              "Vienkārša paplašināmība",
             ],
           },
         ],
       },
       innovation: {
         icon: <FiCpu />,
-        title: "Inovācijas un Tendences",
+        title: "Inovācijas",
         content: [
           {
-            subtitle: "Progresīvās Tehnoloģijas",
-            description: "Jaunāko tendenču integrācija jūsu risinājumos.",
+            subtitle: "Modernās Tehnoloģijas",
+            description: "Strādājam ar jaunākajām tīmekļa tehnoloģijām.",
             stats: [
-              { value: "15+", label: "Jaunas tehnoloģijas gadā" },
-              { value: "30%", label: "Produktivitātes pieaugums" },
-              { value: "5", label: "Patentu pieteikumi" },
+              { value: "100%", label: "React ekosistēma" },
+              { value: "100%", label: "TypeScript izstrāde" },
+              { value: "100%", label: "API risinājumi" },
             ],
           },
           {
-            subtitle: "Pētniecība un Attīstība",
-            description: "Nepārtraukta jaunu risinājumu izstrāde.",
+            subtitle: "Tehnoloģiju Kopums",
+            description: "Izmantojam mūsdienīgu tehnoloģiju steku.",
             list: [
-              "AI un ML integrācija",
-              "IoT un Edge skaitļošana",
-              "Kvantu skaitļošanas gatavība",
-              "Blokķēdes tehnoloģiju izmantošana",
+              "Progresīvās tīmekļa lietotnes",
+              "Bezserveru arhitektūra",
+              "Konteineru tehnoloģijas",
+              "Modernās CSS sistēmas",
             ],
           },
         ],
       },
       support: {
         icon: <FiHeadphones />,
-        title: "Atbalsts un Apmācība",
+        title: "Atbalsts",
         content: [
           {
-            subtitle: "Visaptverošs Atbalsts",
-            description:
-              "24/7 pieejama atbalsta komanda ātrai problēmu risināšanai.",
+            subtitle: "Klientu Apkalpošana",
+            description: "Sniedzam profesionālu atbalstu jūsu izaugsmei.",
             stats: [
-              { value: "<15min", label: "Vidējais reakcijas laiks" },
-              { value: "98%", label: "Klientu apmierinātība" },
-              { value: "24/7", label: "Atbalsta pieejamība" },
+              { value: "<2h", label: "Reakcijas laiks" },
+              { value: "100%", label: "Atrisinātas problēmas" },
+              { value: "8/5", label: "Pieejamība" },
             ],
           },
           {
-            subtitle: "Personalizētas Apmācības",
-            description: "Pielāgotas apmācību programmas jūsu komandai.",
+            subtitle: "Apmācības",
+            description: "Nodrošinām pilnvērtīgu sistēmas apguvi.",
             list: [
-              "Interaktīvi tiešsaistes kursi",
-              "Praktiskie semināri",
-              "Pastāvīgi atjaunināta dokumentācija",
-              "Personalizēti apmācību plāni",
+              "Detalizēti metodiskie materiāli",
+              "Video apmācības",
+              "Tiešsaistes konsultācijas",
+              "Praktiskās nodarbības",
             ],
           },
         ],
       },
       roi: {
         icon: <FiDollarSign />,
-        title: "Investīciju Atdeve",
+        title: "Izmaksu Lietderība",
         content: [
           {
-            subtitle: "Finansiālā Ietekme",
-            description:
-              "Mūsu risinājumi nodrošina ievērojamu finansiālo atdevi.",
+            subtitle: "Sabalansēts Budžets",
+            description: "Nodrošinām efektīvu resursu izmantošanu.",
             stats: [
-              { value: "250%", label: "Vidējā ROI" },
-              { value: "18 mēn.", label: "Vidējais atmaksāšanās periods" },
-              { value: "40%", label: "Ieņēmumu pieaugums" },
+              { value: "0%", label: "Papildu izmaksas" },
+              { value: "100%", label: "Izmaksu caurskatāmība" },
+              { value: "2-3x", label: "Veiktspējas pieaugums" },
             ],
           },
           {
-            subtitle: "Ilgtermiņa Vērtība",
-            description:
-              "Mūsu risinājumi rada ilgtermiņa vērtību jūsu biznesam.",
+            subtitle: "Pievienotā Vērtība",
+            description: "Koncentrējamies uz taustāmiem biznesa ieguvumiem.",
             list: [
-              "Uzlabota klientu lojalitāte",
-              "Palielināta tirgus daļa",
-              "Samazinātas operacionālās izmaksas",
-              "Ātrāka pielāgošanās tirgus izmaiņām",
+              "Precīzas izmaksu aplēses",
+              "Regulāra progresa analīze",
+              "Elastīgi maksājumu nosacījumi",
+              "Ātra vērtības nodrošināšana",
             ],
           },
         ],
       },
       clientSuccess: {
         icon: <FiThumbsUp />,
-        title: "Klientu Panākumi",
+        title: "Klientu Veiksme",
         content: [
           {
-            subtitle: "Uz Rezultātiem Orientēta Pieeja",
-            description:
-              "Mēs koncentrējamies uz izmērāmiem rezultātiem un klientu panākumiem.",
+            subtitle: "Rezultātu Orientācija",
+            description: "Jūsu panākumi ir mūsu galvenā prioritāte.",
             stats: [
-              { value: "98%", label: "Projektu pabeigšanas rādītājs laikā" },
-              { value: "95%", label: "Klientu apmierinātības rādītājs" },
-              { value: "10+", label: "Nozaru pieredze" },
+              { value: "100%", label: "Pabeigti projekti" },
+              { value: "90%", label: "Klientu atsauksmes" },
+              { value: "3+", label: "Nozaru kompetence" },
             ],
           },
           {
-            subtitle: "Ilgtermiņa Partnerība",
-            description:
-              "Mēs veidojam ilgstošas attiecības ar mūsu klientiem, koncentrējoties uz viņu ilgtermiņa panākumiem.",
+            subtitle: "Sadarbība",
+            description: "Veidojam ilgtermiņa partnerattiecības.",
             list: [
-              "Regulāras stratēģiskās konsultācijas",
-              "Personalizēti izaugsmes plāni",
-              "Nepārtraukta atbalsta un uzlabojumu programma",
-              "Kopīga inovāciju izstrāde",
+              "Regulāras tikšanās",
+              "Izaugsmes plānošana",
+              "Pastāvīgs atbalsts",
+              "Biznesa izpratne",
             ],
           },
         ],
       },
       qualityAssurance: {
         icon: <FiStar />,
-        title: "Kvalitātes Nodrošināšana",
+        title: "Kvalitātes Kontrole",
         content: [
           {
-            subtitle: "Visaptverošs QA Process",
-            description:
-              "Mūsu stingrā kvalitātes kontrole nodrošina nevainojamus produktus.",
+            subtitle: "Testēšanas Process",
+            description: "Veicam rūpīgu kvalitātes pārbaudi.",
             stats: [
-              { value: "99.9%", label: "Kodu pārklājums ar testiem" },
-              { value: "<0.1%", label: "Kļūdu īpatsvars produkcijā" },
-              { value: "100%", label: "Automatizēta testēšana" },
+              { value: "100%", label: "Automatizētie testi" },
+              { value: "0", label: "Kritiskās kļūdas" },
+              { value: "95%", label: "Koda pārbaude" },
             ],
           },
           {
-            subtitle: "Nepārtraukta Uzlabošana",
-            description:
-              "Mēs pastāvīgi pilnveidojam mūsu procesus un produktus.",
+            subtitle: "Kvalitātes Standarti",
+            description: "Ievērojam augstus kvalitātes standartus.",
             list: [
-              "Regulāras kodu pārbaudes",
-              "Automatizēta kļūdu atklāšana",
-              "Nepārtraukta integrācija un piegāde (CI/CD)",
-              "Lietotāju atgriezeniskās saites integrācija",
+              "Automatizēta koda analīze",
+              "Pārlūku saderības testi",
+              "Veiktspējas uzlabošana",
+              "Lietojamības pārbaudes",
             ],
           },
         ],
@@ -489,111 +481,97 @@ const WhyChooseWebWorksSection: React.FC = () => {
         title: "Tirgus Izpratne",
         content: [
           {
-            subtitle: "Datu Vadīta Pieeja",
-            description:
-              "Mēs izmantojam tirgus datus, lai sniegtu jums konkurences priekšrocības.",
+            subtitle: "Nozares Tendences",
+            description: "Sekojam līdzi tehnoloģiju attīstībai.",
             stats: [
-              { value: "1M+", label: "Analizētie datu punkti dienā" },
-              { value: "50+", label: "Tirgus tendenču ziņojumi gadā" },
-              { value: "30%", label: "Ātrāka reakcija uz tirgus izmaiņām" },
+              { value: "100%", label: "Modernas tehnoloģijas" },
+              { value: "10+", label: "Tehnoloģiju partneri" },
+              { value: "24/7", label: "Tirgus pētījumi" },
             ],
           },
           {
-            subtitle: "Stratēģiskā Konsultēšana",
-            description:
-              "Mūsu eksperti palīdz jums pieņemt informētus lēmumus.",
+            subtitle: "Nozares Zināšanas",
+            description: "Izprotam digitālā tirgus specifiku.",
             list: [
-              "Personalizēti tirgus pārskati",
-              "Konkurentu analīze",
-              "Nākotnes tendenču prognozes",
-              "Biznesa stratēģijas konsultācijas",
+              "Lietotāju pieredzes analīze",
+              "Tehnoloģiju novērtējums",
+              "Konkurences izpēte",
+              "Lietotāju vajadzību analīze",
             ],
           },
         ],
       },
       timeToMarket: {
         icon: <FiClock />,
-        title: "Ātrāks Time-to-Market",
+        title: "Ātra Ieviešana",
         content: [
           {
-            subtitle: "Efektīva Projektu Pārvaldība",
-            description:
-              "Mūsu optimizētie procesi palīdz jums ātrāk sasniegt tirgu.",
+            subtitle: "Efektīva Izstrāde",
+            description: "Koncentrējamies uz ātru un kvalitatīvu rezultātu.",
             stats: [
-              { value: "40%", label: "Ātrāka produktu izlaišana" },
-              { value: "30%", label: "Samazināts izstrādes cikls" },
-              { value: "95%", label: "Projektu pabeigšana termiņā" },
+              { value: "2x", label: "Ātrāka ieviešana" },
+              { value: "90%", label: "Savlaicīga piegāde" },
+              { value: "100%", label: "Procesa pārskatāmība" },
             ],
           },
           {
             subtitle: "Agilā Metodoloģija",
-            description:
-              "Izmantojam elastīgas pieejas, lai ātri pielāgotos izmaiņām.",
+            description: "Izmantojam modernas projektu vadības metodes.",
             list: [
-              "Regulāras iterācijas un piegādes",
-              "Cieša sadarbība ar klientu",
-              "Ātra atsauksmju ieviešana",
-              "Nepārtraukta vērtības piegāde",
+              "Divu nedēļu sprinti",
+              "Regulāras versijas",
+              "Ātra atgriezeniskā saite",
+              "Nepārtraukta integrācija",
             ],
           },
         ],
       },
       customization: {
         icon: <FiTool />,
-        title: "Pielāgošanas Iespējas",
+        title: "Individuāli Risinājumi",
         content: [
           {
-            subtitle: "Individuāli Risinājumi",
-            description:
-              "Mēs veidojam risinājumus, kas precīzi atbilst jūsu biznesa vajadzībām.",
+            subtitle: "Personalizēta Pieeja",
+            description: "Katrs projekts ir unikāls un īpašs.",
             stats: [
               { value: "100%", label: "Pielāgoti risinājumi" },
-              {
-                value: "90%",
-                label: "Klientu, kas izvēlas individuālu pieeju",
-              },
-              {
-                value: "15+",
-                label: "Nozares, kurām esam pielāgojuši risinājumus",
-              },
+              { value: "∞", label: "Pielāgošanas iespējas" },
+              { value: "0", label: "Standarta veidnes" },
             ],
           },
           {
-            subtitle: "Elastīga Arhitektūra",
-            description:
-              "Mūsu risinājumi ir veidoti, lai viegli pielāgotos jūsu mainīgajām vajadzībām.",
+            subtitle: "Elastīga Izstrāde",
+            description: "Pielāgojamies jūsu biznesa vajadzībām.",
             list: [
-              "Modulāra sistēmas uzbūve",
-              "Viegla integrācija ar esošajām sistēmām",
-              "Pielāgojama lietotāja saskarne",
-              "Specifiskas nozares funkcionalitāte",
+              "Modulāra sistēma",
+              "Responsīvs dizains",
+              "Integrāciju iespējas",
+              "Individuāli komponenti",
             ],
           },
         ],
       },
       sustainability: {
         icon: <FiTarget />,
-        title: "Ilgtspējība un Sociālā Atbildība",
+        title: "Ilgtspējība",
         content: [
           {
-            subtitle: "Zaļās Tehnoloģijas",
-            description:
-              "Mēs izmantojam resursus efektīvi un veicinām ilgtspējīgu attīstību.",
+            subtitle: "Videi Draudzīga Pieeja",
+            description: "Izstrādājam resursefektīvus risinājumus.",
             stats: [
-              { value: "50%", label: "Enerģijas patēriņa samazinājums" },
-              { value: "100%", label: "Atjaunojamās enerģijas izmantošana" },
-              { value: "0", label: "Oglekļa emisijas" },
+              { value: "90%", label: "Resursu optimizācija" },
+              { value: "100%", label: "Mākoņpakalpojumi" },
+              { value: "50%", label: "Enerģijas ekonomija" },
             ],
           },
           {
-            subtitle: "Sociālā Ietekme",
-            description:
-              "Mēs aktīvi piedalāmies sabiedrības attīstībā un izglītošanā.",
+            subtitle: "Sociālā Atbildība",
+            description: "Atbalstām vietējo IT kopienu.",
             list: [
-              "Tehnoloģiju apmācības programmas jauniešiem",
-              "Atbalsts vietējām kopienām",
-              "Daudzveidības un iekļaušanas iniciatīvas",
-              "Ētiska AI un datu izmantošana",
+              "Atvērtā koda projekti",
+              "Prakses programmas",
+              "Vietējie pasākumi",
+              "Kopienas iniciatīvas",
             ],
           },
         ],
@@ -601,7 +579,6 @@ const WhyChooseWebWorksSection: React.FC = () => {
     }),
     []
   );
-
   const handleTabChange = useCallback((key: string) => {
     setActiveTab(key);
   }, []);
