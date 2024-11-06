@@ -27,7 +27,10 @@ interface ResourceLink {
   title: string;
   url: string;
 }
-
+interface ServiceLink {
+  title: string;
+  url: string;
+}
 const ScrollToTopButton = () => {
   const [showScrollButton, setShowScrollButton] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -281,15 +284,20 @@ const Footer: React.FC = () => {
   };
 
   // Navigation and content data
-  const services = [
-    "Web Izstrade",
-    "E-komercija",
-    "Mobilo Aplikaciju Izstrade",
-    "SEO Optimizacija",
-    "Digitalais Marketings",
-    "Web Aplikacijas",
+  const services: ServiceLink[] = [
+    { title: "Web Izstrāde", url: "/pakalpojumi/web-izstrade" },
+    { title: "E-komercija", url: "/pakalpojumi/e-komercija" },
+    {
+      title: "Mobilo Aplikāciju Izstrāde",
+      url: "/pakalpojumi/mobilo-aplikaciju-izstrade",
+    },
+    { title: "SEO Optimizācija", url: "/pakalpojumi/seo-optimizacija" },
+    {
+      title: "Digitālais Mārketings",
+      url: "/pakalpojumi/digitalais-marketings",
+    },
+    { title: "Web Aplikācijas", url: "/pakalpojumi/web-aplikacijas" },
   ];
-
   const resources: ResourceLink[] = [
     { title: "Dokumentacija", url: "/dokumentacija" },
     { title: "Biezak Uzdotie Jautajumi", url: "/faq-page" },
@@ -366,17 +374,17 @@ const Footer: React.FC = () => {
           {/* Services */}
           <motion.div variants={sectionVariants}>
             <h3 className="text-2xl font-bold mb-4 text-[#EEC71B]">
-              Musu Pakalpojumi
+              Mūsu Pakalpojumi
             </h3>
             <ul className="space-y-2">
               {services.map((service, index) => (
                 <motion.li key={index} whileHover={{ x: 5 }} className="group">
                   <Link
-                    href={`/pakalpojumi/${slugify(service)}`}
+                    href={service.url}
                     className="hover:text-[#EEC71B] transition-colors duration-300 flex items-center"
                   >
                     <FiCoffee className="mr-2 group-hover:rotate-45 transition-transform duration-300" />
-                    {service}
+                    {service.title}
                   </Link>
                 </motion.li>
               ))}
@@ -386,7 +394,7 @@ const Footer: React.FC = () => {
           {/* Resources */}
           <motion.div variants={sectionVariants}>
             <h3 className="text-2xl font-bold mb-4 text-[#EEC71B]">
-              Noderigi Resursi
+              Noderīgi Resursi
             </h3>
             <ul className="space-y-2">
               {resources.map((resource, index) => (
