@@ -298,25 +298,17 @@ const FloatingPromo: React.FC = () => {
 
               <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
                 <Link
-                  href="/apreksinat-aptuvenu-lapas-izmaksas-cenu"
-                  className="bg-[#EEC71B] text-[#3D3B4A] font-bold py-1.5 px-3 sm:py-2 sm:px-4 rounded-full text-sm transition duration-300 transform hover:scale-105 hover:shadow-lg flex items-center"
-                >
-                  Aprēķināt Cenu
-                </Link>
-                <Link
                   href="/sakt-projekta-skici"
-                  className="bg-[#8CB8B4] text-white font-bold py-1.5 px-3 sm:py-2 sm:px-4 rounded-full text-sm transition duration-300 transform hover:scale-105 hover:shadow-lg flex items-center"
+                  className="bg-[#8CB8B4] text-white font-bold py-1.5 px-3 sm:py-2 sm:px-4 rounded-lg text-sm transition duration-300 transform hover:scale-105 hover:shadow-lg flex items-center"
                 >
                   Sākt Projekta Skici
                 </Link>
-                <button
-                  onClick={() =>
-                    showToast("Paldies! Mēs ar jums sazināsimies drīzumā.")
-                  }
-                  className="bg-white text-[#3D3B4A] font-bold py-1.5 px-3 sm:py-2 sm:px-4 rounded-full text-sm transition duration-300 transform hover:scale-105 hover:shadow-lg flex items-center"
+                <Link
+                  href="/contact-us"
+                  className="bg-white text-[#3D3B4A] font-bold py-1.5 px-3 sm:py-2 sm:px-4 rounded-lg text-sm transition duration-300 transform hover:scale-105 hover:shadow-lg flex items-center"
                 >
                   Sazinies ar Mums
-                </button>
+                </Link>
               </div>
             </motion.div>
           </motion.div>
