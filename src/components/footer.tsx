@@ -28,10 +28,10 @@ interface ResourceLink {
   url: string;
 }
 
-// ScrollToTopButton Component
 const ScrollToTopButton = () => {
   const [showScrollButton, setShowScrollButton] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,7 +47,14 @@ const ScrollToTopButton = () => {
   }, []);
 
   const scrollToTop = () => {
+    setIsScrolling(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
+
+    // Reset the scrolling state after animation completes
+    const scrollDuration = 1000; // matches smooth scroll duration
+    setTimeout(() => {
+      setIsScrolling(false);
+    }, scrollDuration);
   };
 
   return (
@@ -73,43 +80,105 @@ const ScrollToTopButton = () => {
             Uz augšu
           </motion.div>
 
-          {/* Button */}
-          <motion.button
-            onClick={scrollToTop}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            className="relative bg-gradient-to-br from-[#EEC71B] to-[#FFD700] text-[#3D3B4A] p-4 rounded-full shadow-lg group"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            aria-label="Scroll to top"
-          >
+          {/* Button Container */}
+          <div className="relative">
+            {/* Speed Lines Effect */}
             <motion.div
-              className="absolute inset-0 bg-white rounded-full opacity-20"
-              animate={{
-                scale: isHovered ? [1, 1.2, 1] : 1,
+              className="absolute inset-0 -z-10"
+              initial="hidden"
+              animate={isScrolling ? "visible" : "hidden"}
+              variants={{
+                hidden: { opacity: 0, scale: 0.8 },
+                visible: { opacity: 1, scale: 1.2 },
               }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
+            >
+              {[...Array(8)].map((_, index) => (
+                <motion.div
+                  key={index}
+                  className="absolute inset-0"
+                  initial={{ opacity: 0 }}
+                  animate={
+                    isScrolling
+                      ? {
+                          opacity: [0, 1, 0],
+                          scale: [1, 1.5],
+                          rotate: 45 * index,
+                        }
+                      : {}
+                  }
+                  transition={{
+                    duration: 0.8,
+                    repeat: Infinity,
+                    delay: index * 0.1,
+                  }}
+                >
+                  <div className="absolute top-1/2 left-1/2 h-8 w-0.5 -translate-x-1/2 -translate-y-1/2 bg-[#EEC71B] blur-[2px]" />
+                </motion.div>
+              ))}
+            </motion.div>
 
-            <div className="relative">
+            {/* Trail Effect */}
+            <AnimatePresence>
+              {isScrolling && (
+                <>
+                  {[...Array(3)].map((_, index) => (
+                    <motion.div
+                      key={`trail-${index}`}
+                      className="absolute left-1/2 -translate-x-1/2 bottom-0 w-12 h-12"
+                      initial={{ opacity: 0.5, y: 0 }}
+                      animate={{ opacity: 0, y: 20 }}
+                      exit={{ opacity: 0 }}
+                      transition={{
+                        duration: 0.5,
+                        delay: index * 0.15,
+                        repeat: Infinity,
+                      }}
+                    >
+                      <div className="w-full h-full rounded-full bg-[#EEC71B] opacity-20 blur-sm" />
+                    </motion.div>
+                  ))}
+                </>
+              )}
+            </AnimatePresence>
+
+            {/* Main Button */}
+            <motion.button
+              onClick={scrollToTop}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+              className="relative bg-gradient-to-br from-[#EEC71B] to-[#FFD700] text-[#3D3B4A] p-4 rounded-full shadow-lg group"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              aria-label="Scroll to top"
+            >
               <motion.div
+                className="absolute inset-0 bg-white rounded-full opacity-20"
                 animate={{
-                  y: isHovered ? -3 : 0,
+                  scale: isHovered ? [1, 1.2, 1] : 1,
                 }}
                 transition={{
-                  duration: 0.3,
+                  duration: 1.5,
                   repeat: Infinity,
-                  repeatType: "reverse",
+                  ease: "easeInOut",
                 }}
-              >
-                <FiChevronsUp className="text-2xl" />
-              </motion.div>
-            </div>
-          </motion.button>
+              />
+
+              <div className="relative">
+                <motion.div
+                  animate={{
+                    y: isScrolling ? [0, -3, 0] : isHovered ? -3 : 0,
+                  }}
+                  transition={{
+                    duration: isScrolling ? 0.2 : 0.3,
+                    repeat: isScrolling ? Infinity : false,
+                    repeatType: "reverse",
+                  }}
+                >
+                  <FiChevronsUp className="text-2xl" />
+                </motion.div>
+              </div>
+            </motion.button>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
