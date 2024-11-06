@@ -131,7 +131,7 @@ const EnhancedInteractiveCTASection: React.FC = () => {
           <div className="flex justify-center">
             <Button
               asChild
-              className="bg-[#EEC71B] text-[#3D3B4A] px-8 py-6 rounded-full font-bold text-lg hover:bg-white transition-colors duration-300 group"
+              className="bg-[#EEC71B] text-[#3D3B4A] px-4 sm:px-8 py-4 sm:py-6 rounded-full font-bold text-base sm:text-lg hover:bg-white transition-colors duration-300 group"
             >
               <motion.a
                 href="/contact-us"
@@ -139,7 +139,10 @@ const EnhancedInteractiveCTASection: React.FC = () => {
                 whileTap={{ scale: 0.95 }}
                 className="flex items-center"
               >
-                Sāciet Savu Digitālo Ceļojumu
+                <span className="hidden sm:inline">
+                  Sāciet Savu Digitālo Ceļojumu
+                </span>
+                <span className="sm:hidden">Sazināties</span>
                 <FiArrowRight className="ml-2 transition-transform duration-300 group-hover:translate-x-2" />
               </motion.a>
             </Button>
