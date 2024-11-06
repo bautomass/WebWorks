@@ -119,7 +119,7 @@ const EnhancedInteractiveCTASection: React.FC = () => {
           transition={{ delay: 0.5 }}
         >
           <h2 className="text-3xl font-bold mb-6 text-center">
-            Gatavi Uzsākt Kaut Ko Jaunu?
+            Gatavi Sākt Savu Digitālo Transformāciju?
           </h2>
           <p className="text-xl mb-8 text-center max-w-3xl mx-auto">
             Katrs veiksmīgs bizness sākas ar pirmo soli digitālajā pasaulē.
