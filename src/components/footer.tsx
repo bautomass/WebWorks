@@ -50,11 +50,9 @@ const ScrollToTopButton = () => {
     setIsScrolling(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
 
-    // Reset the scrolling state after animation completes
-    const scrollDuration = 1000; // matches smooth scroll duration
     setTimeout(() => {
       setIsScrolling(false);
-    }, scrollDuration);
+    }, 1000);
   };
 
   return (
@@ -69,7 +67,7 @@ const ScrollToTopButton = () => {
         >
           {/* Tooltip */}
           <motion.div
-            className="bg-[#3D3B4A] text-white px-3 py-1 rounded text-sm whitespace-nowrap"
+            className="bg-black/80 backdrop-blur-sm text-white px-4 py-2 rounded-lg text-sm whitespace-nowrap shadow-lg"
             initial={{ opacity: 0, x: 20 }}
             animate={{
               opacity: isHovered ? 1 : 0,
@@ -82,101 +80,116 @@ const ScrollToTopButton = () => {
 
           {/* Button Container */}
           <div className="relative">
-            {/* Speed Lines Effect */}
-            <motion.div
-              className="absolute inset-0 -z-10"
-              initial="hidden"
-              animate={isScrolling ? "visible" : "hidden"}
-              variants={{
-                hidden: { opacity: 0, scale: 0.8 },
-                visible: { opacity: 1, scale: 1.2 },
-              }}
-            >
-              {[...Array(8)].map((_, index) => (
-                <motion.div
-                  key={index}
-                  className="absolute inset-0"
-                  initial={{ opacity: 0 }}
-                  animate={
-                    isScrolling
-                      ? {
-                          opacity: [0, 1, 0],
-                          scale: [1, 1.5],
-                          rotate: 45 * index,
-                        }
-                      : {}
-                  }
-                  transition={{
-                    duration: 0.8,
-                    repeat: Infinity,
-                    delay: index * 0.1,
-                  }}
-                >
-                  <div className="absolute top-1/2 left-1/2 h-8 w-0.5 -translate-x-1/2 -translate-y-1/2 bg-[#EEC71B] blur-[2px]" />
-                </motion.div>
-              ))}
-            </motion.div>
+            {/* Wind Trail Effect */}
+            {isScrolling && (
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-14 h-32">
+                {[...Array(8)].map((_, index) => (
+                  <motion.div
+                    key={`wind-particle-${index}`}
+                    className="absolute bottom-0 left-1/2 h-8 rounded-full"
+                    style={{
+                      width: Math.random() * 3 + 1,
+                      x: `${(Math.random() - 0.5) * 30}px`,
+                    }}
+                    initial={{
+                      opacity: 0.7,
+                      y: 0,
+                      backgroundColor: "#EEC71B",
+                    }}
+                    animate={{
+                      opacity: [0.7, 0],
+                      y: [-20, -100],
+                      x: (Math.random() - 0.5) * 30,
+                    }}
+                    transition={{
+                      duration: 0.8,
+                      repeat: Infinity,
+                      delay: index * 0.1,
+                      ease: "easeOut",
+                    }}
+                  />
+                ))}
 
-            {/* Trail Effect */}
-            <AnimatePresence>
-              {isScrolling && (
-                <>
-                  {[...Array(3)].map((_, index) => (
-                    <motion.div
-                      key={`trail-${index}`}
-                      className="absolute left-1/2 -translate-x-1/2 bottom-0 w-12 h-12"
-                      initial={{ opacity: 0.5, y: 0 }}
-                      animate={{ opacity: 0, y: 20 }}
-                      exit={{ opacity: 0 }}
-                      transition={{
-                        duration: 0.5,
-                        delay: index * 0.15,
-                        repeat: Infinity,
-                      }}
-                    >
-                      <div className="w-full h-full rounded-full bg-[#EEC71B] opacity-20 blur-sm" />
-                    </motion.div>
-                  ))}
-                </>
-              )}
-            </AnimatePresence>
+                {/* Additional speed lines */}
+                {[...Array(5)].map((_, index) => (
+                  <motion.div
+                    key={`speed-line-${index}`}
+                    className="absolute bottom-0 left-1/2 w-[1px] bg-[#EEC71B]"
+                    style={{
+                      height: 20 + Math.random() * 20,
+                      x: `${(Math.random() - 0.5) * 20}px`,
+                    }}
+                    initial={{
+                      opacity: 0.5,
+                      y: 0,
+                    }}
+                    animate={{
+                      opacity: [0.5, 0],
+                      y: [-20, -120],
+                      scaleY: [1, 1.5],
+                    }}
+                    transition={{
+                      duration: 0.6,
+                      repeat: Infinity,
+                      delay: index * 0.15,
+                      ease: "easeOut",
+                    }}
+                  />
+                ))}
+              </div>
+            )}
 
             {/* Main Button */}
             <motion.button
               onClick={scrollToTop}
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
-              className="relative bg-gradient-to-br from-[#EEC71B] to-[#FFD700] text-[#3D3B4A] p-4 rounded-full shadow-lg group"
+              className="relative group"
               whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+              whileTap={{ scale: 0.95 }}
               aria-label="Scroll to top"
             >
-              <motion.div
-                className="absolute inset-0 bg-white rounded-full opacity-20"
-                animate={{
-                  scale: isHovered ? [1, 1.2, 1] : 1,
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
+              {/* Button Background with Gradient */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#EEC71B] to-[#FFD700] opacity-90" />
 
-              <div className="relative">
+              {/* Glass Effect Layer */}
+              <div className="absolute inset-px rounded-full bg-white/10 backdrop-blur-sm" />
+
+              {/* Button Content */}
+              <div className="relative px-4 py-4">
                 <motion.div
                   animate={{
-                    y: isScrolling ? [0, -3, 0] : isHovered ? -3 : 0,
+                    y: isScrolling ? [0, -2, 0] : isHovered ? -2 : 0,
                   }}
                   transition={{
-                    duration: isScrolling ? 0.2 : 0.3,
+                    duration: 0.3,
                     repeat: isScrolling ? Infinity : false,
                     repeatType: "reverse",
                   }}
                 >
-                  <FiChevronsUp className="text-2xl" />
+                  <FiChevronsUp
+                    className={`text-2xl text-[#3D3B4A] transition-transform duration-300 ${
+                      isScrolling ? "scale-110" : ""
+                    }`}
+                  />
                 </motion.div>
+
+                {/* Inner Highlight */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/20 to-transparent" />
               </div>
+
+              {/* Glow Effect */}
+              <motion.div
+                className="absolute -inset-2 rounded-full bg-[#EEC71B] blur-md"
+                animate={{
+                  opacity: isScrolling ? [0.2, 0.4, 0.2] : isHovered ? 0.2 : 0,
+                }}
+                transition={{
+                  duration: 1,
+                  repeat: isScrolling ? Infinity : false,
+                  ease: "easeInOut",
+                }}
+              />
             </motion.button>
           </div>
         </motion.div>
