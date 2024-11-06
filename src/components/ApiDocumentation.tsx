@@ -58,7 +58,7 @@ const REQUEST_VOLUMES = [
 
 const API_DATA = {
   future_release: {
-    date: "2024. gada Jūnijs",
+    date: "2025. gada Jūnijā",
     registration: "Pieejama beta versijas reģistrācija",
     contact: "api@webworks.lv",
   },
