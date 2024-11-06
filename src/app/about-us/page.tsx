@@ -668,7 +668,7 @@ const ParMums: React.FC = () => {
                     <TooltipTrigger asChild>
                       <a
                         href="/contact-us"
-                        className="bg-[#EEC71B] text-[#3D3B4A] px-8 py-3 rounded-full text-lg font-semibold hover:bg-white hover:text-[#3D3B4A] transition-colors duration-300"
+                        className="bg-[#EEC71B] text-[#3D3B4A] px-8 py-3 rounded-lg text-lg font-semibold hover:bg-white hover:text-[#3D3B4A] transition-colors duration-300"
                       >
                         Iedarbiniet Digitālo Raķeti!
                       </a>
