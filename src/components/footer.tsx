@@ -10,7 +10,7 @@ import {
   FiClock,
   FiShield,
   FiBookOpen,
-  FiArrowUp,
+  FiChevronsUp,
   FiCheck,
   FiX,
   FiCoffee,
@@ -28,6 +28,94 @@ interface ResourceLink {
   url: string;
 }
 
+// ScrollToTopButton Component
+const ScrollToTopButton = () => {
+  const [showScrollButton, setShowScrollButton] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPercentage =
+        (window.scrollY /
+          (document.documentElement.scrollHeight - window.innerHeight)) *
+        100;
+      setShowScrollButton(scrollPercentage > 40);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  return (
+    <AnimatePresence>
+      {showScrollButton && (
+        <motion.div
+          className="fixed bottom-8 right-8 z-50 flex items-center gap-3"
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          {/* Tooltip */}
+          <motion.div
+            className="bg-[#3D3B4A] text-white px-3 py-1 rounded text-sm whitespace-nowrap"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{
+              opacity: isHovered ? 1 : 0,
+              x: isHovered ? 0 : 20,
+            }}
+            transition={{ duration: 0.2 }}
+          >
+            Uz augšu
+          </motion.div>
+
+          {/* Button */}
+          <motion.button
+            onClick={scrollToTop}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            className="relative bg-gradient-to-br from-[#EEC71B] to-[#FFD700] text-[#3D3B4A] p-4 rounded-full shadow-lg group"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            aria-label="Scroll to top"
+          >
+            <motion.div
+              className="absolute inset-0 bg-white rounded-full opacity-20"
+              animate={{
+                scale: isHovered ? [1, 1.2, 1] : 1,
+              }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+
+            <div className="relative">
+              <motion.div
+                animate={{
+                  y: isHovered ? -3 : 0,
+                }}
+                transition={{
+                  duration: 0.3,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                }}
+              >
+                <FiChevronsUp className="text-2xl" />
+              </motion.div>
+            </div>
+          </motion.button>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
 // Utility functions
 const slugify = (str: string): string => {
   return str
@@ -41,26 +129,11 @@ const slugify = (str: string): string => {
 const Footer: React.FC = () => {
   // State management
   const [email, setEmail] = useState("");
-  const [showScrollButton, setShowScrollButton] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<SubmitStatus>({
     type: null,
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Scroll handler
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPercentage =
-        (window.scrollY /
-          (document.documentElement.scrollHeight - window.innerHeight)) *
-        100;
-      setShowScrollButton(scrollPercentage > 40);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   // Form submission handler
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -123,10 +196,6 @@ const Footer: React.FC = () => {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   // Navigation and content data
@@ -362,7 +431,7 @@ const Footer: React.FC = () => {
               Privātuma Politika
             </Link>
             <Link
-              href="/lietosanas-noteikumi"
+              href="/info/lietosanas-noteikumi"
               className="hover:text-[#EEC71B] transition-colors duration-300"
             >
               Lietošanas Noteikumi
@@ -370,26 +439,7 @@ const Footer: React.FC = () => {
           </div>
         </motion.div>
       </div>
-
-      <AnimatePresence>
-        {showScrollButton && (
-          <motion.button
-            onClick={scrollToTop}
-            className="fixed bottom-8 right-8 bg-[#EEC71B] text-[#3D3B4A] p-3 rounded-full shadow-lg z-50"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            whileHover={{
-              scale: 1.1,
-              boxShadow: "0px 0px 8px rgba(238, 199, 27, 0.8)",
-            }}
-            whileTap={{ scale: 0.9 }}
-            aria-label="Scroll to top"
-          >
-            <FiArrowUp />
-          </motion.button>
-        )}
-      </AnimatePresence>
+      <ScrollToTopButton />
     </footer>
   );
 };
