@@ -24,6 +24,8 @@ import {
   FiFeather,
   FiCoffee,
   FiBox,
+  FiUsers,
+  FiHeadphones,
 } from "react-icons/fi";
 import Header from "../../components/Header";
 import {
@@ -110,39 +112,39 @@ const ParMums: React.FC = () => {
   const services = [
     {
       icon: <FiLayout />,
-      title: "Episkās Vietnes",
+      title: "Mūsdienīgas Vietnes",
       description:
-        "Radām vizuāli satriecošas un funkcionāli perfektas mājaslapas, kas liek konkurentiem nodrebēt.",
+        "Radām vizuāli pārsteidzošas un funkcionāli nevainojamas mājaslapas, kas izceļas konkurentu vidū.",
     },
     {
       icon: <FiSmartphone />,
-      title: "Mobilās Superlietotnes",
+      title: "Mobilās Lietotnes",
       description:
-        "Izstrādājam lietotnes, kas liek jūsu viedtālrunim justies kā superdatoram.",
+        "Izstrādājam mūsdienīgas lietotnes, kas padara viedierīces par efektīviem biznesa instrumentiem.",
     },
     {
       icon: <FiShoppingCart />,
-      title: "E-komercijas Impērijas",
+      title: "E-komercijas Risinājumi",
       description:
-        "Būvējam tiešsaistes veikalus, kas pārdodas ātrāk nekā karstas bulciņas.",
+        "Veidojam tiešsaistes veikalus, kas nodrošina nevainojamu pirkšanas pieredzi.",
     },
     {
       icon: <FiGlobe />,
-      title: "Web Aplikāciju Maģija",
+      title: "Tīmekļa Lietotnes",
       description:
-        "Radām web risinājumus, kas liek jūsu konkurentiem domāt, ka Jūsu komandā ir burvis.",
+        "Radām inovatīvus web risinājumus, kas sniedz jūsu biznesam konkurences priekšrocības.",
     },
     {
       icon: <FiSearch />,
-      title: "SEO Nindzjas",
+      title: "SEO Optimizācija",
       description:
-        "Padarām jūs tik redzamus meklētāj programmās, ka pat jūsu vecmāmiņa atradīs jūs bez piepūles.",
+        "Padarām jūsu uzņēmumu viegli atrodamu meklētājprogrammās ar mūsdienīgām SEO metodēm.",
     },
     {
       icon: <FiZap />,
-      title: "Zibens Ātruma Optimizācija",
+      title: "Veiktspējas Uzlabošana",
       description:
-        "Paātrisim jūsu vietni tik ļoti, ka tā var apsteigt gaismu (gandrīz).",
+        "Optimizējam jūsu vietnes darbību, lai nodrošinātu maksimālu ātrumu un efektivitāti.",
     },
   ];
 
@@ -448,14 +450,14 @@ const ParMums: React.FC = () => {
                     Mūsu Misija: Digitālā Revolūcija
                   </h2>
                   <p className="text-lg text-white mb-4">
-                    WebWorks nav vienkārši web izstrādes kompānija. Mēs esam
-                    digitālo sapņu īstenotāji, tehnoloģiju burvestībnieki un
-                    jūsu biznesa digitālie supervaroņi. Mūsu kaislība ir radīt
-                    ne tikai mājaslapas, bet digitālās pieredzes, kas liek
-                    cilvēkiem teikt "Vau!" ar pilnu muti.
+                    WebWorks ir moderna tīmekļa risinājumu izstrādes kompānija.
+                    Mēs esam digitālo ideju īstenotāji, tehnoloģiju entuziasti
+                    un jūsu biznesa digitālie partneri. Mūsu mērķis ir radīt ne
+                    tikai mājaslapas, bet digitālās pieredzes, kas pārsteidz un
+                    aizrauj.
                   </p>
                   <p className="text-lg text-white mb-4">
-                    Mums neka nerada lielāku adrenalīna pieplūduma kā radīt
+                    Mums nekas nerada lielāku adrenalīna pieplūduma kā radīt
                     episkus digitālos risinājumus. Vai tas būtu korporatīvais
                     portāls, kas izskatās kā no nākotnes, e-komercijas
                     platforma, kas pārdod zibens ātrumā, vai web aplikācija, kas
@@ -543,23 +545,23 @@ const ParMums: React.FC = () => {
             <AnimatedSection className="py-20 px-4 md:px-0">
               <div className="max-w-6xl mx-auto">
                 <h2 className="text-4xl font-bold text-center text-white mb-12">
-                  Mūsu Digitālie Varoņdarbi
+                  Mūsu Vērtības
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   {[
                     {
-                      number: "300+",
-                      description: "Episkas Vietnes Radītas",
-                      icon: <FiLayout />,
+                      number: "100%",
+                      description: "Individuāla Pieeja",
+                      icon: <FiUsers />,
                     },
                     {
-                      number: "75+",
-                      description: "Supervaroņu Lietotnes",
-                      icon: <FiSmartphone />,
+                      number: "24/7",
+                      description: "Tehniskais Atbalsts",
+                      icon: <FiHeadphones />,
                     },
                     {
-                      number: "1000+",
-                      description: "Digitāli Apburto Klientu",
+                      number: "0%",
+                      description: "Kompromisi Kvalitātē",
                       icon: <FiStar />,
                     },
                   ].map((stat, index) => (
@@ -651,11 +653,11 @@ const ParMums: React.FC = () => {
                   Gatavi Sākt Savu Digitālo Revolūciju?
                 </h2>
                 <p className="text-xl mb-12 text-gray-300">
-                  Neatkarīgi no tā, vai jūs esat mazs start-up ar lielu sapni
-                  vai milzīgs uzņēmums, kas vēlas digitāli dominēt, mēs esam
-                  gatavi pārvērst jūsu vīziju realitātē. Bet uzmanieties - mūsu
-                  risinājumi var izraisīt pēkšņus WOW momentus un nekontrolējamu
-                  vēlmi mainīt pasauli.
+                  Neatkarīgi no tā, vai esat jauns uzņēmums ar ambiciozu vīziju
+                  vai pieredzējis uzņēmums, kas vēlas digitāli attīstīties, mēs
+                  esam gatavi pārvērst jūsu idejas realitātē. Mūsu risinājumi ir
+                  veidoti, lai radītu paliekošu iespaidu un veicinātu jūsu
+                  uzņēmuma izaugsmi.
                 </p>
                 <motion.div
                   className="inline-block"
