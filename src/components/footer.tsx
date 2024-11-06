@@ -299,10 +299,10 @@ const Footer: React.FC = () => {
     { title: "Web Aplikācijas", url: "/pakalpojumi/web-aplikacijas" },
   ];
   const resources: ResourceLink[] = [
-    { title: "Dokumentacija", url: "/dokumentacija" },
-    { title: "Biezak Uzdotie Jautajumi", url: "/faq-page" },
-    { title: "API Dokumentacija", url: "/api-docs" },
-    { title: "Web Izstrades Vadlinijas", url: "/info/vadlinijas" },
+    { title: "Dokumentācija", url: "/dokumentacija" },
+    { title: "Biežāk Uzdotie Jautājumi", url: "/faq-page" },
+    { title: "API Dokumentācija", url: "/api-docs" },
+    { title: "Web Izstrādes Vadlinījas", url: "/info/vadlinijas" },
   ];
 
   const companyInfo: ResourceLink[] = [
