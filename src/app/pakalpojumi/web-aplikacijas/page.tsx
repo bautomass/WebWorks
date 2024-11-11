@@ -274,140 +274,6 @@ const WebAppDevelopment: React.FC = () => {
     }
   };
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-
-  //   if (!validateForm()) {
-  //     toast.error("Lūdzu aizpildiet visus obligātos laukus", {
-  //       position: "top-center",
-  //       autoClose: 5000,
-  //     });
-  //     return;
-  //   }
-
-  //   setIsSubmitting(true);
-
-  //   try {
-  //     // Ensure selected_package is set from the selectedPackage state
-  //     const submitData = {
-  //       ...formData,
-  //       selected_package: selectedPackage?.id || "",
-  //       message: formData.project_description, // Use project description as message
-  //       status: "new",
-  //     };
-
-  //     console.log("Submitting data:", submitData); // Debug log
-
-  //     const { data, error } = await supabase
-  //       .from("web_app_inquiries")
-  //       .insert([submitData])
-  //       .select();
-
-  //     if (error) {
-  //       console.error("Supabase error:", error);
-  //       toast.error("Kļūda nosūtot ziņojumu. Lūdzu mēģiniet vēlreiz.", {
-  //         position: "top-center",
-  //         autoClose: 5000,
-  //       });
-  //       return;
-  //     }
-
-  //     console.log("Success response:", data); // Debug log
-
-  //     toast.success("Paldies! Mēs ar jums sazināsimies tuvākajā laikā.", {
-  //       position: "top-center",
-  //       autoClose: 5000,
-  //     });
-
-  //     setFormData(initialFormData);
-  //     setShowModal(false);
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //     toast.error("Kļūda nosūtot ziņojumu. Lūdzu mēģiniet vēlreiz.", {
-  //       position: "top-center",
-  //       autoClose: 5000,
-  //     });
-  //   } finally {
-  //     setIsSubmitting(false);
-  //   }
-  // };
-
-  // // Update when selecting a package
-  // const handlePackageSelect = (pkg: Package) => {
-  //   setSelectedPackage(pkg);
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     selected_package: pkg.id,
-  //   }));
-  //   setShowModal(true);
-  // };
-
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-
-  //   if (!validateForm()) {
-  //     return;
-  //   }
-
-  //   setIsSubmitting(true);
-
-  //   try {
-  //     const { error } = await supabase.from("web_app_inquiries").insert([
-  //       {
-  //         name: formData.name,
-  //         email: formData.email,
-  //         message: formData.message,
-  //         phone: formData.phone,
-  //         company: formData.company,
-  //         selected_package: selectedPackage?.id,
-  //         estimated_duration: formData.estimated_duration,
-  //         project_description: formData.project_description,
-  //         payment_plan_interest: formData.payment_plan_interest,
-  //         has_existing_system: formData.has_existing_system,
-  //         preferred_start_date: formData.preferred_start_date,
-  //         status: "new",
-  //       },
-  //     ]);
-
-  //     if (error) {
-  //       console.error("Supabase error:", error);
-  //       toast.error("Kļūda nosūtot ziņojumu. Lūdzu mēģiniet vēlreiz.", {
-  //         position: "top-center",
-  //         autoClose: 5000,
-  //         hideProgressBar: false,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: true,
-  //       });
-  //       return;
-  //     }
-
-  //     toast.success("Paldies! Mēs ar jums sazināsimies tuvākajā laikā.", {
-  //       position: "top-center",
-  //       autoClose: 5000,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //     });
-
-  //     setFormData(initialFormData);
-  //     setShowModal(false);
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //     toast.error("Kļūda nosūtot ziņojumu. Lūdzu mēģiniet vēlreiz.", {
-  //       position: "top-center",
-  //       autoClose: 5000,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //     });
-  //   } finally {
-  //     setIsSubmitting(false);
-  //   }
-  // };
-
   const ServiceCard: React.FC<{ pkg: Package }> = ({ pkg }) => (
     <div
       className={`relative transform transition-all duration-300 h-full ${
@@ -512,18 +378,70 @@ const WebAppDevelopment: React.FC = () => {
   return (
     <>
       <Head>
+        {/* Primary Meta Tags */}
         <title>
-          Web Aplikāciju Izstrāde | WebWorks - Profesionāla SAAS Izstrāde
+          Web Aplikāciju & SAAS Izstrāde Latvijā | WebWorks - No €1299
         </title>
         <meta
           name="description"
-          content="WebWorks piedāvā profesionālu web aplikāciju un SAAS risinājumu izstrādi. Veidojam mūsdienīgas, drošas un pielāgojamas web aplikācijas ar modernām tehnoloģijām."
+          content="🚀 Profesionāla web aplikāciju un SAAS platformu izstrāde no WebWorks. Mūsdienīgas tehnoloģijas, mikroservisu arhitektūra, enterprise risinājumi. Izstrāde no 3 mēnešiem. Bezmaksas konsultācija + MVP demo."
         />
         <meta
           name="keywords"
-          content="web aplikācijas, SAAS izstrāde, web development, custom software, enterprise aplikācijas, Latvija"
+          content="web aplikācijas, SAAS risinājumi, custom software, mikroservisi, cloud risinājumi, enterprise software, web development, react, node.js, aws, kubernetes, api izstrāde, Latvija"
         />
-        <link rel="canonical" href="https://www.webworks.lv/web-aplikacijas" />
+
+        {/* Canonical URL */}
+        <link
+          rel="canonical"
+          href="https://www.webworks.lv/pakalpojumi/web-aplikacijas"
+        />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="WebWorks" />
+        <meta
+          property="og:url"
+          content="https://www.webworks.lv/pakalpojumi/web-aplikacijas"
+        />
+        <meta
+          property="og:title"
+          content="Web Aplikācijas & SAAS | WebWorks 🚀 Enterprise Risinājumi"
+        />
+        <meta
+          property="og:description"
+          content="✓ Moderna arhitektūra ✓ Mikroservisi ✓ Cloud Native ✓ Pilns DevOps ✓ 24/7 atbalsts. Izveidojiet savu nākamo lielo produktu ar WebWorks!"
+        />
+        <meta
+          property="og:image"
+          content="https://www.webworks.lv/images/web-app-development-og.jpg"
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:locale" content="lv_LV" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@webworks_lv" />
+        <meta
+          name="twitter:title"
+          content="Web Aplikācijas & SAAS | WebWorks 🚀 no €1299"
+        />
+        <meta
+          name="twitter:description"
+          content="✓ Moderna arhitektūra ✓ Mikroservisi ✓ Cloud Native ✓ Pilns DevOps. Izveidojiet savu nākamo produktu!"
+        />
+        <meta
+          name="twitter:image"
+          content="https://www.webworks.lv/images/web-app-development-og.jpg"
+        />
+
+        {/* Basic SEO & Viewport */}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+        <meta name="author" content="WebWorks" />
+        <meta name="geo.region" content="LV" />
+        <meta name="geo.placename" content="Jelgava" />
       </Head>
 
       <div className="min-h-screen bg-gradient-to-b from-[#F3F5F4] to-white">
@@ -983,50 +901,84 @@ const WebAppDevelopment: React.FC = () => {
       <Footer />
 
       <script
+        id="schema-script"
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebPage",
-            name: "Web Aplikāciju Izstrāde | WebWorks",
-            description:
-              "WebWorks piedāvā profesionālu web aplikāciju un SAAS risinājumu izstrādi. Veidojam mūsdienīgas, drošas un pielāgojamas web aplikācijas ar modernām tehnoloģijām.",
-            url: "https://www.webworks.lv/web-aplikacijas",
-            provider: {
-              "@type": "Organization",
-              name: "WebWorks",
-              url: "https://www.webworks.lv",
-              address: {
-                "@type": "PostalAddress",
-                addressCountry: "LV",
+            mainEntity: {
+              "@type": "SoftwareApplication",
+              name: "WebWorks SAAS Development",
+              applicationCategory: "WebApplication",
+              operatingSystem: "Cloud, Web-based",
+              offers: {
+                "@type": "AggregateOffer",
+                priceCurrency: "EUR",
+                lowPrice: 1299,
+                highPrice: 4999,
+                offerCount: packages.length,
+                offers: packages.map((pkg) => ({
+                  "@type": "Offer",
+                  name: pkg.name,
+                  description: pkg.description,
+                  price: pkg.price,
+                  priceCurrency: "EUR",
+                  validFrom: "2024-01-01",
+                  priceValidUntil: "2024-12-31",
+                })),
+              },
+              provider: {
+                "@type": "Organization",
+                name: "WebWorks",
+                url: "https://www.webworks.lv",
+                address: {
+                  "@type": "PostalAddress",
+                  streetAddress: "Kungu Iela 23/8",
+                  addressLocality: "Jelgava",
+                  postalCode: "LV-3001",
+                  addressCountry: "LV",
+                },
+              },
+              review: {
+                "@type": "AggregateRating",
+                ratingValue: "4.8",
+                reviewCount: "42",
+                bestRating: "5",
+                worstRating: "1",
+              },
+              featureList: [
+                "Microservices Architecture",
+                "Cloud Native Development",
+                "Kubernetes Deployment",
+                "API Development",
+                "DevOps Integration",
+                "Enterprise Security",
+                "Multi-tenant Architecture",
+                "Scalable Infrastructure",
+              ],
+              screenshot:
+                "https://www.webworks.lv/images/webapp-demo-screenshot.jpg",
+              softwareHelp: "https://www.webworks.lv/support",
+              aggregateRating: {
+                "@type": "AggregateRating",
+                ratingValue: "4.8",
+                reviewCount: "42",
+              },
+              audience: {
+                "@type": "BusinessAudience",
+                audienceType: "Enterprise Business",
+              },
+              potentialAction: {
+                "@type": "ViewAction",
+                target:
+                  "https://www.webworks.lv/pakalpojumi/web-aplikacijas#contact",
               },
             },
-            offers: {
-              "@type": "AggregateOffer",
-              priceCurrency: "EUR",
-              lowPrice: Math.min(...packages.map((s) => parseInt(s.price))),
-              highPrice: Math.max(...packages.map((s) => parseInt(s.price))),
-              offerCount: packages.length,
-              offers: packages.map((pkg) => ({
-                "@type": "Offer",
-                name: pkg.name,
-                description: pkg.description,
-                price: pkg.price,
-                priceCurrency: "EUR",
-                itemOffered: {
-                  "@type": "Service",
-                  name: pkg.name,
-                  description: pkg.detailedDescription,
-                  provider: {
-                    "@type": "Organization",
-                    name: "WebWorks",
-                  },
-                },
-              })),
-            },
-            mainEntityOfPage: {
-              "@type": "WebPage",
-              "@id": "https://www.webworks.lv/web-aplikacijas",
+            isPartOf: {
+              "@type": "WebSite",
+              url: "https://www.webworks.lv",
+              name: "WebWorks",
             },
             breadcrumb: {
               "@type": "BreadcrumbList",
@@ -1051,12 +1003,27 @@ const WebAppDevelopment: React.FC = () => {
                   "@type": "ListItem",
                   position: 3,
                   item: {
-                    "@id": "https://www.webworks.lv/web-aplikacijas",
+                    "@id":
+                      "https://www.webworks.lv/pakalpojumi/web-aplikacijas",
                     name: "Web Aplikācijas",
                   },
                 },
               ],
             },
+            specialty: [
+              "SAAS Development",
+              "Enterprise Software",
+              "Cloud Solutions",
+            ],
+            keywords: [
+              "web aplikācijas",
+              "SAAS izstrāde",
+              "enterprise software",
+              "cloud native",
+              "microservices",
+              "kubernetes",
+              "DevOps",
+            ],
           }),
         }}
       />
