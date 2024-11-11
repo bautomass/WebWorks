@@ -649,9 +649,11 @@ const WebIzstrade: React.FC = () => {
         <title>
           Web Izstrāde Latvijā | WebWorks - Jūsu Digitālais Partneris
         </title>
+
+        {/* Basic Meta Tags */}
         <meta
           name="description"
-          content="WebWorks piedāvā profesionālu web izstrādi Latvijā. Radām SEO optimizētas, responsīvas un konversijām orientētas mājaslapas."
+          content="WebWorks piedāvā profesionālu web izstrādi Latvijā. Radām SEO optimizētas, responsīvas un konversijām orientētas mājaslapas ar cenām sākot no €199. Growth Catalyst pakete tagad ar €600 bonusu."
         />
         <meta
           name="keywords"
@@ -661,6 +663,51 @@ const WebIzstrade: React.FC = () => {
           rel="canonical"
           href="https://www.webworks.lv/pakalpojumi/web-izstrade"
         />
+
+        {/* Open Graph Meta Tags */}
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:url"
+          content="https://www.webworks.lv/pakalpojumi/web-izstrade"
+        />
+        <meta
+          property="og:title"
+          content="Web Izstrāde | WebWorks 🚀 Cenas no €199"
+        />
+        <meta
+          property="og:description"
+          content="✓ Modernas mājaslapas ✓ SEO optimizācija ✓ E-komercija ✓ Growth Catalyst pakete ar €600 bonusu. Izveidojiet savu profesionālo mājaslapu ar WebWorks!"
+        />
+        <meta
+          property="og:image"
+          content="https://www.webworks.lv/images/web-development-og.jpg"
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:locale" content="lv_LV" />
+        <meta property="og:site_name" content="WebWorks" />
+
+        {/* Twitter Card Meta Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@webworks_lv" />
+        <meta
+          name="twitter:title"
+          content="Web Izstrāde | WebWorks 🚀 Cenas no €199"
+        />
+        <meta
+          name="twitter:description"
+          content="✓ Modernas mājaslapas ✓ SEO optimizācija ✓ E-komercija ✓ Growth Catalyst pakete ar €600 bonusu. Izveidojiet savu profesionālo mājaslapu ar WebWorks!"
+        />
+        <meta
+          name="twitter:image"
+          content="https://www.webworks.lv/images/web-development-og.jpg"
+        />
+
+        {/* Additional Meta Tags for Rich Previews */}
+        <meta name="author" content="WebWorks" />
+        <meta name="robots" content="index, follow" />
+        <meta name="price" content="€199 - €1299" />
+        <meta name="currency" content="EUR" />
       </Head>
 
       <div className="min-h-screen bg-gradient-to-b from-[#F3F5F4] to-white">
