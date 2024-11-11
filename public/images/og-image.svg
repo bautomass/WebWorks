@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <!-- Enhanced premium background gradient -->
+    <linearGradient id="eliteGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#12131A"/>
+      <stop offset="45%" style="stop-color:#1A1B26"/>
+      <stop offset="55%" style="stop-color:#1E1F2D"/>
+      <stop offset="100%" style="stop-color:#262736"/>
+    </linearGradient>
+
+    <!-- Refined accent gradient -->
+    <linearGradient id="premiumAccent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#EEC71B"/>
+      <stop offset="35%" style="stop-color:#FFD700"/>
+      <stop offset="65%" style="stop-color:#FFD700"/>
+      <stop offset="100%" style="stop-color:#EEC71B"/>
+    </linearGradient>
+
+    <!-- Sophisticated line pattern -->
+    <pattern id="techPattern" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+      <rect width="50" height="50" fill="none"/>
+      <path d="M0 25h50" stroke="#FFFFFF" stroke-width="0.2" opacity="0.03"/>
+      <path d="M25 0v50" stroke="#FFFFFF" stroke-width="0.2" opacity="0.03"/>
+    </pattern>
+
+    <!-- High-end glow effect -->
+    <filter id="eliteGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1.5"/>
+      <feColorMatrix type="matrix" values="1 0 0 0 1   0 1 0 0 1   0 0 1 0 1  0 0 0 25 -15"/>
+    </filter>
+
+    <!-- Refined tech dots pattern -->
+    <pattern id="dotMatrix" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="10" cy="10" r="0.5" fill="#FFFFFF" opacity="0.02"/>
+    </pattern>
+  </defs>
+
+  <!-- Base Layers -->
+  <rect width="1200" height="630" fill="url(#eliteGradient)"/>
+  <rect width="1200" height="630" fill="url(#dotMatrix)"/>
+  <rect width="1200" height="630" fill="url(#techPattern)"/>
+
+  <!-- Sophisticated Background Elements -->
+  <g opacity="0.05">
+    <path d="M-100 150 Q 600 50, 1300 150" stroke="url(#premiumAccent)" stroke-width="0.5" fill="none"/>
+    <path d="M-100 350 Q 600 250, 1300 350" stroke="url(#premiumAccent)" stroke-width="0.5" fill="none"/>
+    <path d="M-100 550 Q 600 450, 1300 550" stroke="url(#premiumAccent)" stroke-width="0.5" fill="none"/>
+  </g>
+
+  <!-- Main Content Container -->
+  <g transform="translate(100, 80)">
+    <!-- Premium Border -->
+    <rect x="0" y="0" width="1000" height="470" stroke="url(#premiumAccent)" stroke-width="0.5" fill="none" opacity="0.1"/>
+    
+    <!-- Brand Section -->
+    <g transform="translate(500, 100)">
+      <!-- Main Brand Name with Elegant Shadow -->
+      <text x="0" y="0" font-family="Arial, sans-serif" font-size="82" font-weight="800" fill="#1A1B26" text-anchor="middle" letter-spacing="3" opacity="0.1" transform="translate(2, 2)">
+        WEBWORKS
+      </text>
+      <text x="0" y="0" font-family="Arial, sans-serif" font-size="82" font-weight="800" fill="white" text-anchor="middle" letter-spacing="3">
+        WEBWORKS
+      </text>
+      
+      <!-- Premium Divider -->
+      <path d="M-120 20 L120 20" stroke="url(#premiumAccent)" stroke-width="3" opacity="0.8"/>
+    </g>
+
+    <!-- Elite Tagline -->
+    <g transform="translate(500, 180)">
+      <text x="0" y="0" font-family="Arial, sans-serif" font-size="26" fill="#EEC71B" text-anchor="middle" letter-spacing="6" font-weight="500">
+        DIGITĀLĀS TRANSFORMĀCIJAS STUDIJA
+      </text>
+    </g>
+
+    <!-- Core Services -->
+    <g transform="translate(500, 260)" text-anchor="middle">
+      <text x="0" y="0" font-family="Arial, sans-serif" font-size="22" fill="white" font-weight="400" letter-spacing="1.5">
+        Augsta Līmeņa Mājaslapas • Enterprise E-komercija • SAAS Risinājumi
+      </text>
+      <text x="0" y="40" font-family="Arial, sans-serif" font-size="22" fill="white" font-weight="400" letter-spacing="1.5" opacity="0.9">
+        Web Aplikācijas • Mākoņrisinājumi • Digitālā Stratēģija
+      </text>
+    </g>
+
+    <!-- Premium Footer -->
+    <g transform="translate(500, 460)">
+      <text x="0" y="0" font-family="Arial, sans-serif" font-size="18" fill="white" text-anchor="middle" opacity="0.7" letter-spacing="2">
+        IZCILĪBA KATRĀ DIGITĀLAJĀ RISINĀJUMĀ
+      </text>
+    </g>
+  </g>
+
+  <!-- Elite Corner Accents -->
+  <g opacity="0.15">
+    <path d="M 30,30 L 80,30 L 80,80" stroke="url(#premiumAccent)" stroke-width="2" fill="none"/>
+    <path d="M 1170,30 L 1120,30 L 1120,80" stroke="url(#premiumAccent)" stroke-width="2" fill="none"/>
+    <path d="M 30,600 L 80,600 L 80,550" stroke="url(#premiumAccent)" stroke-width="2" fill="none"/>
+    <path d="M 1170,600 L 1120,600 L 1120,550" stroke="url(#premiumAccent)" stroke-width="2" fill="none"/>
+  </g>
+</svg>

@@ -13,7 +13,6 @@ export default function Home() {
       <ServicesWeDo />
       <FloatingPromo />
       <Footer />
-      {/* <Modern /> */}
     </main>
   );
 }
