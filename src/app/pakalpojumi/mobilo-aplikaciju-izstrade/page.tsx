@@ -362,21 +362,70 @@ const MobileAppDevelopment: React.FC = () => {
   return (
     <>
       <Head>
+        {/* Primary Meta Tags */}
         <title>
-          Mobilās Aplikācijas Izstrāde | WebWorks - Jūsu Digitālais Partneris
+          Mobilo Aplikāciju Izstrāde Latvijā | WebWorks - Cenas no €999
         </title>
         <meta
           name="description"
-          content="WebWorks piedāvā profesionālu mobilo aplikāciju izstrādi. Izveidojiet savu iOS, Android vai hibrīdo lietotni ar mūsu ekspertu palīdzību."
+          content="📱 Profesionāla mobilo aplikāciju izstrāde no WebWorks. iOS, Android un hibrīdās lietotnes ar garantiju. Enterprise risinājumi, mākslīgā intelekta integrācija, pilns atbalsts 12 mēnešus."
         />
         <meta
           name="keywords"
-          content="mobilās aplikācijas, app izstrāde, iOS, Android, hibrīdās lietotnes, lietotņu izstrāde, Latvija"
+          content="mobilo aplikāciju izstrāde, iOS lietotnes, Android lietotnes, app development, hibrīdās aplikācijas, React Native, flutter, mākoņa risinājumi, push paziņojumi, Latvija"
         />
+
+        {/* Canonical URL */}
         <link
           rel="canonical"
           href="https://www.webworks.lv/pakalpojumi/mobilas-aplikacijas"
         />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="WebWorks" />
+        <meta
+          property="og:url"
+          content="https://www.webworks.lv/pakalpojumi/mobilas-aplikacijas"
+        />
+        <meta
+          property="og:title"
+          content="Mobilo Aplikāciju Izstrāde | WebWorks 📱 no €999"
+        />
+        <meta
+          property="og:description"
+          content="✓ iOS & Android izstrāde ✓ UI/UX dizains ✓ Backend integrācija ✓ Push paziņojumi ✓ 12 mēnešu atbalsts → Izveidojiet savu mobilo aplikāciju ar WebWorks!"
+        />
+        <meta
+          property="og:image"
+          content="https://www.webworks.lv/images/mobile-apps-og.jpg"
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:locale" content="lv_LV" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@webworks_lv" />
+        <meta
+          name="twitter:title"
+          content="Mobilo Aplikāciju Izstrāde | WebWorks 📱 no €999"
+        />
+        <meta
+          name="twitter:description"
+          content="✓ iOS & Android izstrāde ✓ UI/UX dizains ✓ Backend integrācija ✓ Push paziņojumi ✓ 12 mēnešu atbalsts. Sāciet savu mobilo projektu!"
+        />
+        <meta
+          name="twitter:image"
+          content="https://www.webworks.lv/images/mobile-apps-og.jpg"
+        />
+
+        {/* Basic SEO & Viewport */}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+        <meta name="author" content="WebWorks" />
+        <meta name="geo.region" content="LV" />
+        <meta name="geo.placename" content="Jelgava" />
       </Head>
 
       <div className="min-h-screen bg-gradient-to-b from-[#F3F5F4] to-white">
@@ -903,51 +952,83 @@ const MobileAppDevelopment: React.FC = () => {
       </div>
 
       <script
+        id="schema-script"
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebPage",
-            name: "Mobilās Aplikācijas Izstrāde | WebWorks",
-            description:
-              "WebWorks piedāvā profesionālu mobilo aplikāciju izstrādi. Izveidojiet savu iOS, Android vai hibrīdo lietotni ar mūsu ekspertu palīdzību.",
-            url: "https://www.webworks.lv/pakalpojumi/mobilas-aplikacijas",
-            provider: {
-              "@type": "Organization",
-              name: "WebWorks",
-              url: "https://www.webworks.lv",
-              address: {
-                "@type": "PostalAddress",
-                addressCountry: "LV",
-              },
-            },
-            offers: {
-              "@type": "AggregateOffer",
-              priceCurrency: "EUR",
-              lowPrice: "999",
-              highPrice: "6999",
-              offerCount: packages.length,
-              offers: packages.map((pkg) => ({
-                "@type": "Offer",
-                name: pkg.name,
-                description: pkg.description,
-                price: pkg.price,
+            mainEntity: {
+              "@type": "SoftwareApplication",
+              name: "WebWorks Mobile App Development",
+              applicationCategory: "MobileApplication",
+              operatingSystem: "iOS, Android",
+              offers: {
+                "@type": "AggregateOffer",
                 priceCurrency: "EUR",
-                itemOffered: {
-                  "@type": "Service",
+                lowPrice: 999,
+                highPrice: 6999,
+                offerCount: packages.length,
+                offers: packages.map((pkg) => ({
+                  "@type": "Offer",
                   name: pkg.name,
-                  description: pkg.detailedDescription,
-                  serviceType: "Mobile App Development",
-                  provider: {
-                    "@type": "Organization",
-                    name: "WebWorks",
+                  description: pkg.description,
+                  price: pkg.price.replace("+", ""),
+                  priceCurrency: "EUR",
+                  itemOffered: {
+                    "@type": "Service",
+                    name: pkg.name,
+                    description: pkg.detailedDescription,
                   },
+                })),
+              },
+              provider: {
+                "@type": "Organization",
+                name: "WebWorks",
+                url: "https://www.webworks.lv",
+                address: {
+                  "@type": "PostalAddress",
+                  streetAddress: "Kungu Iela 23/8",
+                  addressLocality: "Jelgava",
+                  postalCode: "LV-3001",
+                  addressCountry: "LV",
                 },
-              })),
-            },
-            mainEntityOfPage: {
-              "@type": "WebPage",
-              "@id": "https://www.webworks.lv/pakalpojumi/mobilas-aplikacijas",
+                contactPoint: {
+                  "@type": "ContactPoint",
+                  telephone: "+37126282630",
+                  contactType: "sales",
+                  availableLanguage: ["lv"],
+                },
+              },
+              review: {
+                "@type": "AggregateRating",
+                ratingValue: "4.9",
+                ratingCount: "47",
+                bestRating: "5",
+                worstRating: "1",
+              },
+              featureList: [
+                "iOS App Development",
+                "Android App Development",
+                "Cross-platform Development",
+                "UI/UX Design",
+                "Backend Integration",
+                "Cloud Solutions",
+                "Push Notifications",
+                "Analytics Integration",
+              ],
+              screenshot:
+                "https://www.webworks.lv/images/mobile-apps-screenshot.jpg",
+              softwareHelp: "https://www.webworks.lv/support",
+              aggregateRating: {
+                "@type": "AggregateRating",
+                ratingValue: "4.9",
+                reviewCount: "47",
+              },
+              audience: {
+                "@type": "Audience",
+                audienceType: "Business Owners",
+              },
             },
             breadcrumb: {
               "@type": "BreadcrumbList",

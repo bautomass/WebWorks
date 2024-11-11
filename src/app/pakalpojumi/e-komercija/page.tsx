@@ -348,21 +348,70 @@ const ECommerceServices: React.FC = () => {
   return (
     <>
       <Head>
+        {/* Primary Meta Tags */}
         <title>
-          E-komercijas Risinājumi | WebWorks - Jūsu Tiešsaistes Veikala Izveide
+          E-komercijas Risinājumi Latvijā | WebWorks - Izveide no €499
         </title>
         <meta
           name="description"
-          content="WebWorks piedāvā profesionālus e-komercijas risinājumus. Izveidojiet savu tiešsaistes veikalu ar Shopify vai pielāgotu risinājumu. Sāciet pārdot tiešsaistē jau 4 nedēļu laikā!"
+          content="🛍️ Profesionāli e-komercijas risinājumi no WebWorks. Shopify un individuāla izstrāde, SEO optimizācija, 24/7 atbalsts. E-veikala izveide 4 nedēļās."
         />
         <meta
           name="keywords"
-          content="e-komercija, tiešsaistes veikals, shopify, e-veikals, web izstrāde, e-commerce, interneta veikals, Latvija"
+          content="e-komercija, e-veikals, shopify, interneta veikals, web izstrāde, online shop, e-commerce, pārdošana internetā, droši maksājumi, sūtījumu izsekošana, Latvija"
         />
+
+        {/* Canonical URL */}
         <link
           rel="canonical"
           href="https://www.webworks.lv/pakalpojumi/e-komercija"
         />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="WebWorks" />
+        <meta
+          property="og:url"
+          content="https://www.webworks.lv/pakalpojumi/e-komercija"
+        />
+        <meta
+          property="og:title"
+          content="E-komercijas Risinājumi | WebWorks 🛍️ Izveide no €499"
+        />
+        <meta
+          property="og:description"
+          content="✓ Shopify vai Custom risinājumi ✓ SEO optimizācija ✓ Droši maksājumi ✓ 4 nedēļu izstrāde ✓ 2 mēnešu atbalsts. Izveidojiet savu e-veikalu ar WebWorks!"
+        />
+        <meta
+          property="og:image"
+          content="https://www.webworks.lv/images/ecommerce-og.jpg"
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:locale" content="lv_LV" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@webworks_lv" />
+        <meta
+          name="twitter:title"
+          content="E-komercijas Risinājumi | WebWorks 🛍️ no €499"
+        />
+        <meta
+          name="twitter:description"
+          content="✓ Shopify vai Custom risinājumi ✓ SEO optimizācija ✓ Droši maksājumi ✓ 4 nedēļu izstrāde ✓ 2 mēnešu atbalsts. Sāciet pārdot internetā!"
+        />
+        <meta
+          name="twitter:image"
+          content="https://www.webworks.lv/images/ecommerce-og.jpg"
+        />
+
+        {/* Basic SEO & Viewport */}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+        <meta name="author" content="WebWorks" />
+        <meta name="geo.region" content="LV" />
+        <meta name="geo.placename" content="Jelgava" />
       </Head>
 
       <div className="min-h-screen bg-gradient-to-b from-[#F3F5F4] to-white">
@@ -921,80 +970,109 @@ const ECommerceServices: React.FC = () => {
       </div>
 
       <script
+        id="schema-script"
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebPage",
-            name: "E-komercijas Risinājumi | WebWorks",
-            description:
-              "WebWorks piedāvā profesionālus e-komercijas risinājumus. Izveidojiet savu tiešsaistes veikalu ar Shopify vai pielāgotu risinājumu.",
-            url: "https://www.webworks.lv/pakalpojumi/e-komercija",
-            provider: {
-              "@type": "Organization",
-              name: "WebWorks",
-              url: "https://www.webworks.lv",
+            mainEntity: {
+              "@type": "ProfessionalService",
+              name: "WebWorks E-commerce Solutions",
+              image: "https://www.webworks.lv/images/ecommerce-og.jpg",
+              "@id": "https://www.webworks.lv",
+              url: "https://www.webworks.lv/pakalpojumi/e-komercija",
+              telephone: "+37126282630",
+              priceRange: "€499 - €1299",
               address: {
                 "@type": "PostalAddress",
+                streetAddress: "Kungu Iela 23/8",
+                addressLocality: "Jelgava",
+                postalCode: "LV-3001",
                 addressCountry: "LV",
               },
-            },
-            offers: {
-              "@type": "AggregateOffer",
-              priceCurrency: "EUR",
-              lowPrice: "499",
-              highPrice: "1299",
-              offerCount: packages.length,
-              offers: packages.map((pkg) => ({
-                "@type": "Offer",
-                name: pkg.name,
-                description: pkg.description,
-                price: pkg.price,
+              description:
+                "WebWorks piedāvā profesionālus e-komercijas risinājumus ar Shopify vai individuālu izstrādi. Pilns serviss no dizaina līdz ieviešanai.",
+              openingHoursSpecification: {
+                "@type": "OpeningHoursSpecification",
+                dayOfWeek: [
+                  "Monday",
+                  "Tuesday",
+                  "Wednesday",
+                  "Thursday",
+                  "Friday",
+                ],
+                opens: "09:00",
+                closes: "20:00",
+              },
+              aggregateRating: {
+                "@type": "AggregateRating",
+                ratingValue: "4.9",
+                reviewCount: "89",
+              },
+              offers: {
+                "@type": "AggregateOffer",
                 priceCurrency: "EUR",
-                itemOffered: {
-                  "@type": "Service",
+                lowPrice: 499,
+                highPrice: 1299,
+                offerCount: 3,
+                offers: packages.map((pkg) => ({
+                  "@type": "Offer",
                   name: pkg.name,
-                  description: pkg.detailedDescription,
-                  serviceType: "E-commerce Development",
-                  provider: {
-                    "@type": "Organization",
-                    name: "WebWorks",
+                  description: pkg.description,
+                  price: pkg.price,
+                  priceCurrency: "EUR",
+                  validFrom: "2024-01-01",
+                  url: "https://www.webworks.lv/pakalpojumi/e-komercija",
+                  itemOffered: {
+                    "@type": "Service",
+                    name: pkg.name,
+                    description: pkg.detailedDescription,
                   },
-                },
-              })),
-            },
-            mainEntityOfPage: {
-              "@type": "WebPage",
-              "@id": "https://www.webworks.lv/pakalpojumi/e-komercija",
-            },
-            breadcrumb: {
-              "@type": "BreadcrumbList",
-              itemListElement: [
-                {
-                  "@type": "ListItem",
-                  position: 1,
-                  item: {
-                    "@id": "https://www.webworks.lv",
-                    name: "Sākums",
+                })),
+              },
+              breadcrumb: {
+                "@type": "BreadcrumbList",
+                itemListElement: [
+                  {
+                    "@type": "ListItem",
+                    position: 1,
+                    item: {
+                      "@id": "https://www.webworks.lv",
+                      name: "Sākums",
+                    },
                   },
-                },
-                {
-                  "@type": "ListItem",
-                  position: 2,
-                  item: {
-                    "@id": "https://www.webworks.lv/pakalpojumi",
-                    name: "Pakalpojumi",
+                  {
+                    "@type": "ListItem",
+                    position: 2,
+                    item: {
+                      "@id": "https://www.webworks.lv/pakalpojumi",
+                      name: "Pakalpojumi",
+                    },
                   },
-                },
-                {
-                  "@type": "ListItem",
-                  position: 3,
-                  item: {
-                    "@id": "https://www.webworks.lv/pakalpojumi/e-komercija",
-                    name: "E-komercija",
+                  {
+                    "@type": "ListItem",
+                    position: 3,
+                    item: {
+                      "@id": "https://www.webworks.lv/pakalpojumi/e-komercija",
+                      name: "E-komercija",
+                    },
                   },
-                },
-              ],
+                ],
+              },
+              hasOfferCatalog: {
+                "@type": "OfferCatalog",
+                name: "E-komercijas pakalpojumi",
+                itemListElement: packages.map((pkg, index) => ({
+                  "@type": "Offer",
+                  itemOffered: {
+                    "@type": "Service",
+                    name: pkg.name,
+                    description: pkg.detailedDescription,
+                  },
+                  position: index + 1,
+                })),
+              },
             },
           }),
         }}
