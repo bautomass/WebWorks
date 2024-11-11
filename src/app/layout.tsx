@@ -151,13 +151,6 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
-        <link
-          rel="preload"
-          href="/fonts/custom-font.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
         <meta name="format-detection" content="telephone=no" />
         <meta name="geo.region" content="LV" />
         <meta name="geo.placename" content="Jelgava" />
