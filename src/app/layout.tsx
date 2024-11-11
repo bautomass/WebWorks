@@ -84,9 +84,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "lv_LV",
     url: "https://www.webworks.lv/",
-    siteName: "WebWorks - Moderna Mājaslapu Izstrāde",
+    siteName: "WebWorks - Modernu Mājaslapu Izstrāde",
     title:
-      "WebWorks Moderna Mājaslapu & E-komercijas Izstrāde | Labākās Cenas Latvijā",
+      "WebWorks - Modernu Mājaslapu & E-komercijas Izstrāde | Labākās Cenas Latvijā",
     description:
       "Profesionāla mājaslapu un e-veikalu izstrāde. SEO optimizācija, moderns dizains, draudzīgas cenas. Izveidojiet savu biznesu internetā ar WebWorks!",
     images: [
