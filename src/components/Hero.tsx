@@ -186,7 +186,7 @@ const Hero: React.FC = () => {
             transition={{ duration: 0.5 }}
           >
             <div className="w-full text-left">
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-[#3D3B4A] mb-3 sm:mb-4 leading-tight whitespace-normal">
+              <h1 className="text-2xl sm:text-3xl lg:text-5xl xl:text-6xl font-bold text-[#3D3B4A] mb-3 sm:mb-4 leading-tight whitespace-normal">
                 <span className="whitespace-nowrap">Digitālās Izcilības</span>{" "}
                 <ColoredText color="text-[#EEC71B]">Arhitekti</ColoredText>
               </h1>
