@@ -157,6 +157,7 @@ const menuItems: MenuItem[] = [
     ],
   },
   { name: "Faq", href: "/faq-page" },
+  { name: "Blog", href: "/blog" },
   { name: "Kontakti", href: "/contact-us" },
 ];
 
