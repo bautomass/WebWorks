@@ -235,7 +235,8 @@ const Hero: React.FC = () => {
               ></div>
               <div className="relative w-full h-full overflow-hidden rounded-lg shadow-xl">
                 <Image
-                  src="/images/Palieliniet sava zīmola uzticamību ar izcilu mājas lapas izstrādi.webp"
+                  // src="/images/Palieliniet sava zīmola uzticamību ar izcilu mājas lapas izstrādi.webp"
+                  src="/images/hero-main-image-banner.jpg"
                   alt="Moderns un efektīvs tīmekļa dizains jūsu biznesam"
                   layout="fill"
                   objectFit="cover"
