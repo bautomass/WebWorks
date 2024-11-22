@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../styles/globals.css";
+import CookieConsentBar from "@/components/CookieConsentBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -155,6 +156,7 @@ export default function RootLayout({
         <meta name="geo.region" content="LV" />
         <meta name="geo.placename" content="Jelgava" />
       </head>
+      <CookieConsentBar />
       <body className={inter.className}>{children}</body>
     </html>
   );
