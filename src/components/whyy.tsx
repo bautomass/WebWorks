@@ -127,18 +127,16 @@ const Carousel: React.FC<CarouselProps> = React.memo(({ items }) => {
         </motion.div>
       </AnimatePresence>
 
-      <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+      <div className="absolute bottom-6 left-6 flex space-x-3">
         {items.map((_, index) => (
           <button
             key={index}
-            className={`w-4 h-4 sm:w-6 sm:h-6 p-0.5 sm:p-1 rounded-full transition-all duration-300 ${
+            className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full transition-all duration-300 ${
               index === currentIndex ? "bg-white scale-125" : "bg-white/50"
             }`}
             onClick={() => setCurrentIndex(index)}
             aria-label={`Pāriet uz slaidu ${index + 1}`}
-          >
-            <span className="block w-full h-full rounded-full bg-current"></span>
-          </button>
+          />
         ))}
       </div>
     </div>
