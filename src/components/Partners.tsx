@@ -1,210 +1,227 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { supabase } from "../utils/supabase";
 import Header from "../components/Header";
 import Footer from "../components/footer";
 import Script from "next/script";
-import {
-  FiCode,
-  FiServer,
-  FiDatabase,
-  FiGlobe,
-  FiAward,
-  FiShield,
-  FiCloud,
-  FiTerminal,
-  FiPackage,
-  FiLoader,
-} from "react-icons/fi";
-import {
-  fadeInUp,
-  staggerContainer,
-  scaleIn,
-  float,
-} from "@/utils/animationUtils";
+import { FiArrowRight, FiLoader } from "react-icons/fi";
+import { fadeInUp, staggerContainer } from "@/utils/animationUtils";
 
-type PartnerContent = {
+// Types
+interface PartnerContent {
+  id: number;
   title: string;
   subtitle: string;
-  main_description: string;
-  partnership_description: string;
   contact_info: string;
-};
+  created_at: string;
+  updated_at: string;
+}
 
-type Partner = {
-  id: number;
-  category_id: number;
-  name: string;
-  description: string;
-  website_url: string;
-  location: string;
-  established_year: number;
-  partnership_since: string;
-  is_featured: boolean;
-  order_number: number;
-  technologies?: Technology[];
-  testimonials?: Testimonial[];
-};
+interface HeroSectionProps {
+  title: string;
+  subtitle: string;
+}
 
-type Technology = {
-  id: number;
-  name: string;
-  icon_name: string;
-  description: string;
-};
-
-type Testimonial = {
-  id: number;
-  author_name: string;
-  author_position: string;
-  content: string;
-};
-
-// Loading Component
-const LoadingSpinner = () => (
-  <div className="flex flex-col items-center justify-center min-h-[60vh]">
+// Loading spinner component
+const LoadingSpinner: React.FC = () => (
+  <div
+    className="flex flex-col items-center justify-center min-h-[60vh]"
+    role="status"
+    aria-label="Loading content"
+  >
     <motion.div
+      className="relative"
       animate={{ rotate: 360 }}
       transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-      className="relative w-20 h-20"
     >
-      <div className="absolute inset-0 border-4 border-[#EEC71B]/20 rounded-full" />
-      <div className="absolute inset-0 border-4 border-t-[#EEC71B] rounded-full" />
-      <FiLoader className="absolute inset-0 m-auto text-[#EEC71B] text-2xl" />
+      <div className="w-20 h-20 border-4 border-[#EEC71B]/30 rounded-full" />
+      <div className="absolute top-0 left-0 w-20 h-20 border-4 border-[#EEC71B] rounded-full border-t-transparent" />
+      <div className="absolute inset-0 flex items-center justify-center">
+        <FiLoader className="text-[#EEC71B] text-2xl" aria-hidden="true" />
+      </div>
     </motion.div>
-    <p className="mt-4 text-gray-600">Ielādē saturu...</p>
+    <motion.p
+      className="mt-4 text-gray-600"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: [0, 1, 0] }}
+      transition={{ duration: 2, repeat: Infinity }}
+    >
+      Ielādē saturu...
+    </motion.p>
   </div>
 );
 
-// Partner Card Component
-const PartnerCard = ({ partner }: { partner: Partner }) => (
-  <motion.div
-    variants={fadeInUp}
-    whileHover={{ y: -5 }}
-    className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-300"
+// Circuit pattern background
+const CircuitBackground: React.FC = () => (
+  <div className="absolute inset-0 pointer-events-none opacity-10">
+    <svg
+      width="100%"
+      height="100%"
+      className="text-[#EEC71B]"
+      aria-hidden="true"
+    >
+      <pattern
+        id="circuit"
+        x="0"
+        y="0"
+        width="50"
+        height="50"
+        patternUnits="userSpaceOnUse"
+      >
+        <path
+          d="M10 10h30v30h-30z"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="0.5"
+        />
+        <circle cx="25" cy="25" r="3" fill="currentColor" />
+        <path
+          d="M25 10v8M25 32v8M10 25h8M32 25h8"
+          stroke="currentColor"
+          strokeWidth="0.5"
+        />
+      </pattern>
+      <rect width="100%" height="100%" fill="url(#circuit)" />
+    </svg>
+  </div>
+);
+
+// Hero Section
+const HeroSection: React.FC<HeroSectionProps> = ({ title, subtitle }) => (
+  <motion.section
+    variants={staggerContainer}
+    initial="initial"
+    animate="animate"
+    className="relative bg-[#3D3B4A] text-white py-12 sm:py-16 md:py-20 rounded-2xl mb-8 sm:mb-12 md:mb-16 overflow-hidden min-h-[400px] sm:min-h-[450px] md:min-h-[500px] flex items-center justify-center"
   >
-    <div className="p-6">
-      <div className="flex items-start justify-between mb-4">
-        <div>
-          <h3 className="text-xl font-bold text-[#3D3B4A]">{partner.name}</h3>
-          <p className="text-sm text-gray-500">{partner.location}</p>
-        </div>
-        {partner.is_featured && (
-          <span className="bg-[#EEC71B]/10 text-[#EEC71B] text-xs font-medium px-2.5 py-1 rounded-full">
-            Featured Partner
+    <CircuitBackground />
+    <div className="relative z-10 text-center w-full max-w-4xl mx-auto px-4 flex flex-col items-center">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="font-mono text-[#EEC71B] text-xs sm:text-sm mb-4 sm:mb-6 md:mb-8"
+      >
+        {"<WebWorks>"}
+      </motion.div>
+
+      <motion.div
+        variants={fadeInUp}
+        className="space-y-4 sm:space-y-6 md:space-y-8 mb-8 sm:mb-10 md:mb-12"
+      >
+        <motion.h1
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight bg-clip-text px-2"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          {title}
+        </motion.h1>
+
+        <motion.div
+          className="flex items-center justify-center gap-2 sm:gap-3 md:gap-4 text-lg sm:text-xl md:text-2xl lg:text-3xl font-normal flex-wrap px-2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
+          <motion.span
+            className="text-[#EEC71B] whitespace-nowrap"
+            whileHover={{ scale: 1.05 }}
+          >
+            Innovation
+          </motion.span>
+          <span className="text-gray-400 hidden sm:inline" aria-hidden="true">
+            •
           </span>
-        )}
-      </div>
-
-      <p className="text-gray-600 mb-4">{partner.description}</p>
-
-      <div className="space-y-4">
-        <div className="flex items-center gap-2 text-sm text-gray-500">
-          <FiGlobe className="text-[#EEC71B]" />
-          <span>Est. {partner.established_year}</span>
-          <span className="text-gray-300">|</span>
-          <span>
-            Partner since {new Date(partner.partnership_since).getFullYear()}
+          <motion.span
+            className="text-[#EEC71B] whitespace-nowrap"
+            whileHover={{ scale: 1.05 }}
+          >
+            Partnership
+          </motion.span>
+          <span className="text-gray-400 hidden sm:inline" aria-hidden="true">
+            •
           </span>
-        </div>
+          <motion.span
+            className="text-[#EEC71B] whitespace-nowrap"
+            whileHover={{ scale: 1.05 }}
+          >
+            Growth
+          </motion.span>
+        </motion.div>
 
-        {partner.technologies && (
-          <div className="flex flex-wrap gap-2">
-            {partner.technologies.map((tech) => (
-              <span
-                key={tech.id}
-                className="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-md"
-              >
-                {tech.name}
-              </span>
-            ))}
-          </div>
-        )}
+        <motion.p
+          variants={fadeInUp}
+          className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-300 max-w-2xl mx-auto px-4"
+        >
+          {subtitle}
+        </motion.p>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="font-mono text-[#EEC71B] text-xs sm:text-sm mb-8 sm:mb-12 md:mb-16"
+      >
+        {"</WebWorks>"}
+      </motion.div>
+
+      <div className="absolute bottom-4 sm:bottom-6 md:bottom-8 left-0 right-0 flex justify-center">
+        <motion.div
+          animate={{ y: [0, 10, 0] }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="text-[#EEC71B] cursor-pointer hover:scale-110 transition-transform duration-300"
+          aria-hidden="true"
+        >
+          <FiArrowRight className="text-2xl sm:text-3xl md:text-4xl rotate-90" />
+        </motion.div>
       </div>
     </div>
+  </motion.section>
+);
 
-    {partner.testimonials && partner.testimonials.length > 0 && (
-      <div className="border-t border-gray-100 bg-gray-50 p-6">
-        <blockquote className="text-sm text-gray-600 italic">
-          "{partner.testimonials[0].content}"
-          <footer className="mt-2 text-xs text-gray-500 non-italic">
-            — {partner.testimonials[0].author_name},{" "}
-            {partner.testimonials[0].author_position}
-          </footer>
-        </blockquote>
-      </div>
-    )}
+// Contact Section
+const ContactSection: React.FC<{ contactInfo: string }> = ({ contactInfo }) => (
+  <motion.div
+    variants={fadeInUp}
+    className="bg-white rounded-xl shadow-lg p-8 text-center"
+  >
+    <h3 className="text-2xl font-bold text-[#3D3B4A] mb-4">
+      Kļūstiet par Partneri
+    </h3>
+    <p className="text-gray-600 mb-6">{contactInfo}</p>
+    <motion.a
+      href="mailto:info@webworks.lv"
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      className="inline-block bg-[#EEC71B] text-[#3D3B4A] px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-all duration-300"
+    >
+      info@webworks.lv
+    </motion.a>
   </motion.div>
 );
 
-// Feature Grid Component
-const FeatureGrid = () => (
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    {[
-      {
-        icon: <FiCloud />,
-        title: "Modernie Mākoņrisinājumi",
-        description: "Piekļuve jaunākajām mākoņtehnoloģijām un resursiem",
-      },
-      {
-        icon: <FiCode />,
-        title: "Inovatīvas Tehnoloģijas",
-        description: "Ekskluzīva pieeja beta versijām un jaunākajiem rīkiem",
-      },
-      {
-        icon: <FiShield />,
-        title: "Uzticama Partnerība",
-        description:
-          "Ilgtermiņa sadarbība ar vadošajiem tehnoloģiju uzņēmumiem",
-      },
-    ].map((feature, index) => (
-      <motion.div
-        key={index}
-        variants={fadeInUp}
-        className="bg-white p-6 rounded-xl shadow-lg"
-      >
-        <div className="text-[#EEC71B] text-2xl mb-4">{feature.icon}</div>
-        <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-        <p className="text-gray-600">{feature.description}</p>
-      </motion.div>
-    ))}
-  </div>
-);
-
 // Main Partners Component
-const Partners = () => {
+const Partners: React.FC = () => {
   const [content, setContent] = useState<PartnerContent | null>(null);
-  const [partners, setPartners] = useState<Partner[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const loadContent = async () => {
       try {
-        // Fetch page content
         const { data: contentData, error: contentError } = await supabase
           .from("partners_page_content")
           .select("*")
           .single();
 
         if (contentError) throw contentError;
-
-        // Fetch partners with technologies and testimonials
-        const { data: partnersData, error: partnersError } = await supabase
-          .from("partners")
-          .select(
-            `
-            *,
-            technologies: partner_technologies(*),
-            testimonials: partner_testimonials(*)
-          `
-          )
-          .order("order_number", { ascending: true });
-
-        if (partnersError) throw partnersError;
-
-        setContent(contentData);
-        setPartners(partnersData || []);
+        setContent(contentData as PartnerContent);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -222,99 +239,18 @@ const Partners = () => {
     <>
       <Header />
 
-      <main className="relative min-h-screen pt-16 pb-24 bg-gradient-to-b from-gray-50 to-white">
-        {/* Hero Section */}
+      <main className="relative min-h-screen pt-16 pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={staggerContainer}
-            className="text-center mb-16"
-          >
-            <motion.h1
-              variants={fadeInUp}
-              className="text-4xl md:text-5xl font-bold text-[#3D3B4A] mb-6"
-            >
-              {content.title}
-              <div className="h-1 w-24 bg-[#EEC71B] mx-auto mt-4" />
-            </motion.h1>
-            <motion.p
-              variants={fadeInUp}
-              className="text-xl text-gray-600 max-w-3xl mx-auto"
-            >
-              {content.subtitle}
-            </motion.p>
-          </motion.div>
+          <HeroSection title={content.title} subtitle={content.subtitle} />
 
-          {/* Featured Partners Grid */}
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            animate="visible"
-            className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16"
-          >
-            {partners
-              .filter((p) => p.is_featured)
-              .map((partner) => (
-                <PartnerCard key={partner.id} partner={partner} />
-              ))}
-          </motion.div>
-
-          {/* Partnership Benefits */}
           <motion.section
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
             variants={staggerContainer}
-            className="mb-16"
-          >
-            <motion.h2
-              variants={fadeInUp}
-              className="text-3xl font-bold text-center text-[#3D3B4A] mb-12"
-            >
-              Partnerības Priekšrocības
-            </motion.h2>
-            <FeatureGrid />
-          </motion.section>
-
-          {/* Other Partners */}
-          <motion.section
-            initial="hidden"
-            whileInView="visible"
+            initial="initial"
+            whileInView="animate"
             viewport={{ once: true }}
-            variants={staggerContainer}
-            className="mb-16"
+            className="max-w-4xl mx-auto"
           >
-            <motion.h2
-              variants={fadeInUp}
-              className="text-3xl font-bold text-center text-[#3D3B4A] mb-12"
-            >
-              Tehnoloģiju Partneri
-            </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {partners
-                .filter((p) => !p.is_featured)
-                .map((partner) => (
-                  <PartnerCard key={partner.id} partner={partner} />
-                ))}
-            </div>
-          </motion.section>
-
-          {/* Contact Section */}
-          <motion.section
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-            className="bg-[#3D3B4A] text-white rounded-xl p-8 md:p-12"
-          >
-            <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-3xl font-bold mb-6">Kļūstiet par Partneri</h2>
-              <p className="text-gray-300 mb-8">{content.contact_info}</p>
-              <p className="text-[#EEC71B] font-mono">
-                partnerships@webworks.lv
-              </p>
-            </div>
+            <ContactSection contactInfo={content.contact_info} />
           </motion.section>
         </div>
       </main>
@@ -327,18 +263,34 @@ const Partners = () => {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Organization",
-            name: "WebWorks",
-            description: content.main_description,
+            "@type": "WebPage",
+            name: content.title,
+            description: content.subtitle,
             url: "https://www.webworks.lv/partneri",
-            partner: partners.map((partner) => ({
+            provider: {
               "@type": "Organization",
-              name: partner.name,
-              description: partner.description,
-              url: partner.website_url,
-              location: partner.location,
-              foundingDate: partner.established_year.toString(),
-            })),
+              name: "WebWorks",
+              url: "https://www.webworks.lv",
+              address: {
+                "@type": "PostalAddress",
+                addressCountry: "LV",
+              },
+            },
+            mainEntity: {
+              "@type": "Organization",
+              name: "WebWorks",
+              email: "info@webworks.lv",
+              sameAs: [
+                "https://www.linkedin.com/company/webworks-latvia",
+                "https://www.facebook.com/webworks.lv",
+              ],
+              contactPoint: {
+                "@type": "ContactPoint",
+                contactType: "Partnership Inquiries",
+                email: "info@webworks.lv",
+                availableLanguage: ["lv"],
+              },
+            },
           }),
         }}
       />
