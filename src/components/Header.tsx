@@ -225,7 +225,7 @@ const Header: React.FC = () => {
           <BurgerMenu isOpen={isOpen} setIsOpen={setIsOpen} />
         ) : (
           <nav
-            className="flex items-center space-x-8 relative z-10"
+            className="flex items-center space-x-6 relative z-10"
             aria-label="Main navigation"
           >
             <NavItems />
@@ -342,7 +342,7 @@ const NavItems: React.FC = () => {
               <button
                 onMouseEnter={() => handleMouseEnter(item.name)}
                 onMouseLeave={handleMouseLeave}
-                className="text-[#3D3B4A] font-medium group transition-colors duration-300 hover:text-[#8CB8B4] flex items-center"
+                className="text-[#3D3B4A] font-extrabold group transition-colors duration-300 hover:text-[#8CB8B4] flex items-center uppercase text-base"
                 aria-expanded={openDropdown === item.name}
                 aria-haspopup="true"
               >
@@ -413,7 +413,7 @@ const NavItems: React.FC = () => {
           ) : (
             <Link
               href={item.href}
-              className="text-[#3D3B4A] font-medium group transition-colors duration-300 hover:text-[#8CB8B4]"
+              className="text-[#3D3B4A] font-extrabold group transition-colors duration-300 hover:text-[#8CB8B4] uppercase text-base"
             >
               {item.name}
             </Link>
