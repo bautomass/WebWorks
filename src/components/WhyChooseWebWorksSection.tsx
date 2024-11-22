@@ -588,7 +588,7 @@ const WhyChooseWebWorksSection: React.FC = () => {
                 {Object.entries(tabsContent).map(([key, { icon, title }]) => (
                   <Tooltip key={key} content={title}>
                     <button
-                      className={`p-2 sm:p-4 rounded-lg transition-all duration-300 hover:scale-105 flex items-center justify-center ${
+                      className={`p-2 sm:p-3 rounded-lg transition-all duration-300 hover:scale-107 flex items-center justify-center ${
                         activeTab === key
                           ? "bg-[#3D3B4A] text-white shadow-md scale-105"
                           : "bg-gray-100 text-[#3D3B4A] hover:bg-gray-200"
