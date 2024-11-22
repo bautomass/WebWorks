@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -29,6 +35,8 @@ import {
   IconType,
 } from "react-icons/fi";
 import { BiCookie } from "react-icons/bi";
+import { FaPhone } from "react-icons/fa";
+import { Clock, Calendar, Sun, Moon } from "lucide-react";
 
 interface DropdownItem {
   name: string;
@@ -41,6 +49,53 @@ interface MenuItem {
   name: string;
   href: string;
   dropdown?: DropdownItem[];
+}
+
+const PhoneButton: React.FC<PhoneButtonProps> = React.memo(
+  ({ phone, bg, text, hover, className }) => {
+    const [isRevealed, setIsRevealed] = useState(false);
+    const [isClicked, setIsClicked] = useState(false);
+
+    const formattedPhone = useMemo(() => {
+      if (isClicked) return phone;
+      if (isRevealed) return phone.slice(0, -6) + "XXXXXX";
+      return "Piezvani Mums";
+    }, [phone, isRevealed, isClicked]);
+
+    const handleClick = useCallback(() => {
+      if (!isClicked) {
+        setIsClicked(true);
+        window.location.href = `tel:${phone}`;
+      }
+    }, [phone, isClicked]);
+
+    return (
+      <button
+        onClick={handleClick}
+        onMouseEnter={() => setIsRevealed(true)}
+        onMouseLeave={() => {
+          setIsRevealed(false);
+          setIsClicked(false);
+        }}
+        className={`inline-flex items-center justify-center space-x-2 ${bg} ${text} px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg text-base font-semibold ${hover} transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 ${className}`}
+      >
+        <FaPhone className="text-lg" />
+        <span className="transition-all duration-300 ease-in-out">
+          {formattedPhone}
+        </span>
+      </button>
+    );
+  }
+);
+
+PhoneButton.displayName = "PhoneButton";
+
+interface PhoneButtonProps {
+  phone: string;
+  bg: string;
+  text: string;
+  hover: string;
+  className?: string;
 }
 
 const menuItems: MenuItem[] = [
@@ -432,9 +487,9 @@ const CtaButton: React.FC = React.memo(() => (
   <Link
     href="/sakt-projekta-skici"
     className="bg-[#8CB8B4] text-[#3D3B4A] px-6 py-2 rounded-lg hover:bg-[#EEC71B] transition-colors duration-300 relative overflow-hidden group shadow-md font-bold"
-    aria-label="Saņemt piedāvājumu"
+    aria-label="Izveidot Skici"
   >
-    <span className="relative z-10">Saņemt piedāvājumu</span>
+    <span className="relative z-10">Izveidot Skici</span>
     <span
       className="absolute inset-0 bg-[#CF4B43] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left"
       aria-hidden="true"
@@ -487,12 +542,36 @@ interface MobileMenuProps {
 }
 
 const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, setIsOpen }) => {
+  const [currentTime, setCurrentTime] = useState<string>("");
+  const [isWorkingHours, setIsWorkingHours] = useState<boolean>(false);
   const menuVariants = {
     closed: { opacity: 0, x: "100%" },
     open: { opacity: 1, x: 0 },
   };
 
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+
+  useEffect(() => {
+    const checkWorkingHours = () => {
+      const now = new Date();
+      const hours = now.getHours();
+      const day = now.getDay();
+
+      // Update working hours to 9:00 - 20:00
+      setIsWorkingHours(day >= 1 && day <= 5 && hours >= 9 && hours < 20);
+      setCurrentTime(
+        now.toLocaleTimeString("lv-LV", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      );
+    };
+
+    checkWorkingHours();
+    const timer = setInterval(checkWorkingHours, 60000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <AnimatePresence>
@@ -640,19 +719,69 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, setIsOpen }) => {
               </div>
             ))}
           </div>
-          <div className="mt-12 flex justify-center">
+          <div className="mt-12 flex justify-center gap-4 px-4">
             <Link
               href="/sakt-projekta-skici"
-              className="bg-[#8CB8B4] text-[#3D3B4A] px-6 py-2 rounded-lg hover:bg-[#EEC71B] transition-colors duration-300 relative overflow-hidden group shadow-md font-bold"
+              className="bg-[#8CB8B4] text-[#3D3B4A] px-6 py-2 rounded-lg hover:bg-[#EEC71B] transition-colors duration-300 relative overflow-hidden group shadow-md font-bold flex-1 flex items-center justify-center" // Added flex and justify-center
               onClick={() => setIsOpen(false)}
-              aria-label="Saņemt piedāvājumu"
+              aria-label="Izveidot Skici"
             >
-              <span className="relative z-10">Saņemt piedāvājumu</span>
+              <span className="relative z-10">Izveidot Skici</span>
               <span
                 className="absolute inset-0 bg-[#CF4B43] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left"
                 aria-hidden="true"
               />
             </Link>
+
+            <PhoneButton
+              phone="+37126282630"
+              bg="bg-[#3D3B4A]"
+              text="text-white"
+              hover="hover:bg-[#8CB8B4]"
+              className="flex-1"
+            />
+          </div>
+          {/* After your buttons div */}
+          <div className="mt-6 px-4">
+            <div className="bg-white/60 backdrop-blur-sm rounded-lg p-4 shadow-sm border border-gray-100">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  {isWorkingHours ? (
+                    <Sun className="w-5 h-5 text-[#EEC71B] animate-pulse" />
+                  ) : (
+                    <Moon className="w-5 h-5 text-[#3D3B4A]" />
+                  )}
+                  <span className="text-sm font-medium text-[#3D3B4A]">
+                    {isWorkingHours
+                      ? "Esam Gatavi Palīdzēt!"
+                      : "Šobrīd Sapņojam Par Kodu"}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <Clock className="w-4 h-4" />
+                  {currentTime}
+                </div>
+              </div>
+
+              <div className="mt-4 space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center gap-2 text-gray-600">
+                    <Calendar className="w-4 h-4" />
+                    <span>Darba Dienas:</span>
+                  </div>
+                  <span className="text-[#3D3B4A] font-medium">P. - Pk.</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center gap-2 text-gray-600">
+                    <Clock className="w-4 h-4" />
+                    <span>Darba Laiks:</span>
+                  </div>
+                  <span className="text-[#3D3B4A] font-medium">
+                    09:00 - 20:00
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         </motion.nav>
       )}
