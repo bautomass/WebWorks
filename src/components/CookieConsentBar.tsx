@@ -79,22 +79,20 @@ const CookieConsentBar = () => {
           transition={{ duration: 0.3 }}
           className="fixed bottom-0 left-0 right-0 z-50"
         >
-          {/* Backdrop blur and gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#3D3B4A]/95 to-[#2C2A35]/95 backdrop-blur-sm" />
 
-          {/* Main content */}
-          <div className="relative container mx-auto max-w-7xl px-4 py-6">
+          <div className="relative container mx-auto max-w-7xl px-4 py-4">
             {!showPreferences ? (
-              <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                <div className="flex items-start gap-4">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="flex items-start gap-3">
                   <div className="relative">
                     <div className="absolute -inset-1 bg-gradient-to-r from-[#8CB8B4] to-[#EEC71B] rounded-full blur opacity-40" />
-                    <div className="relative bg-[#3D3B4A] p-2 rounded-full">
-                      <BiCookie className="text-[#EEC71B] text-3xl" />
+                    <div className="relative bg-[#3D3B4A] p-1.5 rounded-full">
+                      <BiCookie className="text-[#EEC71B] text-2xl" />
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-white font-semibold text-lg mb-2">
+                    <h3 className="text-white font-semibold text-base mb-1">
                       Sīkdatņu iestatījumi
                     </h3>
                     <p className="text-gray-200 text-sm leading-relaxed max-w-2xl">
@@ -105,37 +103,37 @@ const CookieConsentBar = () => {
                     </p>
                   </div>
                 </div>
-                <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
                   <button
                     onClick={handleDeclineAll}
-                    className="px-4 py-2.5 text-sm font-medium text-gray-300 hover:text-white hover:bg-[#CF4B43]/20 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2"
+                    className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-[#CF4B43]/20 rounded-lg transition-colors duration-300 flex items-center justify-center gap-1.5"
                   >
-                    <FiX className="text-lg" />
+                    <FiX className="text-base" />
                     Noraidīt visas
                   </button>
                   <button
                     onClick={() => setShowPreferences(true)}
-                    className="px-4 py-2.5 text-sm font-medium bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors duration-300 flex items-center justify-center gap-2"
+                    className="px-3 py-2 text-sm font-medium bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors duration-300 flex items-center justify-center gap-1.5"
                   >
-                    <FiSettings className="text-[#EEC71B]" />
+                    <FiSettings className="text-[#EEC71B] text-base" />
                     Preferences
                   </button>
                   <button
                     onClick={handleAcceptAll}
-                    className="px-6 py-2.5 text-sm font-medium rounded-lg transition-all duration-300 flex items-center justify-center gap-2 relative group"
+                    className="px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 flex items-center justify-center gap-1.5 relative group"
                   >
                     <div className="absolute -inset-0.5 bg-gradient-to-r from-[#8CB8B4] to-[#EEC71B] rounded-lg blur opacity-50 group-hover:opacity-75 transition duration-300" />
-                    <div className="relative bg-[#8CB8B4] hover:bg-[#EEC71B] transition-colors duration-300 w-full h-full rounded-lg px-4 py-2.5 flex items-center justify-center text-white">
-                      <FiCheck className="text-lg" />
+                    <div className="relative bg-[#8CB8B4] hover:bg-[#EEC71B] transition-colors duration-300 w-full h-full rounded-lg px-3 py-2 flex items-center justify-center text-white">
+                      <FiCheck className="text-base" />
                       Pieņemt visas
                     </div>
                   </button>
                 </div>
               </div>
             ) : (
-              <div className="bg-[#2C2A35] rounded-lg p-6 space-y-6">
+              <div className="bg-[#2C2A35] rounded-lg p-5 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xl font-semibold text-white flex items-center gap-3">
+                  <h3 className="text-lg font-semibold text-white flex items-center gap-2">
                     <FiShield className="text-[#EEC71B]" />
                     Sīkdatņu preferences
                   </h3>
@@ -143,10 +141,10 @@ const CookieConsentBar = () => {
                     onClick={() => setShowPreferences(false)}
                     className="text-gray-400 hover:text-[#CF4B43] transition-colors"
                   >
-                    <FiX className="text-2xl" />
+                    <FiX className="text-xl" />
                   </button>
                 </div>
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {[
                     {
                       title: "Nepieciešamās sīkdatnes",
@@ -173,7 +171,7 @@ const CookieConsentBar = () => {
                   ].map((item) => (
                     <div
                       key={item.key}
-                      className="flex items-center justify-between p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-colors duration-300"
+                      className="flex items-center justify-between p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors duration-300"
                     >
                       <div className="flex items-start gap-3">
                         <div className="mt-1">
@@ -212,17 +210,17 @@ const CookieConsentBar = () => {
                 <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
                   <button
                     onClick={() => setShowPreferences(false)}
-                    className="px-4 py-2.5 text-sm font-medium text-gray-300 hover:text-white transition-colors duration-300"
+                    className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors duration-300"
                   >
                     Atpakaļ
                   </button>
                   <button
                     onClick={handleSavePreferences}
-                    className="px-6 py-2.5 text-sm font-medium rounded-lg transition-all duration-300 flex items-center justify-center gap-2 relative group"
+                    className="px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 flex items-center justify-center gap-1.5 relative group"
                   >
                     <div className="absolute -inset-0.5 bg-gradient-to-r from-[#8CB8B4] to-[#EEC71B] rounded-lg blur opacity-50 group-hover:opacity-75 transition duration-300" />
-                    <div className="relative bg-[#8CB8B4] hover:bg-[#EEC71B] transition-colors duration-300 w-full h-full rounded-lg px-4 py-2.5 flex items-center justify-center text-white">
-                      <FiCheck className="text-lg" />
+                    <div className="relative bg-[#8CB8B4] hover:bg-[#EEC71B] transition-colors duration-300 w-full h-full rounded-lg px-3 py-2 flex items-center justify-center text-white">
+                      <FiCheck className="text-base" />
                       Saglabāt preferences
                     </div>
                   </button>
