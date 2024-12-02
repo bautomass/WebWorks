@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     template: "%s | WebWorks",
   },
   description:
-    "WebWorks - Vadošā Web Izstrādes Kompānija Latvijā. Mājaslapas no €199, E-veikali no €499. 200+ Veiksmīgi Projekti, 98% Klientu Apmierinātība, SEO Optimizācija un 24/7 Atbalsts. Bezmaksas Konsultācija!",
+    "WebWorks - Pārvērtīsim Tavu uzņēmumu digitālā veiksmes stāstā. Izstrādājam mājaslapas un e-veikalus, kas izskatās izcili un sasniedz rezultātus. SEO optimizēti risinājumi no €199. Esi pamanāms digitālajā vidē.",
   keywords: [
     "mājas lapu izstrāde",
     "mājaslapu izstrāde",
