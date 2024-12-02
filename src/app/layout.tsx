@@ -120,10 +120,10 @@ export const metadata: Metadata = {
     images: ["https://www.webworks.lv/images/og-image.svg"],
   },
 
-  // Alternative Languages
-  alternates: {
-    canonical: "https://www.webworks.lv",
-  },
+  // // Alternative Languages
+  // alternates: {
+  //   canonical: "https://www.webworks.lv",
+  // },
 
   // Manifest
   manifest: "/manifest.json",
