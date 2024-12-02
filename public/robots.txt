@@ -1,4 +1,47 @@
+# Global rules
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /404
+Disallow: /500
+Disallow: /*?*  # Disallow URLs with query parameters
 
-Sitemap: https://www.yourwebsite.lv/sitemap.xml
+# Allow specific bots with custom rules
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+
+User-agent: Googlebot-Image
+Allow: /images/
+Allow: /public/images/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+
+# Host
+Host: https://www.webworks.lv
+
+# Sitemaps
+Sitemap: https://www.webworks.lv/sitemap.xml
+
+# Crawl delay for aggressive bots
+User-agent: *
+Crawl-delay: 10
+
+# Additional notes for search engines
+# Language
+X-Language: lv
+
+# Rate limiting
+X-Robots-Tag: all
+
+# Specific media targeting
+User-agent: Twitterbot
+Allow: /images/
+Allow: /public/images/
+
+User-agent: facebookexternalhit
+Allow: /images/
+Allow: /public/images/
