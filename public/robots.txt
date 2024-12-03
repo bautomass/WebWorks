@@ -30,13 +30,6 @@ Sitemap: https://www.webworks.lv/sitemap.xml
 User-agent: *
 Crawl-delay: 10
 
-# Additional notes for search engines
-# Language
-X-Language: lv
-
-# Rate limiting
-X-Robots-Tag: all
-
 # Specific media targeting
 User-agent: Twitterbot
 Allow: /images/
