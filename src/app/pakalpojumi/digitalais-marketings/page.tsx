@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Head from "next/head";
 import { motion, AnimatePresence } from "framer-motion";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -146,6 +145,62 @@ function adjustColor(color: string, amount: number): string {
       )
   );
 }
+
+const digitalMarketingSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  mainEntity: {
+    "@type": "ProfessionalService",
+    name: "WebWorks Digital Marketing",
+    image: "https://www.webworks.lv/images/digital-marketing-og.jpg",
+    "@id": "https://www.webworks.lv/pakalpojumi/digitalais-marketings",
+    url: "https://www.webworks.lv/pakalpojumi/digitalais-marketings",
+    telephone: "+37126282630",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Kungu Iela 23/8",
+      addressLocality: "Jelgava",
+      postalCode: "LV-3001",
+      addressCountry: "LV",
+    },
+    offers: {
+      "@type": "AggregateOffer",
+      priceCurrency: "EUR",
+      lowPrice: 399,
+      highPrice: 999,
+      offerCount: 3,
+    },
+  },
+  breadcrumb: {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        item: {
+          "@id": "https://www.webworks.lv",
+          name: "Sākums",
+        },
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        item: {
+          "@id": "https://www.webworks.lv/pakalpojumi",
+          name: "Pakalpojumi",
+        },
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        item: {
+          "@id": "https://www.webworks.lv/pakalpojumi/digitalais-marketings",
+          name: "Digitālais Mārketings",
+        },
+      },
+    ],
+  },
+};
 
 const DigitalaisMarketings: React.FC = () => {
   const [selectedService, setSelectedService] = useState<Service | null>(null);
@@ -364,73 +419,6 @@ const DigitalaisMarketings: React.FC = () => {
 
   return (
     <>
-      <Head>
-        {/* Primary Meta Tags */}
-        <title>
-          Digitālais Mārketings Latvijā | WebWorks - Cenas no €399 | SEO, SMM
-        </title>
-        <meta
-          name="description"
-          content="🚀 Profesionāls digitālais mārketings Latvijā ar WebWorks. Sociālie mediji no €599, SEO pakalpojumi, Google & Facebook reklāmas. 97% klientu apmierinātība. Bezmaksas konsultācija + 25% atlaide gada līgumiem."
-        />
-        <meta
-          name="keywords"
-          content="digitālais mārketings, sociālie mediji, SEO, Google Ads, Facebook reklāmas, Instagram reklāmas, content marketing, e-pasta mārketings, mārketinga stratēģija, Latvija"
-        />
-
-        {/* Canonical URL */}
-        <link
-          rel="canonical"
-          href="https://www.webworks.lv/pakalpojumi/digitalais-marketings"
-        />
-
-        {/* Open Graph / Facebook */}
-        <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="WebWorks" />
-        <meta
-          property="og:url"
-          content="https://www.webworks.lv/pakalpojumi/digitalais-marketings"
-        />
-        <meta
-          property="og:title"
-          content="Digitālais Mārketings | WebWorks 🚀 ROI Garantija"
-        />
-        <meta
-          property="og:description"
-          content="✓ Sociālie mediji no €599 ✓ SEO optimizācija ✓ Google & FB Ads ✓ All-in-One mārketings ar 25% atlaidi ✓ Bezmaksas konsultācija → Palieliniet ROI ar WebWorks!"
-        />
-        <meta
-          property="og:image"
-          content="https://www.webworks.lv/images/digital-marketing-og.jpg"
-        />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:locale" content="lv_LV" />
-
-        {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@webworks_lv" />
-        <meta
-          name="twitter:title"
-          content="Digitālais Mārketings | WebWorks 📈 ROI Garantija"
-        />
-        <meta
-          name="twitter:description"
-          content="✓ Sociālie mediji no €599 ✓ SEO optimizācija ✓ Google & FB Ads ✓ All-in-One mārketings ar 25% atlaidi"
-        />
-        <meta
-          name="twitter:image"
-          content="https://www.webworks.lv/images/digital-marketing-og.jpg"
-        />
-
-        {/* Basic SEO */}
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="robots" content="index, follow" />
-        <meta name="author" content="WebWorks" />
-        <meta name="geo.region" content="LV-RIX" />
-        <meta name="geo.placename" content="Jelgava" />
-      </Head>
-
       <div className="min-h-screen bg-gradient-to-b from-[#F3F5F4] to-white">
         <Header />
         <ToastContainer
@@ -904,87 +892,10 @@ const DigitalaisMarketings: React.FC = () => {
       </div>
 
       <Script
-        id="schema-script"
+        id="digital-marketing-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "WebPage",
-            mainEntity: {
-              "@type": "ProfessionalService",
-              name: "WebWorks Digital Marketing",
-              image: "https://www.webworks.lv/images/digital-marketing-og.jpg",
-              "@id": "https://www.webworks.lv",
-              url: "https://www.webworks.lv/pakalpojumi/digitalais-marketings",
-              telephone: "+37126282630",
-              address: {
-                "@type": "PostalAddress",
-                streetAddress: "Kungu Iela 23/8",
-                addressLocality: "Jelgava",
-                postalCode: "LV-3001",
-                addressCountry: "LV",
-              },
-              description:
-                "WebWorks piedāvā profesionālus digitālā mārketinga pakalpojumus. Palieliniet savu tiešsaistes klātbūtni, piesaistiet vairāk klientu un uzlabojiet sava zīmola atpazīstamību.",
-              priceRange: "€399 - €999",
-              openingHoursSpecification: {
-                "@type": "OpeningHoursSpecification",
-                dayOfWeek: [
-                  "Monday",
-                  "Tuesday",
-                  "Wednesday",
-                  "Thursday",
-                  "Friday",
-                ],
-                opens: "09:00",
-                closes: "20:00",
-              },
-              offers: {
-                "@type": "AggregateOffer",
-                priceCurrency: "EUR",
-                lowPrice: 399,
-                highPrice: 999,
-                offerCount: 3,
-                offers: services.map((service) => ({
-                  "@type": "Offer",
-                  name: service.name,
-                  description: service.description,
-                  price: service.price,
-                  priceCurrency: "EUR",
-                })),
-              },
-              breadcrumb: {
-                "@type": "BreadcrumbList",
-                itemListElement: [
-                  {
-                    "@type": "ListItem",
-                    position: 1,
-                    item: {
-                      "@id": "https://www.webworks.lv",
-                      name: "Sākums",
-                    },
-                  },
-                  {
-                    "@type": "ListItem",
-                    position: 2,
-                    item: {
-                      "@id": "https://www.webworks.lv/pakalpojumi",
-                      name: "Pakalpojumi",
-                    },
-                  },
-                  {
-                    "@type": "ListItem",
-                    position: 3,
-                    item: {
-                      "@id":
-                        "https://www.webworks.lv/pakalpojumi/digitalais-marketings",
-                      name: "Digitālais Mārketings",
-                    },
-                  },
-                ],
-              },
-            },
-          }),
+          __html: JSON.stringify(digitalMarketingSchema),
         }}
       />
     </>

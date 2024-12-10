@@ -5,36 +5,51 @@ Disallow: /api/
 Disallow: /_next/
 Disallow: /404
 Disallow: /500
-Disallow: /*?*  # Disallow URLs with query parameters
+Disallow: /*?*
 
-# Allow specific bots with custom rules
+# Googlebot specific rules
 User-agent: Googlebot
 Allow: /
 Disallow: /api/
+Allow: /*.js$
+Allow: /*.css$
 
+# Googlebot-Image specific rules
 User-agent: Googlebot-Image
 Allow: /images/
 Allow: /public/images/
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.gif$
+Allow: /*.png$
+Allow: /*.webp$
+Allow: /*.svg$
 
+# Bing specific rules
 User-agent: Bingbot
 Allow: /
 Disallow: /api/
+Allow: /*.js$
+Allow: /*.css$
 
-# Host
+# Social Media Crawlers
+User-agent: Twitterbot
+Allow: /
+Allow: /images/
+Allow: /public/images/
+Disallow: /api/
+
+User-agent: facebookexternalhit
+Allow: /
+Allow: /images/
+Allow: /public/images/
+Disallow: /api/
+
+# Host directive
 Host: https://www.webworks.lv
 
 # Sitemaps
 Sitemap: https://www.webworks.lv/sitemap.xml
 
-# Crawl delay for aggressive bots
-User-agent: *
-Crawl-delay: 10
-
-# Specific media targeting
-User-agent: Twitterbot
-Allow: /images/
-Allow: /public/images/
-
-User-agent: facebookexternalhit
-Allow: /images/
-Allow: /public/images/
+# Rate limiting
+Crawl-delay: 5
