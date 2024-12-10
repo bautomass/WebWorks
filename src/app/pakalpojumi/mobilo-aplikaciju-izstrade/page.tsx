@@ -16,7 +16,7 @@ import {
   FiUsers,
   FiShield,
 } from "react-icons/fi";
-import { supabase } from "../../../utils/supabase";
+import { supabase } from "@/utils/supabase";
 import Header from "@/components/Header";
 import Footer from "@/components/footer";
 import Script from "next/script";
@@ -227,7 +227,7 @@ const MobileAppDevelopment: React.FC = () => {
         return;
       }
 
-      toast.success("Paldies! Mēs ar jums sazināsimies tuvākaj�� laikā.", {
+      toast.success("Paldies! Mēs ar jums sazināsimies tuvākaj laikā.", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -360,529 +360,527 @@ const MobileAppDevelopment: React.FC = () => {
   );
 
   return (
-    <>
-      <div className="min-h-screen bg-gradient-to-b from-[#F3F5F4] to-white">
-        <Header />
-        <ToastContainer
-          position="top-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="colored"
-        />
+    <div className="min-h-screen bg-gradient-to-b from-[#F3F5F4] to-white">
+      <Header />
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
 
-        <main className="container mx-auto px-4 py-16">
-          <div className="max-w-7xl mx-auto">
-            <section className="text-center mb-16">
-              <h1 className="text-4xl md:text-5xl font-bold text-[#3D3B4A] mb-8">
-                Inovatīva Mobilo Aplikāciju Izstrāde
-              </h1>
-              <p className="text-xl text-gray-700 mb-12 max-w-3xl mx-auto">
-                Pārvērtiet savas idejas realitātē ar mūsu ekspertu veidotām
-                mobilajām lietotnēm. Mēs radām lietotnes, kas piesaista,
-                iesaista un pārveido jūsu biznesu.
-              </p>
-            </section>
+      <main className="container mx-auto px-4 py-16">
+        <div className="max-w-7xl mx-auto">
+          <section className="text-center mb-16">
+            <h1 className="text-4xl md:text-5xl font-bold text-[#3D3B4A] mb-8">
+              Inovatīva Mobilo Aplikāciju Izstrāde
+            </h1>
+            <p className="text-xl text-gray-700 mb-12 max-w-3xl mx-auto">
+              Pārvērtiet savas idejas realitātē ar mūsu ekspertu veidotām
+              mobilajām lietotnēm. Mēs radām lietotnes, kas piesaista,
+              iesaista un pārveido jūsu biznesu.
+            </p>
+          </section>
 
-            <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-              {packages.map((pkg) => (
-                <PackageCard key={pkg.id} pkg={pkg} />
-              ))}
-            </section>
+          <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            {packages.map((pkg) => (
+              <PackageCard key={pkg.id} pkg={pkg} />
+            ))}
+          </section>
 
-            <section className="mb-16">
-              <div className="bg-gradient-to-r from-[#3D3B4A] to-[#2D2B3A] p-1 rounded-lg">
-                <div className="bg-gradient-to-r from-[#3D3B4A] to-[#2D2B3A] p-12 md:p-16 rounded-lg relative overflow-hidden">
-                  {/* Background decorative elements */}
-                  <div className="absolute inset-0 overflow-hidden">
-                    <div className="absolute -right-10 -top-10 w-40 h-40 bg-[#EEC71B] opacity-10 rounded-full blur-3xl"></div>
-                    <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-[#EEC71B] opacity-10 rounded-full blur-3xl"></div>
-                  </div>
+          <section className="mb-16">
+            <div className="bg-gradient-to-r from-[#3D3B4A] to-[#2D2B3A] p-1 rounded-lg">
+              <div className="bg-gradient-to-r from-[#3D3B4A] to-[#2D2B3A] p-12 md:p-16 rounded-lg relative overflow-hidden">
+                {/* Background decorative elements */}
+                <div className="absolute inset-0 overflow-hidden">
+                  <div className="absolute -right-10 -top-10 w-40 h-40 bg-[#EEC71B] opacity-10 rounded-full blur-3xl"></div>
+                  <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-[#EEC71B] opacity-10 rounded-full blur-3xl"></div>
+                </div>
 
-                  <div className="relative z-10 max-w-3xl mx-auto text-center">
-                    <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">
-                      Meklējat Individuālu Mobilo Risinājumu?
-                    </h2>
-                    <p className="text-gray-300 text-lg mb-8">
-                      Mēs piedāvājam arī pielāgotus mobilos risinājumus, kas
-                      atbilst tieši jūsu biznesa vajadzībām un mērķiem.
-                      Sazinieties ar mums, lai apspriestu jūsu unikālo projektu.
-                    </p>
-                    <motion.a
-                      href="/contact-us"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="inline-flex items-center px-8 py-3 border border-transparent 
+                <div className="relative z-10 max-w-3xl mx-auto text-center">
+                  <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">
+                    Meklējat Individuālu Mobilo Risinājumu?
+                  </h2>
+                  <p className="text-gray-300 text-lg mb-8">
+                    Mēs piedāvājam arī pielāgotus mobilos risinājumus, kas
+                    atbilst tieši jūsu biznesa vajadzībām un mērķiem.
+                    Sazinieties ar mums, lai apspriestu jūsu unikālo projektu.
+                  </p>
+                  <motion.a
+                    href="/contact-us"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="inline-flex items-center px-8 py-3 border border-transparent 
                   text-base font-medium rounded-lg shadow-md text-[#3D3B4A] 
                   bg-[#EEC71B] hover:bg-[#ffd700] focus:outline-none focus:ring-2 
                   focus:ring-offset-2 focus:ring-[#EEC71B] transition-all duration-200"
-                    >
-                      Sazināties ar mums
-                      <FiArrowRight className="ml-2" />
-                    </motion.a>
-                  </div>
+                  >
+                    Sazināties ar mums
+                    <FiArrowRight className="ml-2" />
+                  </motion.a>
                 </div>
               </div>
-            </section>
+            </div>
+          </section>
 
-            <section className="mb-16 bg-white p-8 rounded-xl shadow-lg">
-              <h2 className="text-3xl font-bold text-center mb-12">
-                <span className="bg-gradient-to-r from-[#3D3B4A] to-[#2D2B3A] bg-clip-text text-transparent">
-                  Mobilo Aplikāciju Izstrādes Process
-                </span>
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div className="bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow duration-300">
-                  <h3 className="font-bold text-lg mb-4 flex items-center">
-                    <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
-                      1
-                    </span>
-                    Idejas un Plānošana
-                  </h3>
-                  <p className="text-gray-600">
-                    Definējam projekta mērķus, funkcionalitāti un tehniskās
-                    prasības.
-                  </p>
-                </div>
-
-                <div className="bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow duration-300">
-                  <h3 className="font-bold text-lg mb-4 flex items-center">
-                    <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
-                      2
-                    </span>
-                    UI/UX Dizains
-                  </h3>
-                  <p className="text-gray-600">
-                    Izstrādājam intuitīvu un pievilcīgu lietotāja saskarni.
-                  </p>
-                </div>
-
-                <div className="bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow duration-300">
-                  <h3 className="font-bold text-lg mb-4 flex items-center">
-                    <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
-                      3
-                    </span>
-                    Izstrāde
-                  </h3>
-                  <p className="text-gray-600">
-                    Veicam aplikācijas izstrādi ar modernām tehnoloģijām.
-                  </p>
-                </div>
-
-                <div className="bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow duration-300">
-                  <h3 className="font-bold text-lg mb-4 flex items-center">
-                    <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
-                      4
-                    </span>
-                    Testēšana
-                  </h3>
-                  <p className="text-gray-600">
-                    Veicam rūpīgu kvalitātes pārbaudi un optimizāciju.
-                  </p>
-                </div>
-
-                <div className="bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow duration-300">
-                  <h3 className="font-bold text-lg mb-4 flex items-center">
-                    <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
-                      5
-                    </span>
-                    Publicēšana
-                  </h3>
-                  <p className="text-gray-600">
-                    Publicējam lietotni App Store un Google Play veikalos.
-                  </p>
-                </div>
-
-                <div className="bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow duration-300">
-                  <h3 className="font-bold text-lg mb-4 flex items-center">
-                    <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
-                      6
-                    </span>
-                    Atbalsts
-                  </h3>
-                  <p className="text-gray-600">
-                    Nodrošinām nepārtrauktu uzturēšanu un atjauninājumus.
-                  </p>
-                </div>
+          <section className="mb-16 bg-white p-8 rounded-xl shadow-lg">
+            <h2 className="text-3xl font-bold text-center mb-12">
+              <span className="bg-gradient-to-r from-[#3D3B4A] to-[#2D2B3A] bg-clip-text text-transparent">
+                Mobilo Aplikāciju Izstrādes Process
+              </span>
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow duration-300">
+                <h3 className="font-bold text-lg mb-4 flex items-center">
+                  <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
+                    1
+                  </span>
+                  Idejas un Plānošana
+                </h3>
+                <p className="text-gray-600">
+                  Definējam projekta mērķus, funkcionalitāti un tehniskās
+                  prasības.
+                </p>
               </div>
-            </section>
-          </div>
 
-          <AnimatePresence>
-            {showModal && (
+              <div className="bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow duration-300">
+                <h3 className="font-bold text-lg mb-4 flex items-center">
+                  <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
+                    2
+                  </span>
+                  UI/UX Dizains
+                </h3>
+                <p className="text-gray-600">
+                  Izstrādājam intuitīvu un pievilcīgu lietotāja saskarni.
+                </p>
+              </div>
+
+              <div className="bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow duration-300">
+                <h3 className="font-bold text-lg mb-4 flex items-center">
+                  <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
+                    3
+                  </span>
+                  Izstrāde
+                </h3>
+                <p className="text-gray-600">
+                  Veicam aplikācijas izstrādi ar modernām tehnoloģijām.
+                </p>
+              </div>
+
+              <div className="bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow duration-300">
+                <h3 className="font-bold text-lg mb-4 flex items-center">
+                  <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
+                    4
+                  </span>
+                  Testēšana
+                </h3>
+                <p className="text-gray-600">
+                  Veicam rūpīgu kvalitātes pārbaudi un optimizāciju.
+                </p>
+              </div>
+
+              <div className="bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow duration-300">
+                <h3 className="font-bold text-lg mb-4 flex items-center">
+                  <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
+                    5
+                  </span>
+                  Publicēšana
+                </h3>
+                <p className="text-gray-600">
+                  Publicējam lietotni App Store un Google Play veikalos.
+                </p>
+              </div>
+
+              <div className="bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow duration-300">
+                <h3 className="font-bold text-lg mb-4 flex items-center">
+                  <span className="bg-[#EEC71B] text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
+                    6
+                  </span>
+                  Atbalsts
+                </h3>
+                <p className="text-gray-600">
+                  Nodrošinām nepārtrauktu uzturēšanu un atjauninājumus.
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <AnimatePresence>
+          {showModal && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 backdrop-blur-sm"
+              onClick={closeModal}
+            >
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 backdrop-blur-sm"
-                onClick={closeModal}
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative shadow-2xl"
+                onClick={(e) => e.stopPropagation()}
               >
-                <motion.div
-                  initial={{ scale: 0.9, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.9, opacity: 0 }}
-                  className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative shadow-2xl"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {selectedPackage && (
-                    <div>
-                      <div
-                        className="p-8 text-white relative overflow-hidden"
-                        style={{
-                          background: `linear-gradient(135deg, ${
-                            selectedPackage.color
-                          } 0%, ${adjustColor(
-                            selectedPackage.color,
-                            -30
-                          )} 100%)`,
-                        }}
-                      >
-                        {selectedPackage.popular && (
-                          <div className="absolute top-4 right-16 bg-yellow-400 text-gray-900 px-4 py-1 rounded-full text-sm font-bold">
-                            Populārākā Izvēle
-                          </div>
-                        )}
-                        <button
-                          className="absolute top-4 right-4 text-white hover:text-gray-200 transition-colors duration-200"
-                          onClick={closeModal}
-                          aria-label="Aizvērt"
-                        >
-                          <FiX size={24} />
-                        </button>
-                        <h3 className="text-3xl font-bold mb-2">
-                          {selectedPackage.name}
-                        </h3>
-                        <p className="text-xl opacity-90 mb-4">
-                          {selectedPackage.tagline}
-                        </p>
-                        <div className="flex items-baseline gap-2">
-                          <p className="text-4xl font-bold">
-                            €{selectedPackage.price}
-                          </p>
+                {selectedPackage && (
+                  <div>
+                    <div
+                      className="p-8 text-white relative overflow-hidden"
+                      style={{
+                        background: `linear-gradient(135deg, ${
+                          selectedPackage.color
+                        } 0%, ${adjustColor(
+                          selectedPackage.color,
+                          -30
+                        )} 100%)`,
+                      }}
+                    >
+                      {selectedPackage.popular && (
+                        <div className="absolute top-4 right-16 bg-yellow-400 text-gray-900 px-4 py-1 rounded-full text-sm font-bold">
+                          Populārākā Izvēle
                         </div>
+                      )}
+                      <button
+                        className="absolute top-4 right-4 text-white hover:text-gray-200 transition-colors duration-200"
+                        onClick={closeModal}
+                        aria-label="Aizvērt"
+                      >
+                        <FiX size={24} />
+                      </button>
+                      <h3 className="text-3xl font-bold mb-2">
+                        {selectedPackage.name}
+                      </h3>
+                      <p className="text-xl opacity-90 mb-4">
+                        {selectedPackage.tagline}
+                      </p>
+                      <div className="flex items-baseline gap-2">
+                        <p className="text-4xl font-bold">
+                          €{selectedPackage.price}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="p-8">
+                      <div className="prose max-w-none mb-8">
+                        <p className="text-gray-700 text-lg leading-relaxed">
+                          {selectedPackage.detailedDescription}
+                        </p>
                       </div>
 
-                      <div className="p-8">
-                        <div className="prose max-w-none mb-8">
-                          <p className="text-gray-700 text-lg leading-relaxed">
-                            {selectedPackage.detailedDescription}
-                          </p>
-                        </div>
-
-                        <div className="bg-gray-50 rounded-xl p-6 mb-8">
-                          <h4 className="font-bold text-xl mb-4 text-[#3D3B4A]">
-                            Iekļautie pakalpojumi:
-                          </h4>
-                          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {selectedPackage.features.map((feature, index) => (
-                              <li key={index} className="flex items-center">
-                                <FiCheckCircle
-                                  className={`mr-3 flex-shrink-0 ${
-                                    selectedPackage.highlightFeatures?.includes(
-                                      feature
-                                    )
-                                      ? "text-yellow-500"
-                                      : "text-[#EEC71B]"
-                                  }`}
-                                />
-                                <span
-                                  className={`text-gray-700 ${
-                                    selectedPackage.highlightFeatures?.includes(
-                                      feature
-                                    )
-                                      ? "font-medium"
-                                      : ""
-                                  }`}
-                                >
-                                  {feature}
-                                </span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                              <label
-                                className="block text-sm font-medium text-gray-700 mb-1"
-                                htmlFor="name"
-                              >
-                                Vārds*
-                              </label>
-                              <input
-                                type="text"
-                                id="name"
-                                name="name"
-                                value={formData.name}
-                                onChange={(e) =>
-                                  setFormData({
-                                    ...formData,
-                                    name: e.target.value,
-                                  })
-                                }
-                                className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-[${
-                                  selectedPackage.color
-                                }] focus:border-transparent transition-colors duration-200
-                            ${
-                              formErrors.name
-                                ? "border-red-500"
-                                : "border-gray-300"
-                            }`}
-                                required
+                      <div className="bg-gray-50 rounded-xl p-6 mb-8">
+                        <h4 className="font-bold text-xl mb-4 text-[#3D3B4A]">
+                          Iekļautie pakalpojumi:
+                        </h4>
+                        <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {selectedPackage.features.map((feature, index) => (
+                            <li key={index} className="flex items-center">
+                              <FiCheckCircle
+                                className={`mr-3 flex-shrink-0 ${
+                                  selectedPackage.highlightFeatures?.includes(
+                                    feature
+                                  )
+                                    ? "text-yellow-500"
+                                    : "text-[#EEC71B]"
+                                }`}
                               />
-                              {formErrors.name && (
-                                <p className="mt-1 text-sm text-red-600">
-                                  {formErrors.name}
-                                </p>
-                              )}
-                            </div>
-
-                            <div>
-                              <label
-                                className="block text-sm font-medium text-gray-700 mb-1"
-                                htmlFor="email"
+                              <span
+                                className={`text-gray-700 ${
+                                  selectedPackage.highlightFeatures?.includes(
+                                    feature
+                                  )
+                                    ? "font-medium"
+                                    : ""
+                                }`}
                               >
-                                E-pasts*
-                              </label>
-                              <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={(e) =>
-                                  setFormData({
-                                    ...formData,
-                                    email: e.target.value,
-                                  })
-                                }
-                                className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-[${
-                                  selectedPackage.color
-                                }] focus:border-transparent transition-colors duration-200
-                            ${
-                              formErrors.email
-                                ? "border-red-500"
-                                : "border-gray-300"
-                            }`}
-                                required
-                              />
-                              {formErrors.email && (
-                                <p className="mt-1 text-sm text-red-600">
-                                  {formErrors.email}
-                                </p>
-                              )}
-                            </div>
-                          </div>
+                                {feature}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
 
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                              <label
-                                className="block text-sm font-medium text-gray-700 mb-1"
-                                htmlFor="phone"
-                              >
-                                Tālrunis
-                              </label>
-                              <input
-                                type="tel"
-                                id="phone"
-                                name="phone"
-                                value={formData.phone}
-                                onChange={(e) =>
-                                  setFormData({
-                                    ...formData,
-                                    phone: e.target.value,
-                                  })
-                                }
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#EEC71B] focus:border-transparent transition-colors duration-200"
-                              />
-                            </div>
-
-                            <div>
-                              <label
-                                className="block text-sm font-medium text-gray-700 mb-1"
-                                htmlFor="company"
-                              >
-                                Uzņēmums
-                              </label>
-                              <input
-                                type="text"
-                                id="company"
-                                name="company"
-                                value={formData.company}
-                                onChange={(e) =>
-                                  setFormData({
-                                    ...formData,
-                                    company: e.target.value,
-                                  })
-                                }
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#EEC71B] focus:border-transparent transition-colors duration-200"
-                              />
-                            </div>
+                      <form onSubmit={handleSubmit} className="space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div>
+                            <label
+                              className="block text-sm font-medium text-gray-700 mb-1"
+                              htmlFor="name"
+                            >
+                              Vārds*
+                            </label>
+                            <input
+                              type="text"
+                              id="name"
+                              name="name"
+                              value={formData.name}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  name: e.target.value,
+                                })
+                              }
+                              className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-[${
+                                selectedPackage.color
+                              }] focus:border-transparent transition-colors duration-200
+                          ${
+                            formErrors.name
+                              ? "border-red-500"
+                              : "border-gray-300"
+                          }`}
+                              required
+                            />
+                            {formErrors.name && (
+                              <p className="mt-1 text-sm text-red-600">
+                                {formErrors.name}
+                              </p>
+                            )}
                           </div>
 
                           <div>
                             <label
                               className="block text-sm font-medium text-gray-700 mb-1"
-                              htmlFor="platform"
+                              htmlFor="email"
                             >
-                              Vēlamā Platforma*
+                              E-pasts*
                             </label>
-                            <select
-                              id="platform"
-                              name="platform"
-                              value={formData.platform}
+                            <input
+                              type="email"
+                              id="email"
+                              name="email"
+                              value={formData.email}
                               onChange={(e) =>
                                 setFormData({
                                   ...formData,
-                                  platform: e.target.value as
-                                    | "ios"
-                                    | "android"
-                                    | "both",
+                                  email: e.target.value,
                                 })
                               }
-                              className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#EEC71B] focus:border-transparent transition-colors duration-200
+                              className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-[${
+                                selectedPackage.color
+                              }] focus:border-transparent transition-colors duration-200
+                          ${
+                            formErrors.email
+                              ? "border-red-500"
+                              : "border-gray-300"
+                          }`}
+                              required
+                            />
+                            {formErrors.email && (
+                              <p className="mt-1 text-sm text-red-600">
+                                {formErrors.email}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div>
+                            <label
+                              className="block text-sm font-medium text-gray-700 mb-1"
+                              htmlFor="phone"
+                            >
+                              Tālrunis
+                            </label>
+                            <input
+                              type="tel"
+                              id="phone"
+                              name="phone"
+                              value={formData.phone}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  phone: e.target.value,
+                                })
+                              }
+                              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#EEC71B] focus:border-transparent transition-colors duration-200"
+                            />
+                          </div>
+
+                          <div>
+                            <label
+                              className="block text-sm font-medium text-gray-700 mb-1"
+                              htmlFor="company"
+                            >
+                              Uzņēmums
+                            </label>
+                            <input
+                              type="text"
+                              id="company"
+                              name="company"
+                              value={formData.company}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  company: e.target.value,
+                                })
+                              }
+                              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#EEC71B] focus:border-transparent transition-colors duration-200"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label
+                            className="block text-sm font-medium text-gray-700 mb-1"
+                            htmlFor="platform"
+                          >
+                            Vēlamā Platforma*
+                          </label>
+                          <select
+                            id="platform"
+                            name="platform"
+                            value={formData.platform}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                platform: e.target.value as
+                                  | "ios"
+                                  | "android"
+                                  | "both",
+                              })
+                            }
+                            className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#EEC71B] focus:border-transparent transition-colors duration-200
                           ${
                             formErrors.platform
                               ? "border-red-500"
                               : "border-gray-300"
                           }`}
-                              required
-                            >
-                              <option value="">Izvēlieties platformu</option>
-                              <option value="ios">iOS</option>
-                              <option value="android">Android</option>
-                              <option value="both">iOS un Android</option>
-                            </select>
-                            {formErrors.platform && (
-                              <p className="mt-1 text-sm text-red-600">
-                                {formErrors.platform}
-                              </p>
-                            )}
-                          </div>
-                          <div>
-                            <label
-                              className="block text-sm font-medium text-gray-700 mb-1"
-                              htmlFor="message"
-                            >
-                              Īss apraksts par jūsu vajadzībām*
-                            </label>
-                            <textarea
-                              id="message"
-                              name="message"
-                              value={formData.message}
-                              onChange={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  message: e.target.value,
-                                })
-                              }
-                              rows={3}
-                              className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#EEC71B] focus:border-transparent transition-colors duration-200
+                            required
+                          >
+                            <option value="">Izvēlieties platformu</option>
+                            <option value="ios">iOS</option>
+                            <option value="android">Android</option>
+                            <option value="both">iOS un Android</option>
+                          </select>
+                          {formErrors.platform && (
+                            <p className="mt-1 text-sm text-red-600">
+                              {formErrors.platform}
+                            </p>
+                          )}
+                        </div>
+                        <div>
+                          <label
+                            className="block text-sm font-medium text-gray-700 mb-1"
+                            htmlFor="message"
+                          >
+                            Īss apraksts par jūsu vajadzībām*
+                          </label>
+                          <textarea
+                            id="message"
+                            name="message"
+                            value={formData.message}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                message: e.target.value,
+                              })
+                            }
+                            rows={3}
+                            className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#EEC71B] focus:border-transparent transition-colors duration-200
       ${formErrors.message ? "border-red-500" : "border-gray-300"}`}
-                              required
-                              placeholder="Pastāstiet īsumā par savām vajadzībām un vēlmēm"
-                            ></textarea>
-                            {formErrors.message && (
-                              <p className="mt-1 text-sm text-red-600">
-                                {formErrors.message}
-                              </p>
-                            )}
-                          </div>
-                          <div>
-                            <label
-                              className="block text-sm font-medium text-gray-700 mb-1"
-                              htmlFor="project_description"
-                            >
-                              Projekta apraksts*
-                            </label>
-                            <textarea
-                              id="project_description"
-                              name="project_description"
-                              value={formData.project_description}
-                              onChange={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  project_description: e.target.value,
-                                })
-                              }
-                              rows={4}
-                              className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#EEC71B] focus:border-transparent transition-colors duration-200
+                            required
+                            placeholder="Pastāstiet īsumā par savām vajadzībām un vēlmēm"
+                          ></textarea>
+                          {formErrors.message && (
+                            <p className="mt-1 text-sm text-red-600">
+                              {formErrors.message}
+                            </p>
+                          )}
+                        </div>
+                        <div>
+                          <label
+                            className="block text-sm font-medium text-gray-700 mb-1"
+                            htmlFor="project_description"
+                          >
+                            Projekta apraksts*
+                          </label>
+                          <textarea
+                            id="project_description"
+                            name="project_description"
+                            value={formData.project_description}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                project_description: e.target.value,
+                              })
+                            }
+                            rows={4}
+                            className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#EEC71B] focus:border-transparent transition-colors duration-200
                           ${
                             formErrors.project_description
                               ? "border-red-500"
                               : "border-gray-300"
                           }`}
-                              required
-                              placeholder="Aprakstiet savu projekta ideju un galvenās funkcijas..."
-                            ></textarea>
-                          </div>
+                            required
+                            placeholder="Aprakstiet savu projekta ideju un galvenās funkcijas..."
+                          ></textarea>
+                        </div>
 
-                          <div className="bg-gray-50 p-6 -mx-6 mt-6 flex justify-between items-center">
-                            <div className="text-sm text-gray-600">
-                              <p className="font-medium">Izvēlētā pakete:</p>
-                              <p className="text-gray-900">
-                                {selectedPackage.name} - €
-                                {selectedPackage.price}
-                              </p>
-                            </div>
-                            <button
-                              type="submit"
-                              disabled={isSubmitting}
-                              className={`inline-flex items-center px-6 py-3 border border-transparent 
+                        <div className="bg-gray-50 p-6 -mx-6 mt-6 flex justify-between items-center">
+                          <div className="text-sm text-gray-600">
+                            <p className="font-medium">Izvēlētā pakete:</p>
+                            <p className="text-gray-900">
+                              {selectedPackage.name} - €
+                              {selectedPackage.price}
+                            </p>
+                          </div>
+                          <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className={`inline-flex items-center px-6 py-3 border border-transparent 
                           text-base font-medium rounded-lg shadow-sm text-[#3D3B4A] 
                           bg-[#EEC71B] hover:bg-[#ffd700] focus:outline-none focus:ring-2 
                           focus:ring-offset-2 focus:ring-[#EEC71B] disabled:opacity-50 
                           disabled:cursor-not-allowed transition-all duration-200`}
-                            >
-                              {isSubmitting ? (
-                                <>
-                                  <svg
-                                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-[#3D3B4A]"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                  >
-                                    <circle
-                                      className="opacity-25"
-                                      cx="12"
-                                      cy="12"
-                                      r="10"
-                                      stroke="currentColor"
-                                      strokeWidth="4"
-                                    ></circle>
-                                    <path
-                                      className="opacity-75"
-                                      fill="currentColor"
-                                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                    ></path>
-                                  </svg>
-                                  Nosūta...
-                                </>
-                              ) : (
-                                <>
-                                  Pieteikties
-                                  <FiArrowRight className="ml-2" />
-                                </>
-                              )}
-                            </button>
-                          </div>
-                        </form>
-                      </div>
+                          >
+                            {isSubmitting ? (
+                              <>
+                                <svg
+                                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-[#3D3B4A]"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                  ></circle>
+                                  <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                  ></path>
+                                </svg>
+                                Nosūta...
+                              </>
+                            ) : (
+                              <>
+                                Pieteikties
+                                <FiArrowRight className="ml-2" />
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      </form>
                     </div>
-                  )}
-                </motion.div>
+                  </div>
+                )}
               </motion.div>
-            )}
-          </AnimatePresence>
-        </main>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </main>
 
-        <Footer />
-      </div>
+      <Footer />
 
       <Script
         id="schema-script"
@@ -996,7 +994,7 @@ const MobileAppDevelopment: React.FC = () => {
           }),
         }}
       />
-    </>
+    </div>
   );
 };
 
