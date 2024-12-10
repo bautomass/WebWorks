@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import Head from "next/head";
 import { motion, AnimatePresence } from "framer-motion";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Script from "next/script";
 import {
   FiShoppingCart,
   FiTrendingUp,
@@ -347,73 +347,6 @@ const ECommerceServices: React.FC = () => {
 
   return (
     <>
-      <Head>
-        {/* Primary Meta Tags */}
-        <title>
-          E-komercijas Risinājumi Latvijā | WebWorks - Izveide no €499
-        </title>
-        <meta
-          name="description"
-          content="🛍️ Profesionāli e-komercijas risinājumi no WebWorks. Shopify un individuāla izstrāde, SEO optimizācija, 24/7 atbalsts. E-veikala izveide 4 nedēļās."
-        />
-        <meta
-          name="keywords"
-          content="e-komercija, e-veikals, shopify, interneta veikals, web izstrāde, online shop, e-commerce, pārdošana internetā, droši maksājumi, sūtījumu izsekošana, Latvija"
-        />
-
-        {/* Canonical URL */}
-        <link
-          rel="canonical"
-          href="https://www.webworks.lv/pakalpojumi/e-komercija"
-        />
-
-        {/* Open Graph / Facebook */}
-        <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="WebWorks" />
-        <meta
-          property="og:url"
-          content="https://www.webworks.lv/pakalpojumi/e-komercija"
-        />
-        <meta
-          property="og:title"
-          content="E-komercijas Risinājumi | WebWorks 🛍️ Izveide no €499"
-        />
-        <meta
-          property="og:description"
-          content="✓ Shopify vai Custom risinājumi ✓ SEO optimizācija ✓ Droši maksājumi ✓ 4 nedēļu izstrāde ✓ 2 mēnešu atbalsts. Izveidojiet savu e-veikalu ar WebWorks!"
-        />
-        <meta
-          property="og:image"
-          content="https://www.webworks.lv/images/ecommerce-og.jpg"
-        />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:locale" content="lv_LV" />
-
-        {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@webworks_lv" />
-        <meta
-          name="twitter:title"
-          content="E-komercijas Risinājumi | WebWorks 🛍️ no €499"
-        />
-        <meta
-          name="twitter:description"
-          content="✓ Shopify vai Custom risinājumi ✓ SEO optimizācija ✓ Droši maksājumi ✓ 4 nedēļu izstrāde ✓ 2 mēnešu atbalsts. Sāciet pārdot internetā!"
-        />
-        <meta
-          name="twitter:image"
-          content="https://www.webworks.lv/images/ecommerce-og.jpg"
-        />
-
-        {/* Basic SEO & Viewport */}
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="robots" content="index, follow, max-image-preview:large" />
-        <meta name="author" content="WebWorks" />
-        <meta name="geo.region" content="LV" />
-        <meta name="geo.placename" content="Jelgava" />
-      </Head>
-
       <div className="min-h-screen bg-gradient-to-b from-[#F3F5F4] to-white">
         <Header />
         <ToastContainer
@@ -969,7 +902,7 @@ const ECommerceServices: React.FC = () => {
         <Footer />
       </div>
 
-      <script
+      <Script
         id="schema-script"
         type="application/ld+json"
         dangerouslySetInnerHTML={{

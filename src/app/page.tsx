@@ -7,6 +7,7 @@ import FloatingPromo from "../components/FloatingPromo";
 import ServicesWeDo from "../components/ServicesWeDo";
 import Footer from "../components/footer";
 import { baseMetadata } from "@/lib/metadata";
+import ChristmasPromoBanner from "../components/ChristmasPromoBanner";
 
 // Homepage specific schema
 const homePageSchema = {
@@ -53,6 +54,7 @@ export default function Home() {
       />
       <main>
         <Header />
+        <ChristmasPromoBanner />
         <Hero />
         <Services />
         <ServicesWeDo />
