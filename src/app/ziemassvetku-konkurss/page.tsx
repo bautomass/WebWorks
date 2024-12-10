@@ -625,7 +625,7 @@ const ChristmasContest: React.FC = () => {
               <div className="bg-[#EEC71B]/10 p-4 rounded-lg">
                 <p className="text-sm font-medium text-gray-700">
                   🎁 Visi dalībnieki (izņemot uzvarētāju) saņems 30% atlaidi
-                  Startup Vision pakam!
+                  Startup Vision projektam.
                 </p>
               </div>
             </motion.div>
