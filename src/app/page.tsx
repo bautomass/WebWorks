@@ -1,13 +1,13 @@
 // app/page.tsx
-import type { Metadata } from "next";
-import Header from "../components/Header";
-import Hero from "../components/Hero";
-import Services from "../components/services";
-import FloatingPromo from "../components/FloatingPromo";
-import ServicesWeDo from "../components/ServicesWeDo";
-import Footer from "../components/footer";
+import Header from "@/components/Header";
+import Hero from "@/components/Hero";
+import Services from "@/components/services";
+import FloatingPromo from "@/components/FloatingPromo";
+import ServicesWeDo from "@/components/ServicesWeDo";
+import Footer from "@/components/footer";
 import { baseMetadata } from "@/lib/metadata";
-import ChristmasPromoBanner from "../components/ChristmasPromoBanner";
+import ChristmasPromoBanner from "@/components/ChristmasPromoBanner";
+import Script from "next/script";
 
 // Homepage specific schema
 const homePageSchema = {
@@ -27,7 +27,7 @@ const homePageSchema = {
     "Moderna mājaslapu izstrāde ar WebWorks - no €199. 📱 Responsīvs dizains, ⚡ Ātra izstrāde, 🛡️ SEO optimizācija. E-veikali no €499, WordPress risinājumi, uzņēmumu mājaslapas.",
 };
 
-export const metadata: Metadata = {
+export const metadata = {
   ...baseMetadata,
   alternates: {
     canonical: "https://www.webworks.lv",
@@ -46,7 +46,8 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
-      <script
+      <Script
+        id="homepage-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(homePageSchema),
