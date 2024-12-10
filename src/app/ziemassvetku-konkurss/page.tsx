@@ -562,8 +562,10 @@ const ChristmasContest: React.FC = () => {
             </h1>
             <p className="text-xl text-gray-600 mb-8">
               Laimē pilnībā individuāli pielāgotu mājaslapu{" "}
-              <span className="text-[#EEC71B] font-bold">Startup Vision</span>{" "}
-              pakā!
+              <span className="text-[#EEC71B] font-bold">
+                no Startup Vision
+              </span>{" "}
+              pakas!
             </p>
 
             {/* Countdown Timer */}
