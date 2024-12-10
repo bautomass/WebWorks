@@ -1,8 +1,10 @@
 "use client";
-import React, { memo, useEffect } from "react";
+import React, { memo, useEffect, useState } from "react";
 import Link from "next/link";
 import { motion, LazyMotion, domAnimation, m } from "framer-motion";
 import { FiGift } from "react-icons/fi";
+import { useRouter } from "next/navigation";
+import ChristmasLoadingScreen from "./ChristmasLoadingScreen"; // Make sure path is correct
 
 const MotionGift = memo(() => (
   <m.div
@@ -67,6 +69,9 @@ const Sparkles = memo(() => (
 Sparkles.displayName = "Sparkles";
 
 const ChristmasPromoBanner = () => {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     const link = document.createElement("link");
     link.rel = "preconnect";
@@ -75,8 +80,17 @@ const ChristmasPromoBanner = () => {
     return () => document.head.removeChild(link);
   }, []);
 
+  const handleClick = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setTimeout(() => {
+      router.push("/ziemassvetku-konkurss");
+    }, 2000);
+  };
+
   return (
     <LazyMotion features={domAnimation}>
+      {isLoading && <ChristmasLoadingScreen />}
       <div
         className="bg-[#EEC71B] relative overflow-hidden"
         role="banner"
@@ -91,6 +105,7 @@ const ChristmasPromoBanner = () => {
 
         <Link
           href="/ziemassvetku-konkurss"
+          onClick={handleClick}
           className="block py-2.5 sm:py-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3D3B4A] focus-visible:ring-opacity-75 relative z-10"
           aria-label="Piedalīties Ziemassvētku konkursā un laimēt mājaslapu €199 vērtībā"
         >
