@@ -596,7 +596,6 @@ const ChristmasContest: React.FC = () => {
                   </h2>
                   <p className="text-lg mb-4">
                     Ideāls sākums jūsu digitālajam ceļojumam
-                    <span className="ml-2">✨</span>
                   </p>
                   <div className="text-3xl font-bold text-[#EEC71B] flex items-center">
                     <span className="mr-2">🎁</span>
