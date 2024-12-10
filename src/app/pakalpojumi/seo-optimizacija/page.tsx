@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import Head from "next/head";
 import { motion, AnimatePresence } from "framer-motion";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Script from "next/script";
 import {
   FiSearch,
   FiTrendingUp,
@@ -14,7 +14,7 @@ import {
   FiArrowRight,
   FiStar,
 } from "react-icons/fi";
-import { supabase } from "../../../utils/supabase";
+import { supabase } from "@/utils/supabase";
 import Header from "@/components/Header";
 import Footer from "@/components/footer";
 
@@ -423,74 +423,6 @@ const SEOOptimizacija: React.FC = () => {
 
   return (
     <>
-      <Head>
-        {/* Primary Meta Tags */}
-        <title>
-          SEO Optimizācija Latvijā | WebWorks - Pakalpojumi no €299 | Google TOP
-          10
-        </title>
-        <meta
-          name="description"
-          content="🎯 Profesionāla SEO optimizācija no WebWorks. Garantēta pozīciju uzlabošana Google, tehniskā optimizācija, satura stratēģija. 94% klientu redz rezultātus 3 mēnešu laikā. Bezmaksas SEO audits."
-        />
-        <meta
-          name="keywords"
-          content="seo optimizācija, seo pakalpojumi, google optimizācija, meklētājprogrammu optimizācija, atslēgvārdu izpēte, tehniskais seo, satura optimizācija, linkbūve, lokālais seo, Latvija"
-        />
-
-        {/* Canonical URL */}
-        <link
-          rel="canonical"
-          href="https://www.webworks.lv/pakalpojumi/seo-optimizacija"
-        />
-
-        {/* Open Graph / Facebook */}
-        <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="WebWorks" />
-        <meta
-          property="og:url"
-          content="https://www.webworks.lv/pakalpojumi/seo-optimizacija"
-        />
-        <meta
-          property="og:title"
-          content="SEO Optimizācija | WebWorks 🎯 Garantēti Rezultāti"
-        />
-        <meta
-          property="og:description"
-          content="✓ Pozīciju uzlabošana Google ✓ Tehniskā optimizācija ✓ Satura stratēģija ✓ Rezultāti 3 mēnešos. Iegūstiet vairāk klientu ar SEO!"
-        />
-        <meta
-          property="og:image"
-          content="https://www.webworks.lv/images/seo-services-og.jpg"
-        />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:locale" content="lv_LV" />
-
-        {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@webworks_lv" />
-        <meta
-          name="twitter:title"
-          content="SEO Optimizācija | WebWorks 🎯 no €299"
-        />
-        <meta
-          name="twitter:description"
-          content="✓ Pozīciju uzlabošana Google ✓ Tehniskā optimizācija ✓ Satura stratēģija ✓ Rezultāti 3 mēnešos"
-        />
-        <meta
-          name="twitter:image"
-          content="https://www.webworks.lv/images/seo-services-og.jpg"
-        />
-
-        {/* Basic SEO & Viewport */}
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="robots" content="index, follow, max-image-preview:large" />
-        <meta name="author" content="WebWorks" />
-        <meta name="geo.region" content="LV" />
-        <meta name="geo.placename" content="Jelgava" />
-      </Head>
-
       <div className="min-h-screen bg-gradient-to-b from-[#F3F5F4] to-white">
         <Header />
         <ToastContainer
@@ -954,8 +886,7 @@ const SEOOptimizacija: React.FC = () => {
         <Footer />
       </div>
 
-      {/* Schema Markup */}
-      <script
+      <Script
         id="schema-script"
         type="application/ld+json"
         dangerouslySetInnerHTML={{

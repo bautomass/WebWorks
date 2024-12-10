@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Head from "next/head";
 import { motion, AnimatePresence } from "framer-motion";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,6 +18,7 @@ import {
 import { supabase } from "../../../utils/supabase";
 import Header from "@/components/Header";
 import Footer from "@/components/footer";
+import Script from "next/script";
 
 interface Package {
   id: string;
@@ -377,73 +377,6 @@ const WebAppDevelopment: React.FC = () => {
 
   return (
     <>
-      <Head>
-        {/* Primary Meta Tags */}
-        <title>
-          Web Aplikāciju & SAAS Izstrāde Latvijā | WebWorks - No €1299
-        </title>
-        <meta
-          name="description"
-          content="🚀 Profesionāla web aplikāciju un SAAS platformu izstrāde no WebWorks. Mūsdienīgas tehnoloģijas, mikroservisu arhitektūra, enterprise risinājumi. Izstrāde no 3 mēnešiem. Bezmaksas konsultācija + MVP demo."
-        />
-        <meta
-          name="keywords"
-          content="web aplikācijas, SAAS risinājumi, custom software, mikroservisi, cloud risinājumi, enterprise software, web development, react, node.js, aws, kubernetes, api izstrāde, Latvija"
-        />
-
-        {/* Canonical URL */}
-        <link
-          rel="canonical"
-          href="https://www.webworks.lv/pakalpojumi/web-aplikacijas"
-        />
-
-        {/* Open Graph / Facebook */}
-        <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="WebWorks" />
-        <meta
-          property="og:url"
-          content="https://www.webworks.lv/pakalpojumi/web-aplikacijas"
-        />
-        <meta
-          property="og:title"
-          content="Web Aplikācijas & SAAS | WebWorks 🚀 Enterprise Risinājumi"
-        />
-        <meta
-          property="og:description"
-          content="✓ Moderna arhitektūra ✓ Mikroservisi ✓ Cloud Native ✓ Pilns DevOps ✓ 24/7 atbalsts. Izveidojiet savu nākamo lielo produktu ar WebWorks!"
-        />
-        <meta
-          property="og:image"
-          content="https://www.webworks.lv/images/web-app-development-og.jpg"
-        />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:locale" content="lv_LV" />
-
-        {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@webworks_lv" />
-        <meta
-          name="twitter:title"
-          content="Web Aplikācijas & SAAS | WebWorks 🚀 no €1299"
-        />
-        <meta
-          name="twitter:description"
-          content="✓ Moderna arhitektūra ✓ Mikroservisi ✓ Cloud Native ✓ Pilns DevOps. Izveidojiet savu nākamo produktu!"
-        />
-        <meta
-          name="twitter:image"
-          content="https://www.webworks.lv/images/web-app-development-og.jpg"
-        />
-
-        {/* Basic SEO & Viewport */}
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="robots" content="index, follow, max-image-preview:large" />
-        <meta name="author" content="WebWorks" />
-        <meta name="geo.region" content="LV" />
-        <meta name="geo.placename" content="Jelgava" />
-      </Head>
-
       <div className="min-h-screen bg-gradient-to-b from-[#F3F5F4] to-white">
         <Header />
         <ToastContainer
@@ -900,7 +833,7 @@ const WebAppDevelopment: React.FC = () => {
 
       <Footer />
 
-      <script
+      <Script
         id="schema-script"
         type="application/ld+json"
         dangerouslySetInnerHTML={{

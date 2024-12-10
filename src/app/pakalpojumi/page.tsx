@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import Head from "next/head";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import Script from "next/script";
 import {
   FiSearch,
   FiShoppingCart,
@@ -106,120 +106,54 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => (
 
 const Pakalpojumi: React.FC = () => {
   return (
-    <>
-      <Head>
-        {/* Primary Meta Tags */}
-        <title>
-          Digitālie Pakalpojumi Latvijā | WebWorks 🚀 Web Izstrāde, SEO, SAAS
-        </title>
-        <meta
-          name="description"
-          content="Pilns digitālo pakalpojumu klāsts no WebWorks. Web izstrāde no €199, e-komercija, SEO, aplikāciju izstrāde. 200+ veiksmīgi projekti, 98% klientu apmierinātība. Bezmaksas konsultācija + ROI garantija."
-        />
-        <meta
-          name="keywords"
-          content="web izstrāde, digitālais mārketings, seo optimizācija, e-komercija, web aplikācijas, mobilās aplikācijas, mājaslapu izstrāde, wordpress, react, latvija, rīga"
-        />
+    <div className="min-h-screen bg-gradient-to-b from-[#F3F5F4] to-white">
+      <Header />
 
-        {/* Canonical URL */}
-        <link rel="canonical" href="https://www.webworks.lv/pakalpojumi" />
+      <main className="container mx-auto px-4 py-16">
+        <div className="max-w-7xl mx-auto">
+          <section className="text-center mb-16">
+            <h1 className="text-4xl md:text-5xl font-bold text-[#3D3B4A] mb-8">
+              Mūsu Digitālie Pakalpojumi
+            </h1>
+            <p className="text-xl text-gray-700 mb-12 max-w-3xl mx-auto">
+              Izmantojiet mūsu plašo pakalpojumu klāstu, lai attīstītu savu
+              biznesu digitālajā vidē. No idejas līdz realizācijai - mēs
+              palīdzēsim jums sasniegt jaunas virsotnes.
+            </p>
+          </section>
 
-        {/* Open Graph / Facebook */}
-        <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="WebWorks" />
-        <meta property="og:url" content="https://www.webworks.lv/pakalpojumi" />
-        <meta
-          property="og:title"
-          content="Digitālie Pakalpojumi | WebWorks 🚀 Pilns Serviss"
-        />
-        <meta
-          property="og:description"
-          content="✓ Web Izstrāde ✓ Digitālais Mārketings ✓ SEO ✓ E-komercija ✓ Mobilās Aplikācijas. Izvēlieties labāko savam biznesam!"
-        />
-        <meta
-          property="og:image"
-          content="https://www.webworks.lv/images/services-og.jpg"
-        />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:locale" content="lv_LV" />
+          <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {services.map((service) => (
+              <ServiceCard key={service.id} service={service} />
+            ))}
+          </section>
 
-        {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@webworks_lv" />
-        <meta
-          name="twitter:title"
-          content="Digitālie Pakalpojumi | WebWorks 🚀 No €199"
-        />
-        <meta
-          name="twitter:description"
-          content="Pilns digitālo pakalpojumu klāsts jūsu biznesam. Web izstrāde, SEO, aplikācijas un vairāk!"
-        />
-        <meta
-          name="twitter:image"
-          content="https://www.webworks.lv/images/services-og.jpg"
-        />
-
-        {/* Additional SEO Meta Tags */}
-        <meta
-          name="robots"
-          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
-        />
-        <meta name="author" content="WebWorks" />
-        <meta name="geo.region" content="LV" />
-        <meta name="geo.placename" content="Jelgava" />
-        <meta name="format-detection" content="telephone=no" />
-      </Head>
-
-      <div className="min-h-screen bg-gradient-to-b from-[#F3F5F4] to-white">
-        <Header />
-
-        <main className="container mx-auto px-4 py-16">
-          <div className="max-w-7xl mx-auto">
-            <section className="text-center mb-16">
-              <h1 className="text-4xl md:text-5xl font-bold text-[#3D3B4A] mb-8">
-                Mūsu Digitālie Pakalpojumi
-              </h1>
-              <p className="text-xl text-gray-700 mb-12 max-w-3xl mx-auto">
-                Izmantojiet mūsu plašo pakalpojumu klāstu, lai attīstītu savu
-                biznesu digitālajā vidē. No idejas līdz realizācijai - mēs
-                palīdzēsim jums sasniegt jaunas virsotnes.
+          <section className="mt-16">
+            <div className="bg-gradient-to-r from-[#3D3B4A] to-[#2D2B3A] p-12 rounded-xl text-center text-white">
+              <h2 className="text-2xl md:text-3xl font-bold mb-4">
+                Nevar atrast vajadzīgo pakalpojumu?
+              </h2>
+              <p className="text-lg mb-8 opacity-90">
+                Sazinieties ar mums, un mēs izveidosim individuālu risinājumu
+                tieši jūsu vajadzībām.
               </p>
-            </section>
+              <motion.a
+                href="/contact-us"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="inline-flex items-center px-8 py-3 bg-[#EEC71B] text-[#3D3B4A] rounded-lg font-bold hover:bg-[#ffd700] transition-colors duration-300"
+              >
+                Sazināties ar mums
+                <FiArrowRight className="ml-2" />
+              </motion.a>
+            </div>
+          </section>
+        </div>
+      </main>
 
-            <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {services.map((service) => (
-                <ServiceCard key={service.id} service={service} />
-              ))}
-            </section>
+      <Footer />
 
-            <section className="mt-16">
-              <div className="bg-gradient-to-r from-[#3D3B4A] to-[#2D2B3A] p-12 rounded-xl text-center text-white">
-                <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                  Nevar atrast vajadzīgo pakalpojumu?
-                </h2>
-                <p className="text-lg mb-8 opacity-90">
-                  Sazinieties ar mums, un mēs izveidosim individuālu risinājumu
-                  tieši jūsu vajadzībām.
-                </p>
-                <motion.a
-                  href="/contact-us"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="inline-flex items-center px-8 py-3 bg-[#EEC71B] text-[#3D3B4A] rounded-lg font-bold hover:bg-[#ffd700] transition-colors duration-300"
-                >
-                  Sazināties ar mums
-                  <FiArrowRight className="ml-2" />
-                </motion.a>
-              </div>
-            </section>
-          </div>
-        </main>
-
-        <Footer />
-      </div>
-
-      <script
+      <Script
         id="schema-script"
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -311,7 +245,7 @@ const Pakalpojumi: React.FC = () => {
           }),
         }}
       />
-    </>
+    </div>
   );
 };
 
