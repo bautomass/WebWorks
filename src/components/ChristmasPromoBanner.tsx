@@ -18,9 +18,9 @@ const MotionGift = memo(() => (
       type: "tween",
       ease: "easeInOut",
     }}
-    className="text-[#3D3B4A] relative"
+    className="text-[#3D3B4A] relative flex-shrink-0"
   >
-    <FiGift className="text-xl" />
+    <FiGift className="text-lg sm:text-xl" />
     <m.div
       className="absolute -inset-1 bg-white/20 rounded-full blur-sm"
       animate={{
@@ -91,11 +91,11 @@ const ChristmasPromoBanner = () => {
 
         <Link
           href="/ziemassvetku-konkurss"
-          className="block py-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3D3B4A] focus-visible:ring-opacity-75 relative z-10"
+          className="block py-2.5 sm:py-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3D3B4A] focus-visible:ring-opacity-75 relative z-10"
           aria-label="Piedalīties Ziemassvētku konkursā un laimēt mājaslapu €199 vērtībā"
         >
           <m.div
-            className="container mx-auto px-4 text-center"
+            className="container mx-auto px-3 sm:px-4 text-center"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
@@ -104,12 +104,15 @@ const ChristmasPromoBanner = () => {
               ease: "easeOut",
             }}
           >
-            <div className="flex items-center justify-center space-x-3 text-[#3D3B4A]">
+            <div className="flex items-center justify-center space-x-2 sm:space-x-3 text-[#3D3B4A]">
               <MotionGift />
-              <span className="font-medium">
+              <span className="font-medium text-sm sm:text-base">
                 <span className="sr-only">Piedalies</span>
-                Ziemassvētku konkurss! Laimē mājaslapu
-                <span className="hidden sm:inline"> (€199 vērtībā)</span>
+                Ziemassvētku konkurss!{" "}
+                <span className="whitespace-nowrap">
+                  Laimē mājaslapu
+                  <span className="hidden sm:inline"> (€199 vērtībā)</span>
+                </span>
               </span>
               <m.span
                 className="hidden sm:inline-block font-bold underline decoration-2 underline-offset-2 hover:text-[#2D2B3A] transition-colors"
@@ -120,6 +123,13 @@ const ChristmasPromoBanner = () => {
                 <span aria-hidden="true" className="ml-1">
                   →
                 </span>
+              </m.span>
+              <m.span
+                className="sm:hidden inline-block text-sm font-bold"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "tween", duration: 0.2 }}
+              >
+                →
               </m.span>
             </div>
           </m.div>
