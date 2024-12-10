@@ -114,7 +114,7 @@ const SnowflakeParticle = React.memo(({ index }: { index: number }) => {
 
   return (
     <motion.div
-      className="absolute w-2 h-2 rounded-full pointer-events-none bg-[#EEC71B]/50"
+      className="absolute w-2 h-2 rounded-full pointer-events-none bg-white/70"
       initial={{
         top: -20,
         left: `${Math.random() * 100}%`,
@@ -578,13 +578,30 @@ const ChristmasContest: React.FC = () => {
               animate={{ opacity: 1, x: 0 }}
               className="bg-white p-8 rounded-xl shadow-xl relative overflow-hidden"
             >
-              <div className="bg-[#3D3B4A] text-white p-6 rounded-lg mb-6">
-                <h2 className="text-2xl font-bold mb-2">Startup Vision</h2>
-                <p className="text-lg mb-4">
-                  Ideāls sākums jūsu digitālajam ceļojumam
-                </p>
-                <div className="text-3xl font-bold text-[#EEC71B]">
-                  €199/projekts
+              <div className="bg-[#3D3B4A] text-white p-6 rounded-lg mb-6 relative overflow-hidden">
+                {/* Local snowfall just for this section */}
+                <div className="absolute inset-0 overflow-hidden">
+                  {[...Array(20)].map((_, i) => (
+                    <SnowflakeParticle key={i} index={i} />
+                  ))}
+                </div>
+
+                {/* Christmas decorations */}
+                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-500 via-green-500 to-red-500" />
+
+                <div className="relative z-10">
+                  <h2 className="text-2xl font-bold mb-2">
+                    <span className="mr-2">🎄</span>
+                    Startup Vision
+                  </h2>
+                  <p className="text-lg mb-4">
+                    Ideāls sākums jūsu digitālajam ceļojumam
+                    <span className="ml-2">✨</span>
+                  </p>
+                  <div className="text-3xl font-bold text-[#EEC71B] flex items-center">
+                    <span className="mr-2">🎁</span>
+                    €199/projekts
+                  </div>
                 </div>
               </div>
 
