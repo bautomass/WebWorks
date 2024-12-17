@@ -653,9 +653,9 @@ const ChristmasContest: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="bg-white p-8 rounded-xl shadow-xl relative overflow-hidden"
+              className="bg-white p-4 sm:p-8 rounded-xl shadow-xl relative overflow-hidden"
             >
-              <div className="bg-[#3D3B4A] text-white p-6 rounded-lg mb-6 relative overflow-hidden">
+              <div className="bg-[#3D3B4A] text-white p-4 sm:p-6 rounded-lg mb-4 sm:mb-6 relative overflow-hidden">
                 {/* Local snowfall just for this section */}
                 <div className="absolute inset-0 overflow-hidden">
                   {[...Array(20)].map((_, i) => (
@@ -667,32 +667,32 @@ const ChristmasContest: React.FC = () => {
                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-500 via-green-500 to-red-500" />
 
                 <div className="relative z-10">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="bg-[#EEC71B] text-[#3D3B4A] px-3 py-1 rounded-full text-sm font-bold">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 mb-3">
+                    <div className="bg-[#EEC71B] text-[#3D3B4A] px-3 py-1 rounded-full text-xs sm:text-sm font-bold">
                       GALVENĀ BALVA
                     </div>
-                    <div className="bg-white/10 px-3 py-1 rounded-lg text-sm">
+                    <div className="bg-white/10 px-3 py-1 rounded-lg text-xs sm:text-sm">
                       Izloze 23. decembrī
                     </div>
                   </div>
                   
-                  <h2 className="text-2xl font-bold mb-2 flex items-center gap-2">
-                    <span>🎄</span>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-2 flex items-center gap-2">
+                    <span className="text-2xl sm:text-3xl">🎄</span>
                     Startup Vision Mājaslapa
                   </h2>
                   
-                  <p className="text-base mb-3">
+                  <p className="text-sm sm:text-base mb-3 text-white/90">
                     Pilnībā bezmaksas mājaslapa jūsu biznesam vai projektam
                   </p>
                   
-                  <div className="flex items-center gap-3">
-                    <span className="line-through text-gray-400 text-lg">€199</span>
-                    <span className="text-2xl font-bold text-white">BEZMAKSAS</span>
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <span className="line-through text-gray-400 text-base sm:text-lg">€199</span>
+                    <span className="text-xl sm:text-2xl font-bold text-white">BEZMAKSAS</span>
                   </div>
                 </div>
               </div>
 
-              <ul className="space-y-4 mb-6">
+              <ul className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
                 {[
                   "5 lapu moderna mājaslapa",
                   "Mobilajām ierīcēm pielāgots dizains",
@@ -703,15 +703,15 @@ const ChristmasContest: React.FC = () => {
                   "SSL sertifikāts",
                   "Hostings uz 6 mēnešiem",
                 ].map((feature, index) => (
-                  <li key={index} className="flex items-center">
-                    <FiCheck className="text-[#EEC71B] mr-3 flex-shrink-0" />
+                  <li key={index} className="flex items-center text-sm sm:text-base">
+                    <FiCheck className="text-[#EEC71B] mr-2 sm:mr-3 flex-shrink-0" />
                     <span className="text-gray-700">{feature}</span>
                   </li>
                 ))}
               </ul>
 
-              <div className="bg-[#EEC71B]/10 p-4 rounded-lg">
-                <p className="text-sm font-medium text-gray-700">
+              <div className="bg-[#EEC71B]/10 p-3 sm:p-4 rounded-lg">
+                <p className="text-xs sm:text-sm font-medium text-gray-700">
                   🎁 Visi dalībnieki (izņemot uzvarētāju) saņems 30% atlaidi
                   Startup Vision projekta izstrādei.
                 </p>
