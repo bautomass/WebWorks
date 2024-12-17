@@ -159,11 +159,11 @@ const LoadingSpinner = React.memo(() => (
 LoadingSpinner.displayName = "LoadingSpinner";
 
 const TimeDisplay = React.memo(({ timeLeft }: { timeLeft: TimeLeft }) => (
-  <div className="flex flex-wrap justify-center gap-3 mb-8 px-4">
+  <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 px-2 sm:px-4">
     {Object.entries(timeLeft).map(([key, value]) => (
       <div
         key={key}
-        className="bg-[#3D3B4A] text-white p-3 rounded-lg relative min-w-[90px] flex-1 max-w-[150px]"
+        className="bg-[#3D3B4A] text-white p-2 sm:p-3 rounded-lg relative min-w-[70px] sm:min-w-[90px] flex-1 max-w-[110px] sm:max-w-[150px]"
       >
         <motion.div
           className="absolute inset-0 bg-[#EEC71B]/20 rounded-lg"
@@ -171,8 +171,8 @@ const TimeDisplay = React.memo(({ timeLeft }: { timeLeft: TimeLeft }) => (
           transition={{ duration: 2, repeat: Infinity }}
         />
         <div className="relative z-10">
-          <div className="text-2xl md:text-3xl font-bold">{value}</div>
-          <div className="text-xs md:text-sm">
+          <div className="text-lg sm:text-2xl md:text-3xl font-bold">{value}</div>
+          <div className="text-xs sm:text-sm">
             {key.charAt(0).toUpperCase() + key.slice(1)}
           </div>
         </div>
@@ -336,25 +336,25 @@ ContestantCard.displayName = "ContestantCard";
 const ChanceIndicator: React.FC<{ totalParticipants: number }> = React.memo(({ totalParticipants }) => {
   const getChanceDetails = (count: number) => {
     if (count <= 50) return {
-      text: "Ļoti Liela",
+      text: "Ļoti Lielas",
       color: "from-green-500 to-green-600",
       percentage: "1:" + Math.round(count),
       emoji: "🎯"
     };
     if (count <= 100) return {
-      text: "Laba",
+      text: "Labas",
       color: "from-blue-500 to-blue-600",
       percentage: "1:" + Math.round(count),
       emoji: "⭐"
     };
     if (count <= 200) return {
-      text: "Vidēja",
+      text: "Vidējas",
       color: "from-yellow-500 to-yellow-600",
       percentage: "1:" + Math.round(count),
       emoji: "🎲"
     };
     return {
-      text: "Izaicinošā",
+      text: "Izaicinošas",
       color: "from-orange-500 to-orange-600",
       percentage: "1:" + Math.round(count),
       emoji: "🎪"
@@ -620,23 +620,23 @@ const ChristmasContest: React.FC = () => {
 
         <Header />
 
-        <main className="container mx-auto px-4 py-16 relative">
-          {/* Hero Section */}
+        <main className="container mx-auto px-2 sm:px-4 py-8 sm:py-16 relative">
+          {/* Hero Section with adjusted responsive text */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-12"
+            className="text-center mb-8 sm:mb-12"
           >
-            <h1 className="text-4xl md:text-6xl font-bold text-[#3D3B4A] mb-4">
+            <h1 className="text-2xl sm:text-4xl md:text-6xl font-bold text-[#3D3B4A] mb-3 sm:mb-4">
               🎄 Laimē Bezmaksas Mājaslapu
             </h1>
-            <div className="max-w-3xl mx-auto">
-              <p className="text-xl text-gray-600 mb-4">
+            <div className="max-w-3xl mx-auto px-2 sm:px-4">
+              <p className="text-base sm:text-xl text-gray-600 mb-3 sm:mb-4">
                 Piedalies konkursā un laimē <span className="font-bold">pilnīgi bezmaksas</span> individuāli 
                 pielāgotu mājaslapu no Startup Vision (€199 vērtībā)!
               </p>
-              <div className="bg-green-50 p-4 rounded-lg mb-8">
-                <p className="text-lg text-green-800">
+              <div className="bg-green-50 p-3 sm:p-4 rounded-lg mb-6 sm:mb-8">
+                <p className="text-sm sm:text-lg text-green-800">
                   <span className="font-bold">✨ Bonuss visiem dalībniekiem:</span> Pat ja neuzvarēsi, 
                   saņemsi garantētu 30% atlaides kodu mājas lapai!
                 </p>
