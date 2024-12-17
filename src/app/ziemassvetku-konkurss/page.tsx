@@ -17,6 +17,8 @@ import {
   FiShare2,
   FiAlertCircle,
   FiLoader,
+  FiUsers,
+  FiChevronDown,
 } from "react-icons/fi";
 
 // Types
@@ -157,11 +159,11 @@ const LoadingSpinner = React.memo(() => (
 LoadingSpinner.displayName = "LoadingSpinner";
 
 const TimeDisplay = React.memo(({ timeLeft }: { timeLeft: TimeLeft }) => (
-  <div className="flex justify-center gap-4 mb-8">
+  <div className="flex flex-wrap justify-center gap-3 mb-8 px-4">
     {Object.entries(timeLeft).map(([key, value]) => (
       <div
         key={key}
-        className="bg-[#3D3B4A] text-white p-4 rounded-lg relative w-24"
+        className="bg-[#3D3B4A] text-white p-3 rounded-lg relative min-w-[90px] flex-1 max-w-[150px]"
       >
         <motion.div
           className="absolute inset-0 bg-[#EEC71B]/20 rounded-lg"
@@ -169,8 +171,8 @@ const TimeDisplay = React.memo(({ timeLeft }: { timeLeft: TimeLeft }) => (
           transition={{ duration: 2, repeat: Infinity }}
         />
         <div className="relative z-10">
-          <div className="text-3xl font-bold">{value}</div>
-          <div className="text-sm">
+          <div className="text-2xl md:text-3xl font-bold">{value}</div>
+          <div className="text-xs md:text-sm">
             {key.charAt(0).toUpperCase() + key.slice(1)}
           </div>
         </div>
@@ -330,6 +332,73 @@ const ContestantCard = React.memo(
 
 ContestantCard.displayName = "ContestantCard";
 
+// Add new component for chance calculation
+const ChanceIndicator: React.FC<{ totalParticipants: number }> = React.memo(({ totalParticipants }) => {
+  const getChanceDetails = (count: number) => {
+    if (count <= 50) return {
+      text: "Ļoti Liela",
+      color: "from-green-500 to-green-600",
+      percentage: "1:" + Math.round(count),
+      emoji: "🎯"
+    };
+    if (count <= 100) return {
+      text: "Laba",
+      color: "from-blue-500 to-blue-600",
+      percentage: "1:" + Math.round(count),
+      emoji: "⭐"
+    };
+    if (count <= 200) return {
+      text: "Vidēja",
+      color: "from-yellow-500 to-yellow-600",
+      percentage: "1:" + Math.round(count),
+      emoji: "🎲"
+    };
+    return {
+      text: "Izaicinošā",
+      color: "from-orange-500 to-orange-600",
+      percentage: "1:" + Math.round(count),
+      emoji: "🎪"
+    };
+  };
+
+  const chance = getChanceDetails(totalParticipants);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="max-w-2xl mx-auto mb-12"
+    >
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div className={`bg-gradient-to-r ${chance.color} p-4 text-white`}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <span className="text-2xl">{chance.emoji}</span>
+              <div>
+                <h3 className="font-bold text-lg">Tavas Izredzes Uzvarēt:</h3>
+                <p className="text-white/90">Pašreizējā konkursa statistika</p>
+              </div>
+            </div>
+            <div className="text-right">
+              <span className="text-3xl font-bold">{chance.percentage}</span>
+            </div>
+          </div>
+        </div>
+        <div className="p-4 bg-gradient-to-b from-white to-gray-50">
+          <p className="text-gray-700">
+            <span className="font-bold">Tavs statuss: </span>
+            <span className="inline-flex items-center bg-gradient-to-r from-gray-100 to-gray-200 px-3 py-1 rounded-full text-sm font-medium">
+              {chance.text} izredzes uzvarēt 🎄
+            </span>
+          </p>
+        </div>
+      </div>
+    </motion.div>
+  );
+});
+
+ChanceIndicator.displayName = "ChanceIndicator";
+
 // Main Component
 const ChristmasContest: React.FC = () => {
   const [contestants, setContestants] = useState<Contestant[]>([]);
@@ -346,6 +415,7 @@ const ChristmasContest: React.FC = () => {
   const [winner, setWinner] = useState<Contestant | null>(null);
   const [isSelectingWinner, setIsSelectingWinner] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [showContestants, setShowContestants] = useState(false);
 
   const startDate = useMemo(() => new Date("2024-12-10"), []);
   const endDate = useMemo(() => new Date("2024-12-23"), []);
@@ -558,18 +628,23 @@ const ChristmasContest: React.FC = () => {
             className="text-center mb-12"
           >
             <h1 className="text-4xl md:text-6xl font-bold text-[#3D3B4A] mb-4">
-              🎄 Ziemassvētku Konkurss
+              🎄 Laimē Bezmaksas Mājaslapu
             </h1>
-            <p className="text-xl text-gray-600 mb-8">
-              Laimē pilnībā individuāli pielāgotu mājaslapu{" "}
-              <span className="text-[#EEC71B] font-bold">
-                no Startup Vision
-              </span>{" "}
-              pakas!
-            </p>
-
-            {/* Countdown Timer */}
+            <div className="max-w-3xl mx-auto">
+              <p className="text-xl text-gray-600 mb-4">
+                Piedalies konkursā un laimē <span className="font-bold">pilnīgi bezmaksas</span> individuāli 
+                pielāgotu mājaslapu no Startup Vision (€199 vērtībā)!
+              </p>
+              <div className="bg-green-50 p-4 rounded-lg mb-8">
+                <p className="text-lg text-green-800">
+                  <span className="font-bold">✨ Bonuss visiem dalībniekiem:</span> Pat ja neuzvarēsi, 
+                  saņemsi garantētu 30% atlaides kodu mājas lapai!
+                </p>
+              </div>
+            </div>
+            
             {timeLeft && <TimeDisplay timeLeft={timeLeft} />}
+            <ChanceIndicator totalParticipants={stats?.total_participants || 0} />
           </motion.div>
 
           {/* Main Content Grid */}
@@ -592,16 +667,27 @@ const ChristmasContest: React.FC = () => {
                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-500 via-green-500 to-red-500" />
 
                 <div className="relative z-10">
-                  <h2 className="text-2xl font-bold mb-2">
-                    <span className="mr-2">🎄</span>
-                    Startup Vision
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="bg-[#EEC71B] text-[#3D3B4A] px-3 py-1 rounded-full text-sm font-bold">
+                      GALVENĀ BALVA
+                    </div>
+                    <div className="bg-white/10 px-3 py-1 rounded-lg text-sm">
+                      Izloze 23. decembrī
+                    </div>
+                  </div>
+                  
+                  <h2 className="text-2xl font-bold mb-2 flex items-center gap-2">
+                    <span>🎄</span>
+                    Startup Vision Mājaslapa
                   </h2>
-                  <p className="text-lg mb-4">
-                    Ideāls sākums jūsu digitālajam ceļojumam
+                  
+                  <p className="text-base mb-3">
+                    Pilnībā bezmaksas mājaslapa jūsu biznesam vai projektam
                   </p>
-                  <div className="text-3xl font-bold text-[#EEC71B] flex items-center">
-                    <span className="mr-2">🎁</span>
-                    €199/projekts
+                  
+                  <div className="flex items-center gap-3">
+                    <span className="line-through text-gray-400 text-lg">€199</span>
+                    <span className="text-2xl font-bold text-white">BEZMAKSAS</span>
                   </div>
                 </div>
               </div>
@@ -638,9 +724,12 @@ const ChristmasContest: React.FC = () => {
               animate={{ opacity: 1, x: 0 }}
               className="bg-white p-8 rounded-xl shadow-xl"
             >
-              <h3 className="text-2xl font-bold mb-6 text-[#3D3B4A]">
-                Piedalies Konkursā
+              <h3 className="text-2xl font-bold mb-2 text-[#3D3B4A]">
+                Piesakies Bezmaksas Mājaslapai
               </h3>
+              <p className="text-gray-600 mb-6">
+                Aizpildi formu zemāk - tas prasīs tikai 30 sekundes
+              </p>
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
@@ -751,21 +840,52 @@ const ChristmasContest: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-12 bg-white p-6 rounded-xl shadow-xl"
+            className="mt-12"
           >
-            <h3 className="text-2xl font-bold mb-6 text-center">
-              {isLoading ? "Ielādē dalībniekus..." : "Konkursa Dalībnieki"}
-            </h3>
+            <div className="text-center mb-6">
+              <button
+                onClick={() => setShowContestants(!showContestants)}
+                className="inline-flex items-center gap-2 bg-white px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
+              >
+                <FiUsers className="text-[#EEC71B] text-xl" />
+                <span className="font-medium">
+                  {showContestants ? "Paslēpt Dalībniekus" : "Skatīt Dalībniekus"}
+                </span>
+                <motion.div
+                  animate={{ rotate: showContestants ? 180 : 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <FiChevronDown className="text-gray-600" />
+                </motion.div>
+              </button>
+            </div>
 
-            {isLoading ? (
-              <LoadingSpinner />
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {contestants.map((contestant) => (
-                  <ContestantCard key={contestant.id} contestant={contestant} />
-                ))}
-              </div>
-            )}
+            <AnimatePresence>
+              {showContestants && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="bg-white p-6 rounded-xl shadow-xl overflow-hidden"
+                >
+                  <h3 className="text-2xl font-bold mb-6 text-center flex items-center justify-center gap-2">
+                    <FiUsers className="text-[#EEC71B]" />
+                    {isLoading ? "Ielādē dalībniekus..." : "Konkursa Dalībnieki"}
+                  </h3>
+
+                  {isLoading ? (
+                    <LoadingSpinner />
+                  ) : (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                      {contestants.map((contestant) => (
+                        <ContestantCard key={contestant.id} contestant={contestant} />
+                      ))}
+                    </div>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Winner Section */}
             <AnimatePresence>
