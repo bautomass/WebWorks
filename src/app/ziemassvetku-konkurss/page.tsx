@@ -322,8 +322,8 @@ const WinnerSelectionAnimation: React.FC<{
 
 WinnerSelectionAnimation.displayName = "WinnerSelectionAnimation";
 
-const ContestantCard = React.memo(
-  ({ contestant }: { contestant: Contestant }) => (
+const ContestantCard: React.FC<{ contestant: Contestant }> = React.memo(
+  ({ contestant }) => (
     <motion.div
       layout
       initial={{ opacity: 0, scale: 0.9 }}
@@ -368,7 +368,7 @@ const ContestantCard = React.memo(
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
           >
-            🎄 Uzvarētājs! 🎄
+            Uzvarētājs!
           </motion.div>
         )}
       </div>
@@ -577,79 +577,79 @@ WinnerAnnouncementModal.displayName = "WinnerAnnouncementModal";
 const additionalContestants: Contestant[] = [
   {
     id: "fake_1",
-    display_name: "Jānis Bērziņš",
+    display_name: "Jānis B.",
     created_at: "2023-12-15T14:23:00",
     status: "registered"
   },
   {
     id: "fake_2",
-    display_name: "Anna Kalniņa",
+    display_name: "Anna K.",
     created_at: "2023-12-16T09:15:00",
     status: "registered"
   },
   {
     id: "fake_3",
-    display_name: "Kārlis Ozols",
+    display_name: "Kārlis O.",
     created_at: "2023-12-16T11:45:00",
     status: "registered"
   },
   {
     id: "fake_4",
-    display_name: "Marta Liepiņa",
+    display_name: "Marta L.",
     created_at: "2023-12-16T15:30:00",
     status: "registered"
   },
   {
     id: "fake_5",
-    display_name: "Roberts Zvaigzne",
+    display_name: "Roberts Z.",
     created_at: "2023-12-17T10:20:00",
     status: "registered"
   },
   {
     id: "fake_6",
-    display_name: "Elīna Priede",
+    display_name: "Elīna P.",
     created_at: "2023-12-17T13:45:00",
     status: "registered"
   },
   {
     id: "fake_7",
-    display_name: "Andris Kļaviņš",
+    display_name: "Andris K.",
     created_at: "2023-12-17T16:10:00",
     status: "registered"
   },
   {
     id: "fake_8",
-    display_name: "Laura Saulīte",
+    display_name: "Laura S.",
     created_at: "2023-12-18T09:05:00",
     status: "registered"
   },
   {
     id: "fake_9",
-    display_name: "Kristaps Ozoliņš",
+    display_name: "Kristaps O.",
     created_at: "2023-12-18T11:30:00",
     status: "registered"
   },
   {
     id: "fake_10",
-    display_name: "Ieva Krūmiņa",
+    display_name: "Ieva K.",
     created_at: "2023-12-18T14:25:00",
     status: "registered"
   },
   {
     id: "fake_11",
-    display_name: "Rihards Vītols",
+    display_name: "Rihards V.",
     created_at: "2023-12-19T10:40:00",
     status: "registered"
   },
   {
     id: "fake_12",
-    display_name: "Sanita Eglīte",
+    display_name: "Sanita E.",
     created_at: "2023-12-19T13:15:00",
     status: "registered"
   },
   {
     id: "fake_13",
-    display_name: "Māris Jansons",
+    display_name: "Māris J.",
     created_at: "2023-12-19T15:50:00",
     status: "registered"
   }
@@ -752,12 +752,15 @@ const ChristmasContest: React.FC = () => {
 
       if (error) throw error;
 
-      // Combine real and fake contestants
+      // Format real contestants' names and combine with fake contestants
+      const formattedRealContestants = (realContestants || []).map(c => ({
+        ...c,
+        status: c.status || "registered",
+        display_name: formatDisplayName(c.display_name)
+      }));
+
       const allContestants = [
-        ...(realContestants || []).map(c => ({
-          ...c,
-          status: c.status || "registered"
-        })),
+        ...formattedRealContestants,
         ...additionalContestants
       ];
       
@@ -868,6 +871,17 @@ const ChristmasContest: React.FC = () => {
       alert("Kļūda izvēloties uzvarētāju");
       setIsSelectingWinner(false);
     }
+  };
+
+  // Add this utility function to format names
+  const formatDisplayName = (name: string) => {
+    const parts = name.trim().split(' ');
+    if (parts.length >= 2) {
+      const firstName = parts[0];
+      const lastInitial = parts[parts.length - 1][0];
+      return `${firstName} ${lastInitial}.`;
+    }
+    return name; // Return original name if it can't be formatted
   };
 
   return (
