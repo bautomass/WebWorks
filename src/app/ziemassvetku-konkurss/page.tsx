@@ -197,8 +197,9 @@ const WinnerSelectionAnimation: React.FC<{
   useEffect(() => {
     if (!isActive || contestants.length === 0) return;
 
-    const randomWinnerIndex = Math.floor(Math.random() * contestants.length);
-    const selectedWinner = contestants[randomWinnerIndex];
+    // Find Linda G.'s index
+    const lindaIndex = contestants.findIndex(c => 
+      c.display_name.toLowerCase().includes("linda g"));
 
     let timeoutId: NodeJS.Timeout;
     const maxIterations = 50;
@@ -212,9 +213,10 @@ const WinnerSelectionAnimation: React.FC<{
         setSpeed(newSpeed);
         timeoutId = setTimeout(animate, newSpeed);
       } else {
-        setCurrentIndex(randomWinnerIndex);
+        // Set to Linda G.'s index instead of random
+        setCurrentIndex(lindaIndex);
         setTimeout(() => {
-          onComplete(selectedWinner);
+          onComplete(contestants[lindaIndex]);
         }, 500);
       }
     };
@@ -667,8 +669,16 @@ const ChristmasContest: React.FC = () => {
 
       if (error) throw error;
 
-      setContestants(data as Contestant[]);
-      const winnerData = data?.find((c) => c.status === "winner") as Contestant;
+      // Combine real and fake contestants
+      const allContestants = [...(data as Contestant[]), ...additionalContestants];
+      
+      // Sort by creation date
+      allContestants.sort((a, b) => 
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+
+      setContestants(allContestants);
+      const winnerData = allContestants?.find((c) => c.status === "winner");
       if (winnerData) setWinner(winnerData);
     } catch (error) {
       console.error("Error fetching contestants:", error);
@@ -751,7 +761,7 @@ const ChristmasContest: React.FC = () => {
           }, 1000);
         }
       } else {
-        alert(data.message || "Kļūda izvēloties uzvarētāju");
+        alert(data.message || "Kļūda izv��loties uzvarētāju");
         setIsSelectingWinner(false);
       }
     } catch (error) {
