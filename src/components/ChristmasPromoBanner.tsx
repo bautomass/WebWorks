@@ -69,32 +69,12 @@ const Sparkles = memo(() => (
 Sparkles.displayName = "Sparkles";
 
 const ChristmasPromoBanner = () => {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "preconnect";
-    link.href = "/ziemassvetku-konkurss";
-    document.head.appendChild(link);
-    return () => document.head.removeChild(link);
-  }, []);
-
-  const handleClick = (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setTimeout(() => {
-      router.push("/ziemassvetku-konkurss");
-    }, 2000);
-  };
-
   return (
     <LazyMotion features={domAnimation}>
-      {isLoading && <ChristmasLoadingScreen />}
       <div
         className="bg-[#EEC71B] relative overflow-hidden"
         role="banner"
-        aria-label="Christmas Contest Promotion"
+        aria-label="Christmas Contest Results"
       >
         <div
           className="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.15)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.15)_50%,rgba(255,255,255,0.15)_75%,transparent_75%,transparent)] bg-[length:24px_24px] opacity-20"
@@ -105,9 +85,8 @@ const ChristmasPromoBanner = () => {
 
         <Link
           href="/ziemassvetku-konkurss"
-          onClick={handleClick}
           className="block py-2.5 sm:py-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3D3B4A] focus-visible:ring-opacity-75 relative z-10"
-          aria-label="Piedalīties Ziemassvētku konkursā un laimēt mājaslapu €199 vērtībā"
+          aria-label="Apskatīt Ziemassvētku konkursa rezultātus"
         >
           <m.div
             className="container mx-auto px-3 sm:px-4 text-center"
@@ -122,11 +101,11 @@ const ChristmasPromoBanner = () => {
             <div className="flex items-center justify-center space-x-2 sm:space-x-3 text-[#3D3B4A]">
               <MotionGift />
               <span className="font-medium text-sm sm:text-base">
-                <span className="sr-only">Piedalies</span>
-                Ziemassvētku konkurss!{" "}
+                <span className="sr-only">Apsveicam</span>
+                Ziemassvētku konkurss noslēdzies!{" "}
                 <span className="whitespace-nowrap">
-                  Laimē mājaslapu
-                  <span className="hidden sm:inline"> (€199 vērtībā)</span>
+                  Apsveicam uzvarētāju
+                  <span className="hidden sm:inline"> Linda G.</span>
                 </span>
               </span>
               <m.span
@@ -134,7 +113,7 @@ const ChristmasPromoBanner = () => {
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "tween", duration: 0.2 }}
               >
-                Piedalīties
+                Apskatīt rezultātus
                 <span aria-hidden="true" className="ml-1">
                   →
                 </span>
