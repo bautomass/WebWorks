@@ -227,57 +227,145 @@ const WinnerSelectionAnimation: React.FC<{
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
       <motion.div
-        className="bg-white rounded-xl p-8 max-w-lg w-full mx-4 relative overflow-hidden"
+        className="bg-gradient-to-b from-white to-gray-50 rounded-2xl p-8 max-w-2xl w-full mx-4 relative overflow-hidden shadow-2xl"
         initial={{ scale: 0.8, y: 50 }}
         animate={{ scale: 1, y: 0 }}
       >
-        {/* Christmas decorations */}
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-500 via-green-500 to-red-500" />
-        <div className="absolute -left-4 -top-4 w-16 h-16 rotate-45 bg-[#EEC71B] opacity-20" />
-        <div className="absolute -right-4 -top-4 w-16 h-16 -rotate-45 bg-[#EEC71B] opacity-20" />
-
-        <h3 className="text-2xl font-bold text-center mb-6">
-          🎄 Izvēlamies Uzvarētāju! 🎄
-        </h3>
-
-        <div className="relative">
-          <div className="absolute inset-0 bg-gradient-to-b from-white via-transparent to-white pointer-events-none z-10" />
-
-          <motion.div
-            className="space-y-2 py-4"
-            initial={false}
-            animate={{ y: -currentIndex * 60 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          >
-            {contestants.map((contestant, index) => (
-              <div
-                key={contestant.id}
-                className={`p-4 rounded-lg text-center transition-all ${
-                  index === currentIndex
-                    ? "bg-[#EEC71B] scale-110 transform shadow-lg"
-                    : "bg-gray-100"
-                }`}
-              >
-                <span className="font-bold">{contestant.display_name}</span>
-              </div>
-            ))}
-          </motion.div>
+        {/* Decorative elements */}
+        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-500 via-[#EEC71B] to-green-500" />
+        <div className="absolute -left-20 -top-20 w-40 h-40 rotate-45 bg-[#EEC71B] opacity-10 rounded-3xl" />
+        <div className="absolute -right-20 -top-20 w-40 h-40 -rotate-45 bg-[#EEC71B] opacity-10 rounded-3xl" />
+        
+        {/* Snowfall effect */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(20)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-2 h-2 bg-white rounded-full"
+              initial={{
+                top: -10,
+                left: `${Math.random() * 100}%`,
+                opacity: 0.7,
+              }}
+              animate={{
+                top: "100%",
+                opacity: 0,
+              }}
+              transition={{
+                duration: 2 + Math.random() * 2,
+                repeat: Infinity,
+                ease: "linear",
+                delay: Math.random() * 2,
+              }}
+            />
+          ))}
         </div>
 
-        <div className="mt-6 text-center">
-          <motion.div
-            className="text-sm text-gray-600"
-            animate={{ scale: [1, 1.1, 1] }}
-            transition={{ duration: 1, repeat: Infinity }}
-          >
-            Izraudzīsim uzvarētāju... 🎅
-          </motion.div>
+        <div className="relative z-10">
+          <h3 className="text-3xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-[#3D3B4A] to-[#EEC71B]">
+            🎄 Ziemassvētku Izloze 🎄
+          </h3>
+
+          <div className="relative bg-white/80 backdrop-blur rounded-xl p-6 shadow-lg mb-6">
+            <div className="absolute inset-0 bg-gradient-to-b from-white/50 via-transparent to-white/50 pointer-events-none rounded-xl" />
+
+            <div className="text-center mb-4">
+              <motion.div
+                className="inline-block text-lg font-medium text-gray-600 bg-[#EEC71B]/10 px-4 py-2 rounded-full"
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                Izvēlamies uzvarētāju...
+              </motion.div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-3 max-h-[300px] overflow-y-auto scrollbar-hide">
+              {contestants.map((contestant, index) => (
+                <motion.div
+                  key={contestant.id}
+                  className={`p-4 rounded-xl transition-all transform ${
+                    index === currentIndex
+                      ? "bg-gradient-to-r from-[#EEC71B] to-[#E3B91A] scale-105 shadow-lg"
+                      : "bg-white/80 hover:bg-white/90"
+                  }`}
+                  animate={
+                    index === currentIndex
+                      ? {
+                          boxShadow: [
+                            "0 0 0 rgba(238, 199, 27, 0)",
+                            "0 0 20px rgba(238, 199, 27, 0.5)",
+                            "0 0 0 rgba(238, 199, 27, 0)",
+                          ],
+                        }
+                      : {}
+                  }
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div
+                        className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                          index === currentIndex
+                            ? "bg-white text-[#EEC71B]"
+                            : "bg-gray-50 text-gray-400"
+                        }`}
+                      >
+                        {index === currentIndex ? (
+                          <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{
+                              duration: 3,
+                              repeat: Infinity,
+                              ease: "linear",
+                            }}
+                          >
+                            <FiAward className="text-xl" />
+                          </motion.div>
+                        ) : (
+                          <FiUser className="text-xl" />
+                        )}
+                      </div>
+                      <span
+                        className={`font-medium ${
+                          index === currentIndex
+                            ? "text-[#3D3B4A]"
+                            : "text-gray-700"
+                        }`}
+                      >
+                        {contestant.display_name}
+                      </span>
+                    </div>
+                    {index === currentIndex && (
+                      <motion.span
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        className="text-xl"
+                      >
+                        ✨
+                      </motion.span>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          <div className="text-center">
+            <motion.div
+              className="inline-flex items-center space-x-2 text-sm text-gray-500"
+              animate={{ opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            >
+              <FiLoader className="animate-spin" />
+              <span>Drīz uzzināsim uzvarētāju...</span>
+            </motion.div>
+          </div>
         </div>
       </motion.div>
     </motion.div>
@@ -416,6 +504,161 @@ const ChanceIndicator: React.FC<{ totalParticipants: number }> = React.memo(
 
 ChanceIndicator.displayName = "ChanceIndicator";
 
+// Add this new component near your other component definitions
+const WinnerAnnouncementModal: React.FC<{
+  winner: Contestant;
+  onClose: () => void;
+}> = React.memo(({ winner, onClose }) => {
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <motion.div
+        className="bg-gradient-to-b from-white to-gray-50 rounded-2xl p-8 max-w-2xl w-full mx-4 relative overflow-hidden shadow-2xl"
+        initial={{ scale: 0.8, y: 50 }}
+        animate={{ scale: 1, y: 0 }}
+      >
+        {/* Decorative elements */}
+        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-500 via-[#EEC71B] to-green-500" />
+        <div className="absolute -left-20 -top-20 w-40 h-40 rotate-45 bg-[#EEC71B] opacity-10 rounded-3xl" />
+        <div className="absolute -right-20 -top-20 w-40 h-40 -rotate-45 bg-[#EEC71B] opacity-10 rounded-3xl" />
+
+        {/* Animated stars */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(20)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute text-2xl"
+              initial={{
+                opacity: 0,
+                scale: 0,
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+              }}
+              animate={{
+                opacity: [0, 1, 0],
+                scale: [0, 1, 0],
+                rotate: [0, 360],
+              }}
+              transition={{
+                duration: 2 + Math.random() * 2,
+                repeat: Infinity,
+                delay: Math.random() * 2,
+              }}
+            >
+              ⭐
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="relative z-10">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", delay: 0.2 }}
+            className="w-24 h-24 mx-auto mb-6 bg-gradient-to-r from-[#EEC71B] to-[#E3B91A] rounded-full flex items-center justify-center shadow-lg"
+          >
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              className="text-4xl"
+            >
+              👑
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            <h3 className="text-3xl font-bold text-center mb-2 bg-clip-text text-transparent bg-gradient-to-r from-[#3D3B4A] to-[#EEC71B]">
+              🎄 Apsveicam Uzvarētāju! 🎄
+            </h3>
+            <div className="text-center mb-8">
+              <motion.div
+                className="text-2xl font-bold mb-2"
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.6 }}
+              >
+                {winner.display_name}
+              </motion.div>
+              <motion.div
+                className="text-gray-600"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+              >
+                Reģistrējās:{" "}
+                {new Date(winner.created_at).toLocaleDateString("lv-LV", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </motion.div>
+            </div>
+
+            <div className="bg-[#EEC71B]/10 rounded-xl p-6 mb-8">
+              <h4 className="font-bold mb-2 text-center">Ko Uzvarētājs Iegūst:</h4>
+              <ul className="space-y-2">
+                <motion.li
+                  className="flex items-center gap-2"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 1 }}
+                >
+                  <FiCheck className="text-green-500" />
+                  <span>Pilnībā bezmaksas mājaslapa (€199 vērtībā)</span>
+                </motion.li>
+                <motion.li
+                  className="flex items-center gap-2"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 1.2 }}
+                >
+                  <FiCheck className="text-green-500" />
+                  <span>6 mēnešu bezmaksas hostings</span>
+                </motion.li>
+                <motion.li
+                  className="flex items-center gap-2"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 1.4 }}
+                >
+                  <FiCheck className="text-green-500" />
+                  <span>Individuāla pieeja un atbalsts</span>
+                </motion.li>
+              </ul>
+            </div>
+
+            <div className="text-center text-sm text-gray-600 mb-6">
+              Ar uzvarētāju sazināsimies pa e-pastu tuvāko dienu laikā.
+            </div>
+
+            <motion.button
+              onClick={onClose}
+              className="w-full bg-gradient-to-r from-[#EEC71B] to-[#E3B91A] text-[#3D3B4A] py-3 rounded-lg font-bold hover:opacity-90 transition-all duration-300 shadow-lg"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.6 }}
+            >
+              Aizvērt
+            </motion.button>
+          </motion.div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+});
+
+WinnerAnnouncementModal.displayName = "WinnerAnnouncementModal";
+
 // Main Component
 const ChristmasContest: React.FC = () => {
   const [contestants, setContestants] = useState<Contestant[]>([]);
@@ -433,6 +676,7 @@ const ChristmasContest: React.FC = () => {
   const [isSelectingWinner, setIsSelectingWinner] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [showContestants, setShowContestants] = useState(false);
+  const [showWinnerAnnouncement, setShowWinnerAnnouncement] = useState(false);
 
   const startDate = useMemo(() => new Date("2024-12-10"), []);
   const endDate = useMemo(() => new Date("2024-12-23"), []);
@@ -569,11 +813,7 @@ const ChristmasContest: React.FC = () => {
   };
 
   const handleSelectWinner = async () => {
-    if (
-      !window.confirm(
-        "Vai tiešām vēlaties izvēlēties uzvarētāju? Šo darbību nevar atsaukt."
-      )
-    ) {
+    if (!window.confirm("Vai tiešām vēlaties izvēlēties uzvarētāju? Šo darbību nevar atsaukt.")) {
       return;
     }
 
@@ -590,6 +830,7 @@ const ChristmasContest: React.FC = () => {
         setShowConfetti(true);
         await fetchContestants();
         await fetchStats();
+        setShowWinnerAnnouncement(true);
       } else {
         alert(data.message || "Kļūda izvēloties uzvarētāju");
       }
@@ -1043,6 +1284,16 @@ const ChristmasContest: React.FC = () => {
             </button>
           </motion.div>
         )}
+
+        {/* Winner Announcement Modal */}
+        <AnimatePresence>
+          {showWinnerAnnouncement && winner && (
+            <WinnerAnnouncementModal
+              winner={winner}
+              onClose={() => setShowWinnerAnnouncement(false)}
+            />
+          )}
+        </AnimatePresence>
       </div>
     </>
   );
