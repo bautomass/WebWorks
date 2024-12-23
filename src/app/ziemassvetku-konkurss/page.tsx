@@ -209,11 +209,12 @@ const WinnerSelectionAnimation: React.FC<{
       iterationsRef.current++;
 
       if (iterationsRef.current < maxIterations) {
+        // Speed up the animation gradually
         const newSpeed = 50 + iterationsRef.current * 10;
         setSpeed(newSpeed);
         timeoutId = setTimeout(animate, newSpeed);
       } else {
-        // Set to Linda G.'s index instead of random
+        // Ensure we end on Linda G.
         setCurrentIndex(lindaIndex);
         setTimeout(() => {
           onComplete(contestants[lindaIndex]);
@@ -756,12 +757,26 @@ const ChristmasContest: React.FC = () => {
       const formattedRealContestants = (realContestants || []).map(c => ({
         ...c,
         status: c.status || "registered",
-        display_name: formatDisplayName(c.display_name)
+        display_name: formatDisplayName(c.first_name + ' ' + c.last_name)
       }));
 
+      // Ensure Linda G. is included in the contestants
+      const lindaG = {
+        id: 'linda_g_special',
+        display_name: 'Linda G.',
+        created_at: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(), // 3 days ago
+        status: "registered"
+      };
+
+      // Filter out any duplicate Linda G. entries from fake contestants
+      const filteredFakeContestants = additionalContestants.filter(c => 
+        !c.display_name.toLowerCase().includes('linda g'));
+
+      // Combine all contestants
       const allContestants = [
         ...formattedRealContestants,
-        ...additionalContestants
+        lindaG,
+        ...filteredFakeContestants
       ];
       
       // Sort by creation date
@@ -865,6 +880,14 @@ const ChristmasContest: React.FC = () => {
           setIsSelectingWinner(false);
           setShowWinnerAnnouncement(true);
         }, 1000);
+
+        // Optional: Update the database if needed
+        if (lindaG.id !== 'linda_g_special') {
+          await supabase
+            .from("christmas_contestants")
+            .update({ status: "winner" })
+            .eq("id", lindaG.id);
+        }
       }
     } catch (error) {
       console.error("Error selecting winner:", error);
