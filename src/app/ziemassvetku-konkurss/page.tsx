@@ -193,6 +193,7 @@ const WinnerSelectionAnimation: React.FC<{
   const [currentIndex, setCurrentIndex] = useState(0);
   const [speed, setSpeed] = useState(50);
   const iterationsRef = useRef(0);
+  const phaseRef = useRef(0); // Track animation phase
 
   useEffect(() => {
     if (!isActive || contestants.length === 0) return;
@@ -200,17 +201,62 @@ const WinnerSelectionAnimation: React.FC<{
     // Find Linda G.'s index
     const lindaIndex = contestants.findIndex(c => 
       c.display_name.toLowerCase().includes("linda g"));
+    
+    let timeoutId: NodeJS.Timeout;
+    const maxIterations = 80; // Increased iterations for more drama
 
-    let timeoutId;
-    const maxIterations = 50;
+    const getRandomIndex = (phase: number): number => {
+      const gridArea = Math.floor(contestants.length / 5); // Approximate grid area
+      
+      if (phase === 0) { // Initial chaotic phase (0-70%)
+        return Math.floor(Math.random() * contestants.length);
+      } else if (phase === 1) { // Focusing phase (70-90%)
+        // Calculate a region around Linda's index
+        const regionSize = gridArea;
+        const minIndex = Math.max(0, lindaIndex - regionSize);
+        const maxIndex = Math.min(contestants.length - 1, lindaIndex + regionSize);
+        return minIndex + Math.floor(Math.random() * (maxIndex - minIndex));
+      } else { // Final phase (90-100%)
+        // Very close to Linda's index
+        const variance = 3;
+        const minIndex = Math.max(0, lindaIndex - variance);
+        const maxIndex = Math.min(contestants.length - 1, lindaIndex + variance);
+        return minIndex + Math.floor(Math.random() * (maxIndex - minIndex));
+      }
+    };
+
+    const getAnimationSpeed = (iteration: number): number => {
+      const progress = iteration / maxIterations;
+      
+      if (progress < 0.3) { // Start fast
+        return 50;
+      } else if (progress < 0.7) { // Gradually slow down
+        return 50 + (iteration * 5);
+      } else if (progress < 0.9) { // Speed up slightly
+        return 200;
+      } else { // Final dramatic slowdown
+        return 300 + ((progress - 0.9) * 1000);
+      }
+    };
 
     const animate = () => {
-      setCurrentIndex((prev) => (prev + 1) % contestants.length);
+      const progress = iterationsRef.current / maxIterations;
+      
+      // Update phase based on progress
+      if (progress < 0.7) phaseRef.current = 0;
+      else if (progress < 0.9) phaseRef.current = 1;
+      else phaseRef.current = 2;
+
+      // Get next index based on current phase
+      const nextIndex = iterationsRef.current === maxIterations - 1 
+        ? lindaIndex 
+        : getRandomIndex(phaseRef.current);
+      
+      setCurrentIndex(nextIndex);
       iterationsRef.current++;
 
       if (iterationsRef.current < maxIterations) {
-        // Speed up the animation gradually
-        const newSpeed = 50 + iterationsRef.current * 10;
+        const newSpeed = getAnimationSpeed(iterationsRef.current);
         setSpeed(newSpeed);
         timeoutId = setTimeout(animate, newSpeed);
       } else {
