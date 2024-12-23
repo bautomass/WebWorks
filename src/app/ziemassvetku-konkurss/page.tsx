@@ -201,7 +201,7 @@ const WinnerSelectionAnimation: React.FC<{
     const lindaIndex = contestants.findIndex(c => 
       c.display_name.toLowerCase().includes("linda g"));
 
-    let timeoutId: NodeJS.Timeout;
+    let timeoutId;
     const maxIterations = 50;
 
     const animate = () => {
@@ -760,22 +760,13 @@ const ChristmasContest: React.FC = () => {
         display_name: formatDisplayName(c.first_name + ' ' + c.last_name)
       }));
 
-      // Ensure Linda G. is included in the contestants
-      const lindaG = {
-        id: 'linda_g_special',
-        display_name: 'Linda G.',
-        created_at: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(), // 3 days ago
-        status: "registered"
-      };
-
-      // Filter out any duplicate Linda G. entries from fake contestants
+      // Filter out any Linda G. entries from fake contestants since we have the real one
       const filteredFakeContestants = additionalContestants.filter(c => 
         !c.display_name.toLowerCase().includes('linda g'));
 
-      // Combine all contestants
+      // Combine real contestants with filtered fake contestants
       const allContestants = [
         ...formattedRealContestants,
-        lindaG,
         ...filteredFakeContestants
       ];
       
