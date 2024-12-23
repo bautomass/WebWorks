@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef,
+} from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "../../utils/supabase";
 import Header from "../../components/Header";
@@ -199,59 +205,74 @@ const WinnerSelectionAnimation: React.FC<{
     if (!isActive || contestants.length === 0) return;
 
     // Find Linda G.'s index
-    const lindaIndex = contestants.findIndex(c => 
-      c.display_name.toLowerCase().includes("linda g"));
-    
+    const lindaIndex = contestants.findIndex((c) =>
+      c.display_name.toLowerCase().includes("linda g")
+    );
+
     let timeoutId: NodeJS.Timeout;
     const maxIterations = 80; // Increased iterations for more drama
 
     const getRandomIndex = (phase: number): number => {
       const gridArea = Math.floor(contestants.length / 5); // Approximate grid area
-      
-      if (phase === 0) { // Initial chaotic phase (0-70%)
+
+      if (phase === 0) {
+        // Initial chaotic phase (0-70%)
         return Math.floor(Math.random() * contestants.length);
-      } else if (phase === 1) { // Focusing phase (70-90%)
+      } else if (phase === 1) {
+        // Focusing phase (70-90%)
         // Calculate a region around Linda's index
         const regionSize = gridArea;
         const minIndex = Math.max(0, lindaIndex - regionSize);
-        const maxIndex = Math.min(contestants.length - 1, lindaIndex + regionSize);
+        const maxIndex = Math.min(
+          contestants.length - 1,
+          lindaIndex + regionSize
+        );
         return minIndex + Math.floor(Math.random() * (maxIndex - minIndex));
-      } else { // Final phase (90-100%)
+      } else {
+        // Final phase (90-100%)
         // Very close to Linda's index
         const variance = 3;
         const minIndex = Math.max(0, lindaIndex - variance);
-        const maxIndex = Math.min(contestants.length - 1, lindaIndex + variance);
+        const maxIndex = Math.min(
+          contestants.length - 1,
+          lindaIndex + variance
+        );
         return minIndex + Math.floor(Math.random() * (maxIndex - minIndex));
       }
     };
 
     const getAnimationSpeed = (iteration: number): number => {
       const progress = iteration / maxIterations;
-      
-      if (progress < 0.3) { // Start fast
+
+      if (progress < 0.3) {
+        // Start fast
         return 50;
-      } else if (progress < 0.7) { // Gradually slow down
-        return 50 + (iteration * 5);
-      } else if (progress < 0.9) { // Speed up slightly
+      } else if (progress < 0.7) {
+        // Gradually slow down
+        return 50 + iteration * 5;
+      } else if (progress < 0.9) {
+        // Speed up slightly
         return 200;
-      } else { // Final dramatic slowdown
-        return 300 + ((progress - 0.9) * 1000);
+      } else {
+        // Final dramatic slowdown
+        return 300 + (progress - 0.9) * 1000;
       }
     };
 
     const animate = () => {
       const progress = iterationsRef.current / maxIterations;
-      
+
       // Update phase based on progress
       if (progress < 0.7) phaseRef.current = 0;
       else if (progress < 0.9) phaseRef.current = 1;
       else phaseRef.current = 2;
 
       // Get next index based on current phase
-      const nextIndex = iterationsRef.current === maxIterations - 1 
-        ? lindaIndex 
-        : getRandomIndex(phaseRef.current);
-      
+      const nextIndex =
+        iterationsRef.current === maxIterations - 1
+          ? lindaIndex
+          : getRandomIndex(phaseRef.current);
+
       setCurrentIndex(nextIndex);
       iterationsRef.current++;
 
@@ -575,7 +596,9 @@ const WinnerAnnouncementModal: React.FC<{
                   transition={{ delay: 1 }}
                 >
                   <FiCheck className="text-[#EEC71B] flex-shrink-0" />
-                  <span className="text-gray-700 text-sm">Pilnībā bezmaksas mājaslapa (€199 vērtībā)</span>
+                  <span className="text-gray-700 text-sm">
+                    Pilnībā bezmaksas mājaslapa (€199 vērtībā)
+                  </span>
                 </motion.li>
                 <motion.li
                   className="flex items-center gap-2"
@@ -584,7 +607,9 @@ const WinnerAnnouncementModal: React.FC<{
                   transition={{ delay: 1.2 }}
                 >
                   <FiCheck className="text-[#EEC71B] flex-shrink-0" />
-                  <span className="text-gray-700 text-sm">6 mēnešu bezmaksas hostings</span>
+                  <span className="text-gray-700 text-sm">
+                    6 mēnešu bezmaksas hostings
+                  </span>
                 </motion.li>
                 <motion.li
                   className="flex items-center gap-2"
@@ -593,7 +618,9 @@ const WinnerAnnouncementModal: React.FC<{
                   transition={{ delay: 1.4 }}
                 >
                   <FiCheck className="text-[#EEC71B] flex-shrink-0" />
-                  <span className="text-gray-700 text-sm">Individuāla pieeja un atbalsts</span>
+                  <span className="text-gray-700 text-sm">
+                    Individuāla pieeja un atbalsts
+                  </span>
                 </motion.li>
               </ul>
             </div>
@@ -626,80 +653,80 @@ const additionalContestants: Contestant[] = [
     id: "fake_1",
     display_name: "Jānis B.",
     created_at: "2023-12-15T14:23:00",
-    status: "registered"
+    status: "registered",
   },
   {
     id: "fake_2",
     display_name: "Anna K.",
     created_at: "2023-12-16T09:15:00",
-    status: "registered"
+    status: "registered",
   },
   {
     id: "fake_3",
     display_name: "Kārlis O.",
     created_at: "2023-12-16T11:45:00",
-    status: "registered"
+    status: "registered",
   },
   {
     id: "fake_4",
     display_name: "Marta L.",
     created_at: "2023-12-16T15:30:00",
-    status: "registered"
+    status: "registered",
   },
   {
     id: "fake_5",
     display_name: "Roberts Z.",
     created_at: "2023-12-17T10:20:00",
-    status: "registered"
+    status: "registered",
   },
   {
     id: "fake_6",
     display_name: "Elīna P.",
     created_at: "2023-12-17T13:45:00",
-    status: "registered"
+    status: "registered",
   },
   {
     id: "fake_7",
     display_name: "Andris K.",
     created_at: "2023-12-17T16:10:00",
-    status: "registered"
+    status: "registered",
   },
   {
     id: "fake_8",
     display_name: "Laura S.",
     created_at: "2023-12-18T09:05:00",
-    status: "registered"
+    status: "registered",
   },
   {
     id: "fake_9",
     display_name: "Kristaps O.",
     created_at: "2023-12-18T11:30:00",
-    status: "registered"
+    status: "registered",
   },
   {
     id: "fake_10",
     display_name: "Ieva K.",
     created_at: "2023-12-18T14:25:00",
-    status: "registered"
+    status: "registered",
   },
   {
     id: "fake_11",
     display_name: "Rihards V.",
     created_at: "2023-12-19T10:40:00",
-    status: "registered"
+    status: "registered",
   },
   {
     id: "fake_12",
     display_name: "Sanita E.",
     created_at: "2023-12-19T13:15:00",
-    status: "registered"
+    status: "registered",
   },
   {
     id: "fake_13",
     display_name: "Māris J.",
     created_at: "2023-12-19T15:50:00",
-    status: "registered"
-  }
+    status: "registered",
+  },
 ];
 
 // Main Component
@@ -719,10 +746,10 @@ const ChristmasContest: React.FC = () => {
 
       if (error) throw error;
 
-      const formattedContestants = (realContestants || []).map(c => ({
+      const formattedContestants = (realContestants || []).map((c) => ({
         ...c,
         status: c.status || "registered",
-        display_name: formatDisplayName(c.first_name + ' ' + c.last_name)
+        display_name: formatDisplayName(c.first_name + " " + c.last_name),
       }));
 
       setContestants(formattedContestants);
@@ -762,7 +789,8 @@ const ChristmasContest: React.FC = () => {
               🎄 Ziemassvētku Konkurss Noslēdzies
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-              Paldies visiem 19 dalībniekiem par piedalīšanos mūsu Ziemassvētku konkursā!
+              Paldies visiem 19 dalībniekiem par piedalīšanos mūsu Ziemassvētku
+              konkursā!
             </p>
           </motion.div>
 
@@ -775,7 +803,7 @@ const ChristmasContest: React.FC = () => {
             <div className="bg-gradient-to-br from-[#EEC71B] to-[#E3B91A] rounded-2xl p-1">
               <div className="bg-white rounded-xl p-8 relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 via-green-500 to-red-500 opacity-50" />
-                
+
                 <div className="text-center">
                   <motion.div
                     initial={{ scale: 0 }}
@@ -788,17 +816,21 @@ const ChristmasContest: React.FC = () => {
                   <h2 className="text-2xl font-bold text-[#3D3B4A] mb-4">
                     Apsveicam Konkursa Uzvarētāju!
                   </h2>
-                  
+
                   <div className="text-3xl font-bold text-[#EEC71B] mb-6">
                     Linda G.
                   </div>
 
                   <div className="max-w-2xl mx-auto">
-                    <h3 className="text-xl font-semibold mb-4">Balvas Saturs:</h3>
+                    <h3 className="text-xl font-semibold mb-4">
+                      Balvas Saturs:
+                    </h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                       <div className="bg-gray-50 p-4 rounded-lg">
                         <FiGift className="text-[#EEC71B] text-2xl mx-auto mb-2" />
-                        <p className="text-sm">Bezmaksas mājaslapa (€199 vērtībā)</p>
+                        <p className="text-sm">
+                          Bezmaksas mājaslapa (€199 vērtībā)
+                        </p>
                       </div>
                       <div className="bg-gray-50 p-4 rounded-lg">
                         <FiClock className="text-[#EEC71B] text-2xl mx-auto mb-2" />
@@ -806,7 +838,9 @@ const ChristmasContest: React.FC = () => {
                       </div>
                       <div className="bg-gray-50 p-4 rounded-lg">
                         <FiUser className="text-[#EEC71B] text-2xl mx-auto mb-2" />
-                        <p className="text-sm">Individuāla pieeja un atbalsts</p>
+                        <p className="text-sm">
+                          Individuāla pieeja un atbalsts
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -825,12 +859,15 @@ const ChristmasContest: React.FC = () => {
               Ziņa Visiem Dalībniekiem
             </h3>
             <p className="text-gray-600 mb-6">
-              Katrs konkursa dalībnieks ir saņēmis e-pastu ar īpašu 30% atlaides kodu, 
-              ko var izmantot, pasūtot mājaslapu no Startup Vision līdz 2024. gada 31. janvārim.
+              Katrs konkursa dalībnieks ir saņēmis e-pastu ar īpašu 30% atlaides
+              kodu, ko var izmantot, pasūtot mājaslapu no Startup Vision līdz
+              2025. gada 31. janvārim.
             </p>
             <div className="inline-flex items-center gap-2 bg-[#EEC71B]/10 px-4 py-2 rounded-full">
               <FiMail className="text-[#EEC71B]" />
-              <span className="text-sm font-medium">Pārbaudiet savu e-pastu</span>
+              <span className="text-sm font-medium">
+                Pārbaudiet savu e-pastu
+              </span>
             </div>
           </motion.div>
 
@@ -861,11 +898,14 @@ const ChristmasContest: React.FC = () => {
             className="text-center max-w-2xl mx-auto"
           >
             <p className="text-gray-600 mb-8">
-              Paldies par piedalīšanos mūsu Ziemassvētku konkursā! 
-              Sekojiet mums sociālajos tīklos, lai uzzinātu par nākamajām aktivitātēm.
+              Paldies par piedalīšanos mūsu Ziemassvētku konkursā! Sekojiet mums
+              sociālajos tīklos, lai uzzinātu par nākamajām aktivitātēm.
             </p>
             <div className="flex justify-center gap-4">
-              <a href="https://facebook.com/webworks" className="text-[#3D3B4A] hover:text-[#EEC71B] transition-colors">
+              <a
+                href="https://facebook.com/webworks"
+                className="text-[#3D3B4A] hover:text-[#EEC71B] transition-colors"
+              >
                 <FiShare2 className="text-2xl" />
               </a>
             </div>
