@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "../../utils/supabase";
 import Header from "../../components/Header";
@@ -220,7 +220,9 @@ const WinnerSelectionAnimation: React.FC<{
     };
 
     timeoutId = setTimeout(animate, speed);
-    return () => clearTimeout(timeoutId);
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, [isActive, contestants, speed, onComplete]);
 
   return (
