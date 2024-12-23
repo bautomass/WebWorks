@@ -238,52 +238,27 @@ const WinnerSelectionAnimation: React.FC<{
         animate={{ scale: 1 }}
       >
         {/* Header */}
-        <div className="text-center mb-8">
-          <h3 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-            🎄 Ziemassvētku Izloze 🎄
+        <div className="text-center mb-6 sm:mb-8">
+          <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3">
+            Ziemassvētku Konkursa Izloze
           </h3>
           <motion.div
-            className="text-[#EEC71B] text-lg sm:text-xl"
+            className="text-[#EEC71B] text-base sm:text-lg font-medium"
             animate={{ opacity: [0.5, 1, 0.5] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
-            Izvēlamies uzvarētāju...
+            Izvēlamies uzvarētāju
           </motion.div>
         </div>
 
         {/* Main content */}
-        <div className="flex-1 relative bg-white/10 backdrop-blur-md rounded-2xl p-6 overflow-hidden">
-          {/* Snowfall effect */}
-          <div className="absolute inset-0 pointer-events-none">
-            {[...Array(30)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute w-2 h-2 bg-white rounded-full"
-                initial={{
-                  top: -10,
-                  left: `${Math.random() * 100}%`,
-                  opacity: 0.7,
-                }}
-                animate={{
-                  top: "100%",
-                  opacity: 0,
-                }}
-                transition={{
-                  duration: 2 + Math.random() * 2,
-                  repeat: Infinity,
-                  ease: "linear",
-                  delay: Math.random() * 2,
-                }}
-              />
-            ))}
-          </div>
-
+        <div className="flex-1 relative bg-white/10 backdrop-blur-md rounded-2xl p-4 sm:p-6 overflow-hidden">
           {/* Contestants grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 max-h-[calc(100vh-200px)] overflow-y-auto p-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 max-h-[calc(100vh-180px)] overflow-y-auto p-2 sm:p-4">
             {contestants.map((contestant, index) => (
               <motion.div
                 key={contestant.id}
-                className={`relative rounded-xl transition-all transform ${
+                className={`relative rounded-lg transition-all transform ${
                   index === currentIndex
                     ? "bg-gradient-to-r from-[#EEC71B] to-[#E3B91A] scale-105 shadow-lg z-10"
                     : "bg-white/5 hover:bg-white/10"
@@ -293,7 +268,7 @@ const WinnerSelectionAnimation: React.FC<{
                     ? {
                         boxShadow: [
                           "0 0 0 rgba(238, 199, 27, 0)",
-                          "0 0 30px rgba(238, 199, 27, 0.5)",
+                          "0 0 20px rgba(238, 199, 27, 0.3)",
                           "0 0 0 rgba(238, 199, 27, 0)",
                         ],
                       }
@@ -301,10 +276,10 @@ const WinnerSelectionAnimation: React.FC<{
                 }
                 transition={{ duration: 1.5, repeat: Infinity }}
               >
-                <div className="p-3 sm:p-4">
-                  <div className="flex flex-col items-center gap-2">
+                <div className="p-2 sm:p-3">
+                  <div className="flex flex-col items-center gap-1.5">
                     <div
-                      className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ${
+                      className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center ${
                         index === currentIndex
                           ? "bg-white text-[#EEC71B]"
                           : "bg-white/10 text-white/60"
@@ -319,14 +294,14 @@ const WinnerSelectionAnimation: React.FC<{
                             ease: "linear",
                           }}
                         >
-                          <FiAward className="text-xl" />
+                          <FiAward className="text-lg" />
                         </motion.div>
                       ) : (
-                        <FiUser className="text-lg" />
+                        <FiUser className="text-base" />
                       )}
                     </div>
                     <span
-                      className={`text-sm sm:text-base font-medium text-center ${
+                      className={`text-xs sm:text-sm font-medium text-center leading-tight ${
                         index === currentIndex ? "text-[#3D3B4A]" : "text-white"
                       }`}
                     >
@@ -334,13 +309,6 @@ const WinnerSelectionAnimation: React.FC<{
                     </span>
                   </div>
                 </div>
-                {index === currentIndex && (
-                  <motion.div
-                    className="absolute -inset-px rounded-xl border-2 border-[#EEC71B]"
-                    initial={{ opacity: 0, scale: 1.1 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                  />
-                )}
               </motion.div>
             ))}
           </div>
@@ -495,57 +463,23 @@ const WinnerAnnouncementModal: React.FC<{
       exit={{ opacity: 0 }}
     >
       <motion.div
-        className="bg-gradient-to-b from-white to-gray-50 rounded-2xl p-8 max-w-2xl w-full mx-4 relative overflow-hidden shadow-2xl"
+        className="bg-gradient-to-b from-white to-gray-50 rounded-xl p-6 sm:p-8 max-w-2xl w-full mx-4 relative overflow-hidden shadow-2xl"
         initial={{ scale: 0.8, y: 50 }}
         animate={{ scale: 1, y: 0 }}
       >
         {/* Decorative elements */}
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-500 via-[#EEC71B] to-green-500" />
-        <div className="absolute -left-20 -top-20 w-40 h-40 rotate-45 bg-[#EEC71B] opacity-10 rounded-3xl" />
-        <div className="absolute -right-20 -top-20 w-40 h-40 -rotate-45 bg-[#EEC71B] opacity-10 rounded-3xl" />
-
-        {/* Animated stars */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute text-2xl"
-              initial={{
-                opacity: 0,
-                scale: 0,
-                x: Math.random() * window.innerWidth,
-                y: Math.random() * window.innerHeight,
-              }}
-              animate={{
-                opacity: [0, 1, 0],
-                scale: [0, 1, 0],
-                rotate: [0, 360],
-              }}
-              transition={{
-                duration: 2 + Math.random() * 2,
-                repeat: Infinity,
-                delay: Math.random() * 2,
-              }}
-            >
-              ⭐
-            </motion.div>
-          ))}
-        </div>
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#EEC71B] to-[#E3B91A]" />
+        <div className="absolute -left-20 -top-20 w-40 h-40 rotate-45 bg-[#EEC71B] opacity-5 rounded-3xl" />
+        <div className="absolute -right-20 -top-20 w-40 h-40 -rotate-45 bg-[#EEC71B] opacity-5 rounded-3xl" />
 
         <div className="relative z-10">
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", delay: 0.2 }}
-            className="w-24 h-24 mx-auto mb-6 bg-gradient-to-r from-[#EEC71B] to-[#E3B91A] rounded-full flex items-center justify-center shadow-lg"
+            className="w-16 h-16 mx-auto mb-6 bg-gradient-to-r from-[#EEC71B] to-[#E3B91A] rounded-full flex items-center justify-center shadow-lg"
           >
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              className="text-4xl"
-            >
-              👑
-            </motion.div>
+            <FiAward className="text-white text-2xl" />
           </motion.div>
 
           <motion.div
@@ -553,12 +487,12 @@ const WinnerAnnouncementModal: React.FC<{
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <h3 className="text-3xl font-bold text-center mb-2 bg-clip-text text-transparent bg-gradient-to-r from-[#3D3B4A] to-[#EEC71B]">
-              🎄 Apsveicam Uzvarētāju! 🎄
+            <h3 className="text-xl sm:text-2xl font-bold text-center mb-2 text-[#3D3B4A]">
+              Apsveicam Konkursa Uzvarētāju
             </h3>
             <div className="text-center mb-8">
               <motion.div
-                className="text-2xl font-bold mb-2"
+                className="text-xl sm:text-2xl font-bold mb-2 text-[#EEC71B]"
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.6 }}
@@ -566,12 +500,12 @@ const WinnerAnnouncementModal: React.FC<{
                 {winner.display_name}
               </motion.div>
               <motion.div
-                className="text-gray-600"
+                className="text-gray-600 text-sm"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
               >
-                Reģistrējās:{" "}
+                Reģistrācijas datums:{" "}
                 {new Date(winner.created_at).toLocaleDateString("lv-LV", {
                   year: "numeric",
                   month: "long",
@@ -582,17 +516,17 @@ const WinnerAnnouncementModal: React.FC<{
               </motion.div>
             </div>
 
-            <div className="bg-[#EEC71B]/10 rounded-xl p-6 mb-8">
-              <h4 className="font-bold mb-2 text-center">Ko Uzvarētājs Iegūst:</h4>
-              <ul className="space-y-2">
+            <div className="bg-[#EEC71B]/5 rounded-lg p-5 mb-6">
+              <h4 className="font-bold mb-3 text-[#3D3B4A]">Balvas Saturs:</h4>
+              <ul className="space-y-2.5">
                 <motion.li
                   className="flex items-center gap-2"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 1 }}
                 >
-                  <FiCheck className="text-green-500" />
-                  <span>Pilnībā bezmaksas mājaslapa (€199 vērtībā)</span>
+                  <FiCheck className="text-[#EEC71B] flex-shrink-0" />
+                  <span className="text-gray-700 text-sm">Pilnībā bezmaksas mājaslapa (€199 vērtībā)</span>
                 </motion.li>
                 <motion.li
                   className="flex items-center gap-2"
@@ -600,8 +534,8 @@ const WinnerAnnouncementModal: React.FC<{
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 1.2 }}
                 >
-                  <FiCheck className="text-green-500" />
-                  <span>6 mēnešu bezmaksas hostings</span>
+                  <FiCheck className="text-[#EEC71B] flex-shrink-0" />
+                  <span className="text-gray-700 text-sm">6 mēnešu bezmaksas hostings</span>
                 </motion.li>
                 <motion.li
                   className="flex items-center gap-2"
@@ -609,19 +543,19 @@ const WinnerAnnouncementModal: React.FC<{
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 1.4 }}
                 >
-                  <FiCheck className="text-green-500" />
-                  <span>Individuāla pieeja un atbalsts</span>
+                  <FiCheck className="text-[#EEC71B] flex-shrink-0" />
+                  <span className="text-gray-700 text-sm">Individuāla pieeja un atbalsts</span>
                 </motion.li>
               </ul>
             </div>
 
-            <div className="text-center text-sm text-gray-600 mb-6">
-              Ar uzvarētāju sazināsimies pa e-pastu tuvāko dienu laikā.
+            <div className="text-center text-xs text-gray-500 mb-6">
+              Ar uzvarētāju sazināsimies pa e-pastu tuvāko dienu laikā
             </div>
 
             <motion.button
               onClick={onClose}
-              className="w-full bg-gradient-to-r from-[#EEC71B] to-[#E3B91A] text-[#3D3B4A] py-3 rounded-lg font-bold hover:opacity-90 transition-all duration-300 shadow-lg"
+              className="w-full bg-gradient-to-r from-[#EEC71B] to-[#E3B91A] text-[#3D3B4A] py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 transition-all duration-300 shadow-lg"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.6 }}
