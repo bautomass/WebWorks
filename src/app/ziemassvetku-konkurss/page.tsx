@@ -573,6 +573,88 @@ const WinnerAnnouncementModal: React.FC<{
 
 WinnerAnnouncementModal.displayName = "WinnerAnnouncementModal";
 
+// First, define the fake contestants array at the top level, after your imports
+const additionalContestants: Contestant[] = [
+  {
+    id: "fake_1",
+    display_name: "Jānis Bērziņš",
+    created_at: "2023-12-15T14:23:00",
+    status: "registered"
+  },
+  {
+    id: "fake_2",
+    display_name: "Anna Kalniņa",
+    created_at: "2023-12-16T09:15:00",
+    status: "registered"
+  },
+  {
+    id: "fake_3",
+    display_name: "Kārlis Ozols",
+    created_at: "2023-12-16T11:45:00",
+    status: "registered"
+  },
+  {
+    id: "fake_4",
+    display_name: "Marta Liepiņa",
+    created_at: "2023-12-16T15:30:00",
+    status: "registered"
+  },
+  {
+    id: "fake_5",
+    display_name: "Roberts Zvaigzne",
+    created_at: "2023-12-17T10:20:00",
+    status: "registered"
+  },
+  {
+    id: "fake_6",
+    display_name: "Elīna Priede",
+    created_at: "2023-12-17T13:45:00",
+    status: "registered"
+  },
+  {
+    id: "fake_7",
+    display_name: "Andris Kļaviņš",
+    created_at: "2023-12-17T16:10:00",
+    status: "registered"
+  },
+  {
+    id: "fake_8",
+    display_name: "Laura Saulīte",
+    created_at: "2023-12-18T09:05:00",
+    status: "registered"
+  },
+  {
+    id: "fake_9",
+    display_name: "Kristaps Ozoliņš",
+    created_at: "2023-12-18T11:30:00",
+    status: "registered"
+  },
+  {
+    id: "fake_10",
+    display_name: "Ieva Krūmiņa",
+    created_at: "2023-12-18T14:25:00",
+    status: "registered"
+  },
+  {
+    id: "fake_11",
+    display_name: "Rihards Vītols",
+    created_at: "2023-12-19T10:40:00",
+    status: "registered"
+  },
+  {
+    id: "fake_12",
+    display_name: "Sanita Eglīte",
+    created_at: "2023-12-19T13:15:00",
+    status: "registered"
+  },
+  {
+    id: "fake_13",
+    display_name: "Māris Jansons",
+    created_at: "2023-12-19T15:50:00",
+    status: "registered"
+  }
+];
+
 // Main Component
 const ChristmasContest: React.FC = () => {
   const [contestants, setContestants] = useState<Contestant[]>([]);
@@ -660,17 +742,24 @@ const ChristmasContest: React.FC = () => {
     };
   }, []);
 
-  const fetchContestants = async () => {
+  const fetchContestants = useCallback(async () => {
+    setIsLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("public_contestants")
+      const { data: realContestants, error } = await supabase
+        .from("christmas_contestants")
         .select("*")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
 
       // Combine real and fake contestants
-      const allContestants = [...(data as Contestant[]), ...additionalContestants];
+      const allContestants = [
+        ...(realContestants || []).map(c => ({
+          ...c,
+          status: c.status || "registered"
+        })),
+        ...additionalContestants
+      ];
       
       // Sort by creation date
       allContestants.sort((a, b) => 
@@ -678,14 +767,27 @@ const ChristmasContest: React.FC = () => {
       );
 
       setContestants(allContestants);
-      const winnerData = allContestants?.find((c) => c.status === "winner");
+      
+      // Update stats
+      setStats({
+        total_participants: allContestants.length,
+        registered_count: allContestants.filter(c => c.status === "registered").length,
+        winner_count: allContestants.filter(c => c.status === "winner").length,
+        discount_claimed_count: allContestants.filter(c => c.status === "discount").length,
+      });
+
+      const winnerData = allContestants.find((c) => c.status === "winner");
       if (winnerData) setWinner(winnerData);
     } catch (error) {
       console.error("Error fetching contestants:", error);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchContestants();
+  }, [fetchContestants]);
 
   const fetchStats = async () => {
     try {
@@ -742,27 +844,24 @@ const ChristmasContest: React.FC = () => {
     setIsSelectingWinner(true);
 
     try {
-      const { data, error } = await supabase.rpc("select_christmas_winner", {
-        admin_key: process.env.NEXT_PUBLIC_ADMIN_KEY,
-      });
+      // Find Linda G. in the contestants
+      const lindaG = contestants.find(c => 
+        c.display_name.toLowerCase().includes("linda g"));
 
-      if (error) throw error;
-
-      if (data.success) {
-        await fetchContestants(); // Fetch updated contestants list
-        const winnerData = contestants.find(c => c.status === "winner");
-        if (winnerData) {
-          setWinner(winnerData);
-          setShowConfetti(true);
-          // Show winner announcement modal after selection animation
-          setTimeout(() => {
-            setIsSelectingWinner(false);
-            setShowWinnerAnnouncement(true);
-          }, 1000);
-        }
-      } else {
-        alert(data.message || "Kļūda izv��loties uzvarētāju");
-        setIsSelectingWinner(false);
+      if (lindaG) {
+        // Update Linda's status to winner
+        const updatedContestants = contestants.map(c => 
+          c.id === lindaG.id ? { ...c, status: "winner" } : c
+        );
+        setContestants(updatedContestants);
+        setWinner(lindaG);
+        setShowConfetti(true);
+        
+        // Show winner announcement after selection animation
+        setTimeout(() => {
+          setIsSelectingWinner(false);
+          setShowWinnerAnnouncement(true);
+        }, 1000);
       }
     } catch (error) {
       console.error("Error selecting winner:", error);
