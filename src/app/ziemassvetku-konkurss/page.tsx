@@ -227,144 +227,122 @@ const WinnerSelectionAnimation: React.FC<{
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/95"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
       <motion.div
-        className="bg-gradient-to-b from-white to-gray-50 rounded-2xl p-8 max-w-2xl w-full mx-4 relative overflow-hidden shadow-2xl"
-        initial={{ scale: 0.8, y: 50 }}
-        animate={{ scale: 1, y: 0 }}
+        className="w-full h-full max-w-7xl mx-auto p-4 sm:p-6 flex flex-col"
+        initial={{ scale: 0.95 }}
+        animate={{ scale: 1 }}
       >
-        {/* Decorative elements */}
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-500 via-[#EEC71B] to-green-500" />
-        <div className="absolute -left-20 -top-20 w-40 h-40 rotate-45 bg-[#EEC71B] opacity-10 rounded-3xl" />
-        <div className="absolute -right-20 -top-20 w-40 h-40 -rotate-45 bg-[#EEC71B] opacity-10 rounded-3xl" />
-        
-        {/* Snowfall effect */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-2 h-2 bg-white rounded-full"
-              initial={{
-                top: -10,
-                left: `${Math.random() * 100}%`,
-                opacity: 0.7,
-              }}
-              animate={{
-                top: "100%",
-                opacity: 0,
-              }}
-              transition={{
-                duration: 2 + Math.random() * 2,
-                repeat: Infinity,
-                ease: "linear",
-                delay: Math.random() * 2,
-              }}
-            />
-          ))}
-        </div>
-
-        <div className="relative z-10">
-          <h3 className="text-3xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-[#3D3B4A] to-[#EEC71B]">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h3 className="text-3xl sm:text-4xl font-bold text-white mb-4">
             🎄 Ziemassvētku Izloze 🎄
           </h3>
+          <motion.div
+            className="text-[#EEC71B] text-lg sm:text-xl"
+            animate={{ opacity: [0.5, 1, 0.5] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            Izvēlamies uzvarētāju...
+          </motion.div>
+        </div>
 
-          <div className="relative bg-white/80 backdrop-blur rounded-xl p-6 shadow-lg mb-6">
-            <div className="absolute inset-0 bg-gradient-to-b from-white/50 via-transparent to-white/50 pointer-events-none rounded-xl" />
-
-            <div className="text-center mb-4">
+        {/* Main content */}
+        <div className="flex-1 relative bg-white/10 backdrop-blur-md rounded-2xl p-6 overflow-hidden">
+          {/* Snowfall effect */}
+          <div className="absolute inset-0 pointer-events-none">
+            {[...Array(30)].map((_, i) => (
               <motion.div
-                className="inline-block text-lg font-medium text-gray-600 bg-[#EEC71B]/10 px-4 py-2 rounded-full"
-                animate={{ scale: [1, 1.05, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                Izvēlamies uzvarētāju...
-              </motion.div>
-            </div>
-
-            <div className="grid grid-cols-1 gap-3 max-h-[300px] overflow-y-auto scrollbar-hide">
-              {contestants.map((contestant, index) => (
-                <motion.div
-                  key={contestant.id}
-                  className={`p-4 rounded-xl transition-all transform ${
-                    index === currentIndex
-                      ? "bg-gradient-to-r from-[#EEC71B] to-[#E3B91A] scale-105 shadow-lg"
-                      : "bg-white/80 hover:bg-white/90"
-                  }`}
-                  animate={
-                    index === currentIndex
-                      ? {
-                          boxShadow: [
-                            "0 0 0 rgba(238, 199, 27, 0)",
-                            "0 0 20px rgba(238, 199, 27, 0.5)",
-                            "0 0 0 rgba(238, 199, 27, 0)",
-                          ],
-                        }
-                      : {}
-                  }
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                          index === currentIndex
-                            ? "bg-white text-[#EEC71B]"
-                            : "bg-gray-50 text-gray-400"
-                        }`}
-                      >
-                        {index === currentIndex ? (
-                          <motion.div
-                            animate={{ rotate: 360 }}
-                            transition={{
-                              duration: 3,
-                              repeat: Infinity,
-                              ease: "linear",
-                            }}
-                          >
-                            <FiAward className="text-xl" />
-                          </motion.div>
-                        ) : (
-                          <FiUser className="text-xl" />
-                        )}
-                      </div>
-                      <span
-                        className={`font-medium ${
-                          index === currentIndex
-                            ? "text-[#3D3B4A]"
-                            : "text-gray-700"
-                        }`}
-                      >
-                        {contestant.display_name}
-                      </span>
-                    </div>
-                    {index === currentIndex && (
-                      <motion.span
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        className="text-xl"
-                      >
-                        ✨
-                      </motion.span>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+                key={i}
+                className="absolute w-2 h-2 bg-white rounded-full"
+                initial={{
+                  top: -10,
+                  left: `${Math.random() * 100}%`,
+                  opacity: 0.7,
+                }}
+                animate={{
+                  top: "100%",
+                  opacity: 0,
+                }}
+                transition={{
+                  duration: 2 + Math.random() * 2,
+                  repeat: Infinity,
+                  ease: "linear",
+                  delay: Math.random() * 2,
+                }}
+              />
+            ))}
           </div>
 
-          <div className="text-center">
-            <motion.div
-              className="inline-flex items-center space-x-2 text-sm text-gray-500"
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            >
-              <FiLoader className="animate-spin" />
-              <span>Drīz uzzināsim uzvarētāju...</span>
-            </motion.div>
+          {/* Contestants grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 max-h-[calc(100vh-200px)] overflow-y-auto p-4">
+            {contestants.map((contestant, index) => (
+              <motion.div
+                key={contestant.id}
+                className={`relative rounded-xl transition-all transform ${
+                  index === currentIndex
+                    ? "bg-gradient-to-r from-[#EEC71B] to-[#E3B91A] scale-105 shadow-lg z-10"
+                    : "bg-white/5 hover:bg-white/10"
+                }`}
+                animate={
+                  index === currentIndex
+                    ? {
+                        boxShadow: [
+                          "0 0 0 rgba(238, 199, 27, 0)",
+                          "0 0 30px rgba(238, 199, 27, 0.5)",
+                          "0 0 0 rgba(238, 199, 27, 0)",
+                        ],
+                      }
+                    : {}
+                }
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                <div className="p-3 sm:p-4">
+                  <div className="flex flex-col items-center gap-2">
+                    <div
+                      className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ${
+                        index === currentIndex
+                          ? "bg-white text-[#EEC71B]"
+                          : "bg-white/10 text-white/60"
+                      }`}
+                    >
+                      {index === currentIndex ? (
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{
+                            duration: 3,
+                            repeat: Infinity,
+                            ease: "linear",
+                          }}
+                        >
+                          <FiAward className="text-xl" />
+                        </motion.div>
+                      ) : (
+                        <FiUser className="text-lg" />
+                      )}
+                    </div>
+                    <span
+                      className={`text-sm sm:text-base font-medium text-center ${
+                        index === currentIndex ? "text-[#3D3B4A]" : "text-white"
+                      }`}
+                    >
+                      {contestant.display_name}
+                    </span>
+                  </div>
+                </div>
+                {index === currentIndex && (
+                  <motion.div
+                    className="absolute -inset-px rounded-xl border-2 border-[#EEC71B]"
+                    initial={{ opacity: 0, scale: 1.1 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                  />
+                )}
+              </motion.div>
+            ))}
           </div>
         </div>
       </motion.div>
@@ -827,19 +805,25 @@ const ChristmasContest: React.FC = () => {
       if (error) throw error;
 
       if (data.success) {
-        setShowConfetti(true);
-        await fetchContestants();
-        await fetchStats();
-        setShowWinnerAnnouncement(true);
+        await fetchContestants(); // Fetch updated contestants list
+        const winnerData = contestants.find(c => c.status === "winner");
+        if (winnerData) {
+          setWinner(winnerData);
+          setShowConfetti(true);
+          // Show winner announcement modal after selection animation
+          setTimeout(() => {
+            setIsSelectingWinner(false);
+            setShowWinnerAnnouncement(true);
+          }, 1000);
+        }
       } else {
         alert(data.message || "Kļūda izvēloties uzvarētāju");
+        setIsSelectingWinner(false);
       }
     } catch (error) {
       console.error("Error selecting winner:", error);
       alert("Kļūda izvēloties uzvarētāju");
-    } finally {
       setIsSelectingWinner(false);
-      setTimeout(() => setShowConfetti(false), 10000);
     }
   };
 
@@ -1259,9 +1243,11 @@ const ChristmasContest: React.FC = () => {
           {isSelectingWinner && (
             <WinnerSelectionAnimation
               isActive={true}
-              contestants={contestants.filter((c) => c.status === "registered")}
+              contestants={contestants}
               onComplete={(selectedWinner) => {
-                handleSelectWinner();
+                setWinner(selectedWinner);
+                setIsSelectingWinner(false);
+                setShowWinnerAnnouncement(true);
               }}
             />
           )}
