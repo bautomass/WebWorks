@@ -1,6 +1,7 @@
 // app/page.tsx
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import PaymentPlansBanner from "@/components/paymentPlansBanner";
 import Services from "@/components/services";
 import FloatingPromo from "@/components/FloatingPromo";
 import ServicesWeDo from "@/components/ServicesWeDo";
@@ -55,7 +56,8 @@ export default function Home() {
       />
       <main>
         <Header />
-        <ChristmasPromoBanner />
+        <PaymentPlansBanner />
+        {/* <ChristmasPromoBanner /> */}
         <Hero />
         <Services />
         <ServicesWeDo />
