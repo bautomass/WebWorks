@@ -10,6 +10,7 @@ import {
   FaHandshake,
   FaLightbulb,
   FaPhone,
+  FaEnvelope,
   IconType,
 } from "react-icons/fa";
 
@@ -32,8 +33,7 @@ type HeroButtonProps = Readonly<{
   ariaLabel: string;
 }>;
 
-type PhoneButtonProps = Readonly<{
-  phone: string;
+type ContactButtonProps = Readonly<{
   bg: string;
   text: string;
   hover: string;
@@ -91,44 +91,19 @@ const HeroButton: React.FC<HeroButtonProps> = React.memo(
 
 HeroButton.displayName = "HeroButton";
 
-const PhoneButton: React.FC<PhoneButtonProps> = React.memo(
-  ({ phone, bg, text, hover }) => {
-    const [isRevealed, setIsRevealed] = useState(false);
-    const [isClicked, setIsClicked] = useState(false);
-
-    const formattedPhone = useMemo(() => {
-      if (isClicked) return phone;
-      if (isRevealed) return phone.slice(0, -6) + "XXXXXX";
-      return "Piezvani Mums";
-    }, [phone, isRevealed, isClicked]);
-
-    const handleClick = useCallback(() => {
-      if (!isClicked) {
-        setIsClicked(true);
-        window.location.href = `tel:${phone}`;
-      }
-    }, [phone, isClicked]);
-
-    return (
-      <button
-        onClick={handleClick}
-        onMouseEnter={() => setIsRevealed(true)}
-        onMouseLeave={() => {
-          setIsRevealed(false);
-          setIsClicked(false);
-        }}
-        className={`inline-flex items-center justify-center space-x-2 ${bg} ${text} px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg text-base font-semibold ${hover} transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 w-full sm:w-auto`}
-      >
-        <FaPhone className="text-lg" />
-        <span className="transition-all duration-300 ease-in-out">
-          {formattedPhone}
-        </span>
-      </button>
-    );
-  }
+const ContactButton: React.FC<ContactButtonProps> = React.memo(
+  ({ bg, text, hover }) => (
+    <Link
+      href="/contact-us"
+      className={`inline-flex items-center justify-center space-x-2.5 ${bg} ${text} px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg text-base font-semibold ${hover} transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 w-full sm:w-auto`}
+    >
+      <FaEnvelope className="text-lg" aria-hidden="true" />
+      <span>Sazināties ar Mums</span>
+    </Link>
+  )
 );
 
-PhoneButton.displayName = "PhoneButton";
+ContactButton.displayName = "ContactButton";
 
 const Hero: React.FC = () => {
   const containerRef = useRef<HTMLElement>(null);
@@ -211,8 +186,7 @@ const Hero: React.FC = () => {
               >
                 Izveidot Skici
               </HeroButton>
-              <PhoneButton
-                phone="+37126282630"
+              <ContactButton
                 bg="bg-[#3D3B4A]"
                 text="text-white"
                 hover="hover:bg-[#8CB8B4]"
