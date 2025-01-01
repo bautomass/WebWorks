@@ -127,9 +127,8 @@ const PaymentPlansPage = () => {
     }
   ];
 
-  const calculatePayment = (splits: number) => {
+  const calculatePayment = (totalPrice: number, splits: number) => {
     if (splits === 1) {
-      // 5% discount for full payment
       return {
         totalAmount: totalPrice * 0.95,
         splitAmount: totalPrice * 0.95,
