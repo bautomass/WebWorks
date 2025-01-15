@@ -56,9 +56,9 @@ export default function Home() {
       />
       <main>
         <Header />
-        <PaymentPlansBanner />
         {/* <ChristmasPromoBanner /> */}
         <Hero />
+        <PaymentPlansBanner />
         <Services />
         <ServicesWeDo />
         <FloatingPromo />
